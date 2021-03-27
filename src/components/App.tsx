@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { hot } from "react-hot-loader";
-import { iNaturalistApi, Place } from "../inaturalist";
+import { iNaturalistApi, Place, SpeciesCount } from "../inaturalist";
 
 const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
@@ -9,7 +9,7 @@ const App = () => {
   const [location, setLocation] = useState<Location | undefined>();
   const [places, setPlaces] = useState<Place[] | undefined>();
   const [selectedPlace, setSelectedPlace] = useState<Place | undefined>();
-  const [species, setSpecies] = useState<object[] | undefined>();
+  const [species, setSpecies] = useState<SpeciesCount[] | undefined>();
 
   if (!location) {
     const result = navigator.geolocation.getCurrentPosition((result) => {
