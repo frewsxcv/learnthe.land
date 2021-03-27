@@ -21,10 +21,9 @@ const App = () => {
       // TODO: error case
     });
     return (
-      <div className="nes-container with-title">
-        <h1 className="title">Places</h1>
-        <p>Requesting location...</p>
-      </div>
+      <NesContainer title="Places">
+        <p>Request location...</p>
+      </NesContainer>
     );
   }
 
@@ -33,10 +32,9 @@ const App = () => {
       setPlaces(places);
     });
     return (
-      <div className="nes-container with-title">
-        <h1 className="title">Places</h1>
+      <NesContainer title="Places">
         <p>Loading...</p>
-      </div>
+      </NesContainer>
     );
   }
 
@@ -53,10 +51,9 @@ const App = () => {
     });
 
     return (
-      <div className="nes-container with-title">
-        <h1 className="title">Places</h1>
+      <NesContainer title="Places">
         {placesElems}
-      </div>
+      </NesContainer>
     );
   }
 
@@ -66,10 +63,9 @@ const App = () => {
     });
 
     return (
-      <div className="nes-container with-title">
-        <h1 className="title">Species ({selectedPlace.display_name})</h1>
+      <NesContainer title={`Species (${selectedPlace.display_name})`}>
         <p>Loading...</p>
-      </div>
+      </NesContainer>
     );
   }
 
@@ -84,14 +80,22 @@ const App = () => {
   });
 
   return (
-    <div className="nes-container with-title">
-      <h1 className="title">Species ({selectedPlace.display_name})</h1>
+    <NesContainer title={`Species (${selectedPlace.display_name})`}>
       <ul className="nes-list is-disc">
         {speciesElems}
       </ul>
-    </div>
+    </NesContainer>
   );
 };
+
+const NesContainer = ({ title, children }: { title: string, children: React.ReactNode }) => {
+  return (
+    <div className="nes-container with-title">
+      <h1 className="title">{title}</h1>
+      {children}
+    </div>
+  );
+}
 
 interface Location {
   longitude: number;
