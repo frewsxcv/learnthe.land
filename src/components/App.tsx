@@ -5,31 +5,90 @@ const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
 
 const App = () => {
-  const [places, setPlaces] = useState<Place[] | undefined>(undefined);
+  const [location, setLocation] = useState<Location | undefined>();
+  const [places, setPlaces] = useState<Place[] | undefined>();
+  const [selectedPlace, setSelectedPlace] = useState<Place | undefined>();
+  const [species, setSpecies] = useState<object[] | undefined>();
 
-  if (!places) {
-    iNaturalistApi.fetchPlaces().then(places => {
-      console.log('setting places', places);
-      setPlaces(places);
+  if (!location) {
+    const result = navigator.geolocation.getCurrentPosition((result) => {
+      setLocation({
+        latitude: result.coords.latitude,
+        longitude: result.coords.longitude,
+      });
+    }, () => {
+      // TODO: error case
     });
     return (
-      <p>Loading places...</p>
+      <div className="nes-container with-title">
+        <h1 className="title">Places</h1>
+        <p>Requesting location...</p>
+      </div>
     );
   }
 
-  const placesElems = places.map((place, i) => {
+  if (!places) {
+    iNaturalistApi.fetchPlaces(location).then(places => {
+      setPlaces(places);
+    });
     return (
-      <div>
-        <button className="nes-btn" key={i}>{place.display_name}</button>
+      <div className="nes-container with-title">
+        <h1 className="title">Places</h1>
+        <p>Loading...</p>
       </div>
+    );
+  }
+
+  if (!selectedPlace) {
+    const placesElems = places.map((place, i) => {
+      const onClick = () => {
+        setSelectedPlace(place);
+      };
+      return (
+        <div key={i}>
+          <button className="nes-btn" onClick={onClick}>{place.display_name}</button>
+        </div>
+      );
+    });
+
+    return (
+      <div className="nes-container with-title">
+        <h1 className="title">Places</h1>
+        {placesElems}
+      </div>
+    );
+  }
+
+  if (!species) {
+    iNaturalistApi.fetchSpecies(selectedPlace).then(species => {
+      setSpecies(species);
+    });
+
+    return (
+      <div className="nes-container with-title">
+        <h1 className="title">Species ({selectedPlace.display_name})</h1>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  const speciesElems = species.map((s, index) => {
+    return (
+      <li key={index}>
+        {s.taxon.name}
+        <br />
+        <img src={s.taxon.default_photo.square_url} alt="" />
+      </li>
     );
   });
 
   return (
-    <>
-      <h1>Places</h1>
-      {placesElems}
-    </>
+    <div className="nes-container with-title">
+      <h1 className="title">Species ({selectedPlace.display_name})</h1>
+      <ul className="nes-list is-disc">
+        {speciesElems}
+      </ul>
+    </div>
   );
 };
 
@@ -38,26 +97,39 @@ interface AppState {
 };
 
 const iNaturalistApi = {
-  // 'https://api.inaturalist.org/v1/observations/species_counts?captive=false&quality_grade=research&nelat=51.95442&nelng=1.53568&swlat=51.013754&swlng=-2.57869&view=species&iconic_taxa=Aves';
-
-  fetchPlaces: () => {
-    const nyLng = -74.007233;
-    const nyLat = 40.713051;
-
+  fetchPlaces: (location) => {
     const url =
       'https://api.inaturalist.org' +
       '/v1/places/nearby' +
-      `?nelat=${nyLat}` +
-      `&nelng=${nyLng}` +
-      `&swlat=${nyLat}` +
-      `&swlng=${nyLng}`;
+      `?nelat=${location.latitude}` +
+      `&nelng=${location.longitude}` +
+      `&swlat=${location.latitude}` +
+      `&swlng=${location.longitude}`;
 
-    console.log('about to fetch');
     return fetch(url).then((response) => response.json()).then((json) => {
       // TODO: do we care about `json.community`?
       return json.results.standard as Place[];
     });
   },
+
+  fetchSpecies: (place: Place) => {
+    const url =
+      'https://api.inaturalist.org' +
+      '/v1/observations/species_counts' +
+      '?captive=false' +
+      '&quality_grade=research' +
+      `&place_id=${place.id}` +
+      '&iconic_taxa=Plantae';
+
+    return fetch(url).then((response) => response.json()).then((json) => {
+      return json.results as object[];
+    });
+  },
+}
+
+interface Location {
+  longitude: number;
+  latitude: number;
 }
 
 interface Place {
