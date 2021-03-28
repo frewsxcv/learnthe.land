@@ -5,24 +5,10 @@ import { NesContainer } from "./NesContainer";
 import { Location, LocationStep } from "./LocationStep";
 import { PlacesStep } from "./PlacesStep";
 import { SelectPlaceStep } from "./SelectPlaceStep";
+import { SelectTaxaCategoryStep } from "./SelectTaxaCategoryStep";
 
 const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
-
-// TODO: is this list exhaustive?
-const iconicTaxa = [
-  'Animalia',
-  'Amphibia',
-  'Arachnida',
-  'Aves',
-  'Chromista',
-  'Fungi',
-  'Insecta',
-  'Mammalia',
-  'Mollusca',
-  'Reptilia',
-  'Plantae',
-];
 
 const App = () => {
   const [location, setLocation] = useState<Location | undefined>();
@@ -46,18 +32,7 @@ const App = () => {
   }
 
   if (!selectedTaxaCategory) {
-    const buttons = iconicTaxa.map((iconicTaxon, i) => {
-      return (
-        <div key={i}>
-          <button className="nes-btn mb1" onClick={() => setSelectedTaxaCategory(iconicTaxon)}>{iconicTaxon}</button>
-        </div>
-      );
-    });
-    return (
-      <NesContainer title={`Taxa Category`}>
-        {buttons}
-      </NesContainer>
-    );
+    return (<SelectTaxaCategoryStep onSelect={(taxaCategory) => setSelectedTaxaCategory(taxaCategory)} />);
   }
 
   if (!species) {
