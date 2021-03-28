@@ -4,6 +4,7 @@ import { iNaturalistApi, Place, SpeciesCount } from "../inaturalist";
 import { NesContainer } from "./NesContainer";
 import { Location, LocationStep } from "./LocationStep";
 import { PlacesStep } from "./PlacesStep";
+import { SelectPlaceStep } from "./SelectPlaceStep";
 
 const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
@@ -41,22 +42,7 @@ const App = () => {
   }
 
   if (!selectedPlace) {
-    const placesElems = places.map((place, i) => {
-      const onClick = () => {
-        setSelectedPlace(place);
-      };
-      return (
-        <div key={i}>
-          <button className="nes-btn mb1" onClick={onClick}>{place.display_name}</button>
-        </div>
-      );
-    });
-
-    return (
-      <NesContainer title="Places">
-        {placesElems}
-      </NesContainer>
-    );
+    return (<SelectPlaceStep places={places} onSelectPlace={(place) => setSelectedPlace(place)} />);
   }
 
   if (!selectedTaxaCategory) {
@@ -95,7 +81,7 @@ const App = () => {
     return (
       <NesContainer title={`Flashcards`}>
         <div>
-          <img className="mb1" style={{border: '4px solid black', maxWidth: '100%'}} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
+          <img className="mb1" style={{ border: '4px solid black', maxWidth: '100%' }} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
         </div>
         <button className="nes-btn" onClick={() => { setRevealSpecies(true) }}>Reveal</button>
       </NesContainer>
@@ -105,7 +91,7 @@ const App = () => {
   return (
     <NesContainer title={`Flashcards`}>
       <div>
-        <img className="mb1" style={{border: '4px solid black', maxWidth: '100%'}} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
+        <img className="mb1" style={{ border: '4px solid black', maxWidth: '100%' }} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
       </div>
       <p>{currentSpecies.taxon.preferred_common_name}</p>
       <p>{currentSpecies.taxon.name}</p>
