@@ -13,13 +13,14 @@ const App = () => {
   const [places, setPlaces] = useState<Place[] | undefined>();
   const [selectedPlace, setSelectedPlace] = useState<Place | undefined>();
   const [species, setSpecies] = useState<SpeciesCount[] | undefined>();
+  const [currentSpecies, setCurrentSpecies] = useState<SpeciesCount | undefined>();
 
   if (!location) {
-    return (<LocationStep onLocation={setLocation} />);
+    return (<LocationStep onLocation={(location) => setLocation(location)} />);
   }
 
   if (!places) {
-    return (<PlacesStep onPlaces={setPlaces} />);
+    return (<PlacesStep location={location} onPlaces={(places) => setPlaces(places)} />);
   }
 
   if (!selectedPlace) {
@@ -53,6 +54,9 @@ const App = () => {
     );
   }
 
+  const randomSpecies = species[Math.floor(Math.random() * species.length)];
+
+  /*
   const speciesElems = species.map((s, index) => {
     return (
       <li key={index}>
@@ -70,6 +74,7 @@ const App = () => {
       </ul>
     </NesContainer>
   );
+  */
 };
 
 declare let module: Record<string, unknown>;
