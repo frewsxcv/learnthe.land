@@ -14,6 +14,9 @@ export const iNaturalistApi = {
     });
   },
 
+  // TODO: limit observations to above a certain count? so we get more common species
+  // TODO: filter month?
+  // TODO: parameterize iconic_taxa?
   fetchSpecies: (place: Place) => {
     const url =
       'https://api.inaturalist.org' +
