@@ -1,0 +1,21 @@
+name: Build site
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_site:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm install
+      - run: npm build
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: dist
+          SINGLE_COMMIT: true
