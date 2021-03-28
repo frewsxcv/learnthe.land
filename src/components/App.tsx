@@ -105,7 +105,7 @@ const App = () => {
   return (
     <NesContainer title={`Flashcards`}>
       <div>
-        <img className="mb1" style={{border: '4px solid black'}} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
+        <img className="mb1" style={{border: '4px solid black', maxWidth: '100%'}} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
       </div>
       <p>{currentSpecies.taxon.preferred_common_name}</p>
       <p>{currentSpecies.taxon.name}</p>
