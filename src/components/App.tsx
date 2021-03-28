@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { hot } from "react-hot-loader";
 import { iNaturalistApi, Place, SpeciesCount } from "../inaturalist";
 import { NesContainer } from "./NesContainer";
+import { LocationStep } from "./LocationStep";
 
 const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
@@ -13,19 +14,7 @@ const App = () => {
   const [species, setSpecies] = useState<SpeciesCount[] | undefined>();
 
   if (!location) {
-    const result = navigator.geolocation.getCurrentPosition((result) => {
-      setLocation({
-        latitude: result.coords.latitude,
-        longitude: result.coords.longitude,
-      });
-    }, () => {
-      // TODO: error case
-    });
-    return (
-      <NesContainer title="Places">
-        <p>Request location...</p>
-      </NesContainer>
-    );
+    return (<LocationStep onLocation={setLocation} />);
   }
 
   if (!places) {
