@@ -47,7 +47,7 @@ const App = () => {
       };
       return (
         <div key={i}>
-          <button className="nes-btn" onClick={onClick}>{place.display_name}</button>
+          <button className="nes-btn mb1" onClick={onClick}>{place.display_name}</button>
         </div>
       );
     });
@@ -63,7 +63,7 @@ const App = () => {
     const buttons = iconicTaxa.map((iconicTaxon, i) => {
       return (
         <div key={i}>
-          <button className="nes-btn" onClick={() => setSelectedTaxaCategory(iconicTaxon)}>{iconicTaxon}</button>
+          <button className="nes-btn mb1" onClick={() => setSelectedTaxaCategory(iconicTaxon)}>{iconicTaxon}</button>
         </div>
       );
     });
@@ -95,7 +95,7 @@ const App = () => {
     return (
       <NesContainer title={`Flashcards`}>
         <div>
-          <img style={{border: '4px solid black'}} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
+          <img className="mb1" style={{border: '4px solid black'}} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
         </div>
         <button className="nes-btn" onClick={() => { setRevealSpecies(true) }}>Reveal</button>
       </NesContainer>
@@ -105,7 +105,7 @@ const App = () => {
   return (
     <NesContainer title={`Flashcards`}>
       <div>
-        <img style={{border: '4px solid black'}} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
+        <img className="mb1" style={{border: '4px solid black'}} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
       </div>
       <p>{currentSpecies.taxon.preferred_common_name}</p>
       <p>{currentSpecies.taxon.name}</p>
