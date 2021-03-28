@@ -8,10 +8,26 @@ import { PlacesStep } from "./PlacesStep";
 const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
 
+// TODO: is this list exhaustive?
+const iconicTaxa = [
+  'Animalia',
+  'Amphibia',
+  'Arachnida',
+  'Aves',
+  'Chromista',
+  'Fungi',
+  'Insecta',
+  'Mammalia',
+  'Mollusca',
+  'Reptilia',
+  'Plantae',
+];
+
 const App = () => {
   const [location, setLocation] = useState<Location | undefined>();
   const [places, setPlaces] = useState<Place[] | undefined>();
   const [selectedPlace, setSelectedPlace] = useState<Place | undefined>();
+  const [selectedTaxaCategory, setSelectedTaxaCategory] = useState<string | undefined>();
   const [species, setSpecies] = useState<SpeciesCount[] | undefined>();
   const [currentSpecies, setCurrentSpecies] = useState<SpeciesCount | undefined>();
   const [revealSpecies, setRevealSpecies] = useState<boolean>(false);
@@ -43,14 +59,29 @@ const App = () => {
     );
   }
 
+  if (!selectedTaxaCategory) {
+    const buttons = iconicTaxa.map((iconicTaxon, i) => {
+      return (
+        <div key={i}>
+          <button className="nes-btn" onClick={() => setSelectedTaxaCategory(iconicTaxon)}>{iconicTaxon}</button>
+        </div>
+      );
+    });
+    return (
+      <NesContainer title={`Taxa Category`}>
+        {buttons}
+      </NesContainer>
+    );
+  }
+
   if (!species) {
-    iNaturalistApi.fetchSpecies(selectedPlace).then(species => {
+    iNaturalistApi.fetchSpecies(selectedTaxaCategory, selectedPlace).then(species => {
       setSpecies(species);
     });
 
     return (
-      <NesContainer title={`Species (${selectedPlace.display_name})`}>
-        <p>Loading...</p>
+      <NesContainer title={`Flashcards`}>
+        <p>Loading species...</p>
       </NesContainer>
     );
   }

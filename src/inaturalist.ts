@@ -16,15 +16,15 @@ export const iNaturalistApi = {
 
   // TODO: limit observations to above a certain count? so we get more common species
   // TODO: filter month?
-  // TODO: parameterize iconic_taxa?
-  fetchSpecies: (place: Place) => {
+  // TODO: parameterize iconic_taxa with an enum
+  fetchSpecies: (iconicTaxa: string, place: Place) => {
     const url =
       'https://api.inaturalist.org' +
       '/v1/observations/species_counts' +
       '?captive=false' +
       '&quality_grade=research' +
       `&place_id=${place.id}` +
-      '&iconic_taxa=Plantae';
+      `&iconic_taxa=${iconicTaxa}`;
 
     return fetch(url).then((response) => response.json()).then((json) => {
       return json.results as SpeciesCount[];
