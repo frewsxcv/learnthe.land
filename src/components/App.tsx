@@ -72,8 +72,12 @@ const App = () => {
     );
   }
 
+  // TODO: make a step for this
+  const numFlashcards = 50;
+
   if (!currentSpecies) {
-    setCurrentSpecies(species[Math.floor(Math.random() * species.length)]);
+    const randSpeciesIndex = Math.floor(Math.random() * Math.min(numFlashcards, species.length))
+    setCurrentSpecies(species[randSpeciesIndex]);
     return;
   }
 
