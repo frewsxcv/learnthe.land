@@ -1,21 +1,10 @@
-// $bg-color: yellow;
-// $border-color: red;
-
-// .app {
-//   font-family: helvetica, arial, sans-serif;
-//   padding: 2em;
-//   border: 5px solid $border-color;
-
-//   p {
-//     background-color: $bg-color;
-//   }
-// }
-
 body {
   font-family: 'Press Start 2P';
+  background-color: #ccc;
 }
 
 #root {
   max-width: 40rem;
-  margin: 1rem;
+  margin: 1rem auto;
+  background-color: white;
 }

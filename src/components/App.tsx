@@ -95,7 +95,7 @@ const App = () => {
     return (
       <NesContainer title={`Flashcards`}>
         <div>
-          <img src={currentSpecies.taxon.default_photo.medium_url} alt="" />
+          <img style={{border: '4px solid black'}} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
         </div>
         <button className="nes-btn" onClick={() => { setRevealSpecies(true) }}>Reveal</button>
       </NesContainer>
@@ -105,7 +105,7 @@ const App = () => {
   return (
     <NesContainer title={`Flashcards`}>
       <div>
-        <img src={currentSpecies.taxon.default_photo.medium_url} alt="" />
+        <img style={{border: '4px solid black'}} src={currentSpecies.taxon.default_photo.medium_url} alt="" />
       </div>
       <p>{currentSpecies.taxon.preferred_common_name}</p>
       <p>{currentSpecies.taxon.name}</p>
