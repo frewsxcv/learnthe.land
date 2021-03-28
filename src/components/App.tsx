@@ -14,6 +14,7 @@ const App = () => {
   const [selectedPlace, setSelectedPlace] = useState<Place | undefined>();
   const [species, setSpecies] = useState<SpeciesCount[] | undefined>();
   const [currentSpecies, setCurrentSpecies] = useState<SpeciesCount | undefined>();
+  const [revealSpecies, setRevealSpecies] = useState<boolean>(false);
 
   if (!location) {
     return (<LocationStep onLocation={(location) => setLocation(location)} />);
@@ -54,27 +55,32 @@ const App = () => {
     );
   }
 
-  const randomSpecies = species[Math.floor(Math.random() * species.length)];
+  if (!currentSpecies) {
+    setCurrentSpecies(species[Math.floor(Math.random() * species.length)]);
+    return;
+  }
 
-  /*
-  const speciesElems = species.map((s, index) => {
+  if (!revealSpecies) {
     return (
-      <li key={index}>
-        {s.taxon.name}
-        <br />
-        <img src={s.taxon.default_photo.square_url} alt="" />
-      </li>
+      <NesContainer title={`Flashcards`}>
+        <div>
+          <img src={currentSpecies.taxon.default_photo.medium_url} alt="" />
+        </div>
+        <button className="nes-btn" onClick={() => { setRevealSpecies(true) }}>Reveal</button>
+      </NesContainer>
     );
-  });
+  }
 
   return (
-    <NesContainer title={`Species (${selectedPlace.display_name})`}>
-      <ul className="nes-list is-disc">
-        {speciesElems}
-      </ul>
+    <NesContainer title={`Flashcards`}>
+      <div>
+        <img src={currentSpecies.taxon.default_photo.medium_url} alt="" />
+      </div>
+      <p>{currentSpecies.taxon.preferred_common_name}</p>
+      <p>{currentSpecies.taxon.name}</p>
+      <button className="nes-btn" onClick={() => { setRevealSpecies(false); setCurrentSpecies(undefined); }}>Next</button>
     </NesContainer>
   );
-  */
 };
 
 declare let module: Record<string, unknown>;
