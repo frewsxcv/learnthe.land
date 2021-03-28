@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { hot } from "react-hot-loader";
 import { iNaturalistApi, Place, SpeciesCount } from "../inaturalist";
+import { NesContainer } from "./NesContainer";
 
 const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
@@ -87,15 +88,6 @@ const App = () => {
     </NesContainer>
   );
 };
-
-const NesContainer = ({ title, children }: { title: string, children: React.ReactNode }) => {
-  return (
-    <div className="nes-container with-title">
-      <h1 className="title">{title}</h1>
-      {children}
-    </div>
-  );
-}
 
 interface Location {
   longitude: number;
