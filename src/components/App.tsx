@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { hot } from "react-hot-loader";
 import { iNaturalistApi, Place, SpeciesCount } from "../inaturalist";
 import { NesContainer } from "./NesContainer";
-import { LocationStep } from "./LocationStep";
+import { Location, LocationStep } from "./LocationStep";
+import { PlacesStep } from "./PlacesStep";
 
 const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
@@ -18,14 +19,7 @@ const App = () => {
   }
 
   if (!places) {
-    iNaturalistApi.fetchPlaces(location).then(places => {
-      setPlaces(places);
-    });
-    return (
-      <NesContainer title="Places">
-        <p>Loading...</p>
-      </NesContainer>
-    );
+    return (<PlacesStep onPlaces={setPlaces} />);
   }
 
   if (!selectedPlace) {
@@ -77,11 +71,6 @@ const App = () => {
     </NesContainer>
   );
 };
-
-interface Location {
-  longitude: number;
-  latitude: number;
-}
 
 declare let module: Record<string, unknown>;
 

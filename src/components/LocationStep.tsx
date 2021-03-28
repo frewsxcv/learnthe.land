@@ -1,6 +1,6 @@
 import { NesContainer } from "./NesContainer";
 
-export const LocationStep = ({ onLocation }: { onLocation: (Location) => void }) => {
+export const LocationStep = ({ onLocation }: { onLocation: (location: Location) => void }) => {
   const result = navigator.geolocation.getCurrentPosition((result) => {
     onLocation({
       latitude: result.coords.latitude,
@@ -8,10 +8,15 @@ export const LocationStep = ({ onLocation }: { onLocation: (Location) => void })
     });
   }, () => {
     // TODO: error case
-  });
+  })
   return (
     <NesContainer title="Places">
       <p>Request location...</p>
     </NesContainer>
   );
+}
+
+export interface Location {
+  longitude: number;
+  latitude: number;
 }
