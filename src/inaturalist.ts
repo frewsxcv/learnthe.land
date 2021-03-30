@@ -17,7 +17,7 @@ export const iNaturalistApi = {
   // TODO: limit observations to above a certain count? so we get more common species
   // TODO: filter month?
   // TODO: parameterize iconic_taxa with an enum
-  fetchSpecies: (iconicTaxa: string, place: Place) => {
+  fetchAllSpeciesForPlace: (iconicTaxa: string, place: Place) => {
     const url =
       'https://api.inaturalist.org' +
       '/v1/observations/species_counts' +
@@ -28,6 +28,23 @@ export const iNaturalistApi = {
 
     return fetch(url).then((response) => response.json()).then((json) => {
       return json.results as SpeciesCount[];
+    });
+  },
+
+  fetchObservationsForTaxon: (taxonId: number) => {
+    const url =
+      'https://api.inaturalist.org' +
+      '/v1/observations' +
+      '?photos=true' +
+      '&popular=true' +
+      '&quality_grade=research' +
+      `&taxon_id=${taxonId}` +
+      '&identifications=most_agree' +
+      '&per_page=5';
+      // '&order_by=votes';
+
+    return fetch(url).then((response) => response.json()).then((json) => {
+      return json.results;
     });
   },
 }

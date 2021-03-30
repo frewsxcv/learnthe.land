@@ -36,7 +36,7 @@ const App = () => {
   }
 
   if (!species) {
-    iNaturalistApi.fetchSpecies(selectedTaxaCategory, selectedPlace).then(species => {
+    iNaturalistApi.fetchAllSpeciesForPlace(selectedTaxaCategory, selectedPlace).then(species => {
       setSpecies(species);
     });
 
