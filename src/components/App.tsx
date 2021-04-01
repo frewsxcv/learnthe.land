@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { hot } from "react-hot-loader";
 import { Place, SpeciesCount } from "../inaturalist";
-import { NesContainer } from "./NesContainer";
 import { Location, LocationStep } from "./LocationStep";
 import { PlacesStep } from "./PlacesStep";
 import { SelectPlaceStep } from "./SelectPlaceStep";
 import { SelectTaxaCategoryStep } from "./SelectTaxaCategoryStep";
 import { LoadAllSpeciesStep } from "./LoadAllSpeciesStep";
+import { Flashcard } from "./Flashcard";
 
-const reactLogo = require("./../assets/img/react_logo.svg");
+// const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
 
 const App = () => {
@@ -75,51 +75,18 @@ const App = () => {
     return;
   }
 
-  if (!revealSpecies) {
-    return (
-      <NesContainer title={`Flashcards`}>
-        <div>
-          <img
-            className="mb1"
-            style={{ border: "4px solid black", maxWidth: "100%" }}
-            src={currentSpecies.taxon.default_photo.medium_url}
-            alt=""
-          />
-        </div>
-        <button
-          className="nes-btn"
-          onClick={() => {
-            setRevealSpecies(true);
-          }}
-        >
-          Reveal
-        </button>
-      </NesContainer>
-    );
-  }
-
   return (
-    <NesContainer title={`Flashcards`}>
-      <div>
-        <img
-          className="mb1"
-          style={{ border: "4px solid black", maxWidth: "100%" }}
-          src={currentSpecies.taxon.default_photo.medium_url}
-          alt=""
-        />
-      </div>
-      <p>{currentSpecies.taxon.preferred_common_name}</p>
-      <p>{currentSpecies.taxon.name}</p>
-      <button
-        className="nes-btn"
-        onClick={() => {
-          setRevealSpecies(false);
-          setCurrentSpecies(undefined);
-        }}
-      >
-        Next
-      </button>
-    </NesContainer>
+    <Flashcard
+      revealed={revealSpecies}
+      species={currentSpecies}
+      onReveal={() => {
+        setRevealSpecies(true);
+      }}
+      onNext={() => {
+        setRevealSpecies(false);
+        setCurrentSpecies(undefined);
+      }}
+    ></Flashcard>
   );
 };
 
