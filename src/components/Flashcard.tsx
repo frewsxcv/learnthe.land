@@ -12,15 +12,13 @@ export const Flashcard = ({
   onReveal: () => void;
   onNext: () => void;
 }) => {
-  const iNaturalistUrl = `https://www.inaturalist.org/taxa/${species.taxon.id}`;
   const lower = revealed ? (
     <>
       <p>{capitalizeFirstLetter(species.taxon.preferred_common_name)}</p>
-      <p>({species.taxon.name})</p>
-      <p>
-        <a href={iNaturalistUrl}>iNaturalist</a>
-        {species.taxon.wikipedia_url && (<> · <a href={species.taxon.wikipedia_url}>Wikipedia</a></>)}
-      </p>
+      <small>
+        <p>({species.taxon.name})</p>
+        <Hyperlinks species={species} />
+      </small>
       <button className="nes-btn" onClick={() => onNext()}>
         Next
       </button>
@@ -43,6 +41,22 @@ export const Flashcard = ({
       </div>
       {lower}
     </NesContainer>
+  );
+};
+
+const Hyperlinks = ({ species }: { species: SpeciesCount }) => {
+  const iNaturalistUrl = `https://www.inaturalist.org/taxa/${species.taxon.id}`;
+  const iNaturalistAnchor = <a href={iNaturalistUrl}>iNaturalist</a>;
+
+  const wikipediaUrl = species.taxon.wikipedia_url;
+  const wikipediaAnchor = wikipediaUrl && <a href={wikipediaUrl}>Wikipedia</a>;
+
+  return wikipediaAnchor ? (
+    <p>
+      {iNaturalistAnchor} · {wikipediaAnchor}
+    </p>
+  ) : (
+    <p>{iNaturalistAnchor}</p>
   );
 };
 
