@@ -13,7 +13,7 @@ export const LocationStep = ({
       });
     },
     () => {
-      // TODO: error case
+      <p>Could not fetch location</p>
     }
   );
   return (
