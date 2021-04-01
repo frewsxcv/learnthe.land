@@ -12,23 +12,19 @@ export const Flashcard = ({
   onReveal: () => void;
   onNext: () => void;
 }) => {
-  if (!revealed) {
-    return (
-      <NesContainer title={`Flashcards`}>
-        <div>
-          <img
-            className="mb1"
-            style={{ border: "4px solid black", maxWidth: "100%" }}
-            src={species.taxon.default_photo.medium_url}
-            alt=""
-          />
-        </div>
-        <button className="nes-btn" onClick={() => onReveal()}>
-          Reveal
-        </button>
-      </NesContainer>
-    );
-  }
+  const lower = revealed ? (
+    <>
+      <p>{species.taxon.preferred_common_name}</p>
+      <p>{species.taxon.name}</p>
+      <button className="nes-btn" onClick={() => onNext()}>
+        Next
+      </button>
+    </>
+  ) : (
+    <button className="nes-btn" onClick={() => onReveal()}>
+      Reveal
+    </button>
+  );
 
   return (
     <NesContainer title={`Flashcards`}>
@@ -40,11 +36,7 @@ export const Flashcard = ({
           alt=""
         />
       </div>
-      <p>{species.taxon.preferred_common_name}</p>
-      <p>{species.taxon.name}</p>
-      <button className="nes-btn" onClick={() => onNext()}>
-        Next
-      </button>
+      {lower}
     </NesContainer>
   );
 };
