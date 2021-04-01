@@ -14,14 +14,16 @@ export const Flashcard = ({
 }) => {
   const lower = revealed ? (
     <>
+      <p>
+        <button className="nes-btn" onClick={() => onNext()}>
+          Next
+        </button>
+      </p>
       <p>{capitalizeFirstLetter(species.taxon.preferred_common_name)}</p>
       <small>
         <p>({species.taxon.name})</p>
         <Hyperlinks species={species} />
       </small>
-      <button className="nes-btn" onClick={() => onNext()}>
-        Next
-      </button>
     </>
   ) : (
     <button className="nes-btn" onClick={() => onReveal()}>
@@ -34,7 +36,7 @@ export const Flashcard = ({
       <div>
         <img
           className="mb1"
-          style={{ border: "4px solid black", maxWidth: "100%" }}
+          style={{ border: "4px solid black", maxWidth: "100%", height: "400px" }}
           src={species.taxon.default_photo.medium_url}
           alt=""
         />
