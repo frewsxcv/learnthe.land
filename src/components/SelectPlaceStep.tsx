@@ -1,7 +1,7 @@
 import { Place } from "../inaturalist";
 import { NesContainer } from "./NesContainer";
 
-export const SelectPlaceStep = ({ places, onSelectPlace }: { places: Place[], onSelectPlace: (Place) => void }) => {
+export const SelectPlaceStep = ({ places, onSelectPlace }: { places: Place[], onSelectPlace: (place: Place) => void }) => {
   const placesElems = places.map((place, i) => {
     const onClick = () => {
       onSelectPlace(place);
