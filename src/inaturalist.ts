@@ -1,17 +1,19 @@
 export const iNaturalistApi = {
   fetchPlaces: (location) => {
     const url =
-      'https://api.inaturalist.org' +
-      '/v1/places/nearby' +
+      "https://api.inaturalist.org" +
+      "/v1/places/nearby" +
       `?nelat=${location.latitude}` +
       `&nelng=${location.longitude}` +
       `&swlat=${location.latitude}` +
       `&swlng=${location.longitude}`;
 
-    return fetch(url).then((response) => response.json()).then((json) => {
-      // TODO: do we care about `json.community`?
-      return json.results.standard as Place[];
-    });
+    return fetch(url)
+      .then((response) => response.json())
+      .then((json) => {
+        // TODO: do we care about `json.community`?
+        return json.results.standard as Place[];
+      });
   },
 
   // TODO: limit observations to above a certain count? so we get more common species
@@ -19,35 +21,39 @@ export const iNaturalistApi = {
   // TODO: parameterize iconic_taxa with an enum
   fetchAllSpeciesForPlace: (iconicTaxa: string, place: Place) => {
     const url =
-      'https://api.inaturalist.org' +
-      '/v1/observations/species_counts' +
-      '?captive=false' +
-      '&quality_grade=research' +
+      "https://api.inaturalist.org" +
+      "/v1/observations/species_counts" +
+      "?captive=false" +
+      "&quality_grade=research" +
       `&place_id=${place.id}` +
       `&iconic_taxa=${iconicTaxa}`;
 
-    return fetch(url).then((response) => response.json()).then((json) => {
-      return json.results as SpeciesCount[];
-    });
+    return fetch(url)
+      .then((response) => response.json())
+      .then((json) => {
+        return json.results as SpeciesCount[];
+      });
   },
 
   fetchObservationsForTaxon: (taxonId: number) => {
     const url =
-      'https://api.inaturalist.org' +
-      '/v1/observations' +
-      '?photos=true' +
-      '&popular=true' +
-      '&quality_grade=research' +
+      "https://api.inaturalist.org" +
+      "/v1/observations" +
+      "?photos=true" +
+      "&popular=true" +
+      "&quality_grade=research" +
       `&taxon_id=${taxonId}` +
-      '&identifications=most_agree' +
-      '&per_page=5';
-      // '&order_by=votes';
+      "&identifications=most_agree" +
+      "&per_page=5";
+    // '&order_by=votes';
 
-    return fetch(url).then((response) => response.json()).then((json) => {
-      return json.results;
-    });
+    return fetch(url)
+      .then((response) => response.json())
+      .then((json) => {
+        return json.results;
+      });
   },
-}
+};
 
 export interface Place {
   admin_level: number;
@@ -88,7 +94,7 @@ export interface Taxon {
     url: string;
     medium_url: string;
     square_url: string;
-  },
+  };
   establishment_means: any;
   observations_count: number;
   preferred_establishment_means: string;
