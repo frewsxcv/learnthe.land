@@ -12,10 +12,15 @@ export const Flashcard = ({
   onReveal: () => void;
   onNext: () => void;
 }) => {
+  const iNaturalistUrl = `https://www.inaturalist.org/taxa/${species.taxon.id}`;
   const lower = revealed ? (
     <>
-      <p>{species.taxon.preferred_common_name}</p>
-      <p>{species.taxon.name}</p>
+      <p>{capitalizeFirstLetter(species.taxon.preferred_common_name)}</p>
+      <p>({species.taxon.name})</p>
+      <p>
+        <a href={iNaturalistUrl}>iNaturalist</a>
+        {species.taxon.wikipedia_url && (<> · <a href={species.taxon.wikipedia_url}>Wikipedia</a></>)}
+      </p>
       <button className="nes-btn" onClick={() => onNext()}>
         Next
       </button>
@@ -39,4 +44,8 @@ export const Flashcard = ({
       {lower}
     </NesContainer>
   );
+};
+
+const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 };

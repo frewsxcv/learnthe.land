@@ -98,4 +98,5 @@ export interface Taxon {
   establishment_means: any;
   observations_count: number;
   preferred_establishment_means: string;
+  wikipedia_url?: string;
 }
