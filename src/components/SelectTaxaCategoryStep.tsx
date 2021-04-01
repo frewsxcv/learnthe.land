@@ -15,7 +15,7 @@ const iconicTaxa = [
   'Plantae',
 ];
 
-export const SelectTaxaCategoryStep = ({ onSelect }: { onSelect: (string) => void }) => {
+export const SelectTaxaCategoryStep = ({ onSelect }: { onSelect: (string: string) => void }) => {
   const buttons = iconicTaxa.map((iconicTaxon, i) => {
     return (
       <div key={i}>

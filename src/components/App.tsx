@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { hot } from "react-hot-loader";
-import { iNaturalistApi, Place, SpeciesCount } from "../inaturalist";
+import { Place, SpeciesCount } from "../inaturalist";
 import { NesContainer } from "./NesContainer";
 import { Location, LocationStep } from "./LocationStep";
 import { PlacesStep } from "./PlacesStep";
 import { SelectPlaceStep } from "./SelectPlaceStep";
 import { SelectTaxaCategoryStep } from "./SelectTaxaCategoryStep";
+import { LoadAllSpeciesStep } from "./LoadAllSpeciesStep";
 
 const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
@@ -15,7 +16,7 @@ const App = () => {
   const [places, setPlaces] = useState<Place[] | undefined>();
   const [selectedPlace, setSelectedPlace] = useState<Place | undefined>();
   const [selectedTaxaCategory, setSelectedTaxaCategory] = useState<string | undefined>();
-  const [species, setSpecies] = useState<SpeciesCount[] | undefined>();
+  const [allSpecies, setAllSpecies] = useState<SpeciesCount[] | undefined>();
   const [currentSpecies, setCurrentSpecies] = useState<SpeciesCount | undefined>();
   const [revealSpecies, setRevealSpecies] = useState<boolean>(false);
 
@@ -35,24 +36,16 @@ const App = () => {
     return (<SelectTaxaCategoryStep onSelect={(taxaCategory) => setSelectedTaxaCategory(taxaCategory)} />);
   }
 
-  if (!species) {
-    iNaturalistApi.fetchAllSpeciesForPlace(selectedTaxaCategory, selectedPlace).then(species => {
-      setSpecies(species);
-    });
-
-    return (
-      <NesContainer title={`Flashcards`}>
-        <p>Loading species...</p>
-      </NesContainer>
-    );
+  if (!allSpecies) {
+    return (<LoadAllSpeciesStep selectedPlace={selectedPlace} selectedTaxaCategory={selectedTaxaCategory} onLoad={(allSpecies) => setAllSpecies(allSpecies)} />);
   }
 
   // TODO: make a step for this
   const numFlashcards = 50;
 
   if (!currentSpecies) {
-    const randSpeciesIndex = Math.floor(Math.random() * Math.min(numFlashcards, species.length))
-    setCurrentSpecies(species[randSpeciesIndex]);
+    const randSpeciesIndex = Math.floor(Math.random() * Math.min(numFlashcards, allSpecies.length))
+    setCurrentSpecies(allSpecies[randSpeciesIndex]);
     return;
   }
 
