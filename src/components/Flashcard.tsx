@@ -1,5 +1,5 @@
 import { NesContainer } from "./NesContainer";
-import { SpeciesCount } from "../inaturalist";
+import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 
 export const Flashcard = ({
   revealed,
@@ -31,13 +31,29 @@ export const Flashcard = ({
     </button>
   );
 
+  const originalPhotoUrl = species.taxon.default_photo.medium_url.replace("medium", "original");
+
+  /*
+  const extraImages = [];
+  iNaturalistApi.fetchObservationsForTaxon(species.taxon.id).then(results => {
+    for (const result of results) {
+      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/square.jpg?1610506716
+      const squarePhotoUrl: string = result.photos[0].url;
+      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/original.jpg?1610506716
+      const originalPhotoUrl = squarePhotoUrl.replace("square", "original");
+      extraImages.push(originalPhotoUrl);
+    }
+    console.log(extraImages);
+  });
+  */
+
   return (
     <NesContainer title={`Flashcards`}>
       <div>
         <img
           className="mb1"
           style={{ border: "4px solid black", maxWidth: "100%", maxHeight: "400px" }}
-          src={species.taxon.default_photo.medium_url}
+          src={originalPhotoUrl}
           alt=""
         />
       </div>
