@@ -36,7 +36,7 @@ export const Flashcard = ({
       <div>
         <img
           className="mb1"
-          style={{ border: "4px solid black", maxWidth: "100%", height: "400px" }}
+          style={{ border: "4px solid black", maxWidth: "100%", maxHeight: "400px" }}
           src={species.taxon.default_photo.medium_url}
           alt=""
         />
