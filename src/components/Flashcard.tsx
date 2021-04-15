@@ -1,5 +1,6 @@
 import { NesContainer } from "./NesContainer";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
+import Flicking from "@egjs/react-flicking";
 
 export const Flashcard = ({
   revealed,
@@ -44,18 +45,28 @@ export const Flashcard = ({
       extraImages.push(originalPhotoUrl);
     }
     console.log(extraImages);
-  });
+     });
   */
 
   return (
     <NesContainer title={`Flashcards`}>
-      <div>
-        <img
-          className="mb1"
-          style={{ border: "4px solid black", maxWidth: "100%", maxHeight: "400px" }}
-          src={originalPhotoUrl}
-          alt=""
-        />
+      <div style={{ border: "1px solid black" }}>
+        <Flicking gap={20}>
+          <img
+            width={300}
+            height={400}
+            style={{ pointerEvents: "none" }}
+            src={originalPhotoUrl}
+            alt=""
+          />
+          <img
+            width={800}
+            height={400}
+            style={{ pointerEvents: "none" }}
+            src={originalPhotoUrl}
+            alt=""
+          />
+        </Flicking>
       </div>
       {lower}
     </NesContainer>
