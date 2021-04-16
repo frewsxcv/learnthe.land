@@ -10,6 +10,7 @@ import { Flashcard } from "./Flashcard";
 
 // const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   const [location, setLocation] = useState<Location | undefined>();

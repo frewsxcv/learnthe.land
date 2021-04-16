@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NesContainer } from "./NesContainer";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
+import Button from 'react-bootstrap/Button';
 
 const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
   imageSrc
@@ -87,15 +88,14 @@ export const Flashcard = ({
   const lower = revealed ? (
     <>
       <p>
-        <button
-          className="nes-btn"
+        <Button
           onClick={() => {
             onNext();
             setImages([]);
           }}
         >
           Next
-        </button>
+        </Button>
       </p>
       <p>{capitalizeFirstLetter(species.taxon.preferred_common_name)}</p>
       <small>
@@ -104,14 +104,13 @@ export const Flashcard = ({
       </small>
     </>
   ) : (
-    <button
-      className="nes-btn"
+    <Button
       onClick={() => {
         onReveal();
       }}
     >
       Reveal
-    </button>
+    </Button>
   );
 
   const imageElems = images.map((image) => {

@@ -1,5 +1,6 @@
 import { Place } from "../inaturalist";
 import { NesContainer } from "./NesContainer";
+import Button from 'react-bootstrap/Button';
 
 export const SelectPlaceStep = ({
   places,
@@ -14,9 +15,9 @@ export const SelectPlaceStep = ({
     };
     return (
       <div key={i}>
-        <button className="nes-btn mb1" onClick={onClick}>
+        <Button className="mb1" onClick={onClick}>
           {place.display_name}
-        </button>
+        </Button>
       </div>
     );
   });

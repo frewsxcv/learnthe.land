@@ -67,6 +67,8 @@
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {
-    "@egjs/react-flicking": "^3.7.0"
+    "@egjs/react-flicking": "^3.7.0",
+    "bootstrap": "^4.6.0",
+    "react-bootstrap": "^1.5.2"
   }
 }

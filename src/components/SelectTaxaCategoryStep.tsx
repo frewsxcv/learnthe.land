@@ -1,4 +1,5 @@
 import { NesContainer } from "./NesContainer";
+import Button from 'react-bootstrap/Button';
 
 // TODO: is this list exhaustive?
 const iconicTaxa = [
@@ -23,9 +24,9 @@ export const SelectTaxaCategoryStep = ({
   const buttons = iconicTaxa.map((iconicTaxon, i) => {
     return (
       <div key={i}>
-        <button className="nes-btn mb1" onClick={() => onSelect(iconicTaxon)}>
+        <Button className="mb1" onClick={() => onSelect(iconicTaxon)}>
           {iconicTaxon}
-        </button>
+        </Button>
       </div>
     );
   });
