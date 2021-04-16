@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { NesContainer } from "./NesContainer";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
@@ -13,6 +14,32 @@ export const Flashcard = ({
   onReveal: () => void;
   onNext: () => void;
 }) => {
+  const [images, setImages] = useState<FlashcardImage[]>([]);
+
+  if (images.length === 0) {
+    iNaturalistApi.fetchObservationsForTaxon(species.taxon.id).then(results => {
+      const extraImages: FlashcardImage[] = [];
+      for (const result of results) {
+        // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/square.jpg?1610506716
+        const squarePhotoUrl: string = result.photos[0].url;
+        // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/original.jpg?1610506716
+        const originalPhotoUrl = squarePhotoUrl.replace("square", "original");
+        extraImages.push({
+          src: originalPhotoUrl,
+          height: result.photos[0].original_dimensions.height,
+          width: result.photos[0].original_dimensions.width
+        });
+      }
+      setImages(extraImages);
+    });
+
+    return (
+      <NesContainer title={`Flashcards`}>
+        <p>Loading images...</p>
+      </NesContainer>
+    );
+  }
+
   const lower = revealed ? (
     <>
       <p>
@@ -34,44 +61,41 @@ export const Flashcard = ({
 
   const originalPhotoUrl = species.taxon.default_photo.medium_url.replace("medium", "original");
 
-  /*
-  const extraImages = [];
-  iNaturalistApi.fetchObservationsForTaxon(species.taxon.id).then(results => {
-    for (const result of results) {
-      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/square.jpg?1610506716
-      const squarePhotoUrl: string = result.photos[0].url;
-      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/original.jpg?1610506716
-      const originalPhotoUrl = squarePhotoUrl.replace("square", "original");
-      extraImages.push(originalPhotoUrl);
-    }
-    console.log(extraImages);
-     });
-  */
+  // height1 / width1 = height2 / width2
+  // width1 * height2 = height1 * width2
+
+  // width2 = (width1 * height1) / height1
+
+  const imageElems = images.map((image) => {
+    const width = image.width * 400 / image.height;
+    return (
+      <img
+        width={width}
+        height={400}
+        style={{ pointerEvents: "none" }}
+        src={image.src}
+        alt=""
+      />
+    );
+  });
 
   return (
     <NesContainer title={`Flashcards`}>
       <div style={{ border: "1px solid black" }}>
         <Flicking gap={20}>
-          <img
-            width={300}
-            height={400}
-            style={{ pointerEvents: "none" }}
-            src={originalPhotoUrl}
-            alt=""
-          />
-          <img
-            width={800}
-            height={400}
-            style={{ pointerEvents: "none" }}
-            src={originalPhotoUrl}
-            alt=""
-          />
+          {imageElems}
         </Flicking>
       </div>
       {lower}
     </NesContainer>
   );
 };
+
+type FlashcardImage = {
+  src: string;
+  height: number;
+  width: number;
+}
 
 const Hyperlinks = ({ species }: { species: SpeciesCount }) => {
   const iNaturalistUrl = `https://www.inaturalist.org/taxa/${species.taxon.id}`;
