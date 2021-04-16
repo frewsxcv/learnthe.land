@@ -67,11 +67,11 @@ export const Flashcard = ({
   // width2 = (width1 * height1) / height1
 
   const imageElems = images.map((image) => {
-    const width = image.width * 400 / image.height;
+    const width = image.width * FLASHCARD_IMAGE_HEIGHT / image.height;
     return (
       <img
         width={width}
-        height={400}
+        height={FLASHCARD_IMAGE_HEIGHT}
         style={{ pointerEvents: "none" }}
         src={image.src}
         alt=""
@@ -93,9 +93,13 @@ export const Flashcard = ({
 
 type FlashcardImage = {
   src: string;
+  // original height
   height: number;
+  // original width
   width: number;
 }
+
+const FLASHCARD_IMAGE_HEIGHT = 400;
 
 const Hyperlinks = ({ species }: { species: SpeciesCount }) => {
   const iNaturalistUrl = `https://www.inaturalist.org/taxa/${species.taxon.id}`;
