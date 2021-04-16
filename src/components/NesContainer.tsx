@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
+import Navbar from 'react-bootstrap/Navbar';
 
 export const NesContainer = ({
   title,
@@ -11,23 +11,20 @@ export const NesContainer = ({
   children: React.ReactNode;
 }) => {
   return (
-    <Container>
-      <Row>
-        <Col>
-          <Card>
-            <Card.Header>{title}</Card.Header>
-            <Card.Body>
-              {/* <Card.Title>Special title treatment</Card.Title> */}
-              <Card.Text>
-                {children}
-              </Card.Text>
-              {/* <Button variant="primary">Go somewhere</Button> */}
-            </Card.Body>
-          </Card>
-          {/* <div>{title}</div>
-          <div>{children}</div> */}
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <Navbar expand="sm" variant="dark" bg="primary">
+        <Container>
+          <Navbar.Brand>learnthe.land</Navbar.Brand>
+        </Container>
+      </Navbar>
+      <Navbar className="shadow" expand="sm" variant="light" bg="light">
+        <Container>
+          <Navbar.Brand>{title}</Navbar.Brand>
+        </Container>
+      </Navbar>
+      <Container className="mt-5">
+        {children}
+      </Container>
+    </>
   );
 };
