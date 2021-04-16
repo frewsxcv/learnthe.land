@@ -61,11 +61,6 @@ export const Flashcard = ({
 
   const originalPhotoUrl = species.taxon.default_photo.medium_url.replace("medium", "original");
 
-  // height1 / width1 = height2 / width2
-  // width1 * height2 = height1 * width2
-
-  // width2 = (width1 * height1) / height1
-
   const imageElems = images.map((image) => {
     const width = image.width * FLASHCARD_IMAGE_HEIGHT / image.height;
     return (
