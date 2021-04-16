@@ -17,21 +17,23 @@ export const Flashcard = ({
   const [images, setImages] = useState<FlashcardImage[]>([]);
 
   if (images.length === 0) {
-    iNaturalistApi.fetchObservationsForTaxon(species.taxon.id).then(results => {
-      const extraImages: FlashcardImage[] = [];
-      for (const result of results) {
-        // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/square.jpg?1610506716
-        const squarePhotoUrl: string = result.photos[0].url;
-        // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/original.jpg?1610506716
-        const originalPhotoUrl = squarePhotoUrl.replace("square", "original");
-        extraImages.push({
-          src: originalPhotoUrl,
-          height: result.photos[0].original_dimensions.height,
-          width: result.photos[0].original_dimensions.width
-        });
-      }
-      setImages(extraImages);
-    });
+    iNaturalistApi
+      .fetchObservationsForTaxon(species.taxon.id)
+      .then((results) => {
+        const extraImages: FlashcardImage[] = [];
+        for (const result of results) {
+          // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/square.jpg?1610506716
+          const squarePhotoUrl: string = result.photos[0].url;
+          // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/original.jpg?1610506716
+          const originalPhotoUrl = squarePhotoUrl.replace("square", "original");
+          extraImages.push({
+            src: originalPhotoUrl,
+            height: result.photos[0].original_dimensions.height,
+            width: result.photos[0].original_dimensions.width,
+          });
+        }
+        setImages(extraImages);
+      });
 
     return (
       <NesContainer title={`Flashcards`}>
@@ -43,7 +45,13 @@ export const Flashcard = ({
   const lower = revealed ? (
     <>
       <p>
-        <button className="nes-btn" onClick={() => onNext()}>
+        <button
+          className="nes-btn"
+          onClick={() => {
+            onNext();
+            setImages([]);
+          }}
+        >
           Next
         </button>
       </p>
@@ -54,15 +62,23 @@ export const Flashcard = ({
       </small>
     </>
   ) : (
-    <button className="nes-btn" onClick={() => onReveal()}>
+    <button
+      className="nes-btn"
+      onClick={() => {
+        onReveal();
+      }}
+    >
       Reveal
     </button>
   );
 
-  const originalPhotoUrl = species.taxon.default_photo.medium_url.replace("medium", "original");
+  const originalPhotoUrl = species.taxon.default_photo.medium_url.replace(
+    "medium",
+    "original"
+  );
 
   const imageElems = images.map((image) => {
-    const width = image.width * FLASHCARD_IMAGE_HEIGHT / image.height;
+    const width = (image.width * FLASHCARD_IMAGE_HEIGHT) / image.height;
     return (
       <img
         width={width}
@@ -77,9 +93,7 @@ export const Flashcard = ({
   return (
     <NesContainer title={`Flashcards`}>
       <div style={{ border: "1px solid black" }}>
-        <Flicking gap={20}>
-          {imageElems}
-        </Flicking>
+        <Flicking gap={20}>{imageElems}</Flicking>
       </div>
       {lower}
     </NesContainer>
@@ -92,7 +106,7 @@ type FlashcardImage = {
   height: number;
   // original width
   width: number;
-}
+};
 
 const FLASHCARD_IMAGE_HEIGHT = 400;
 
