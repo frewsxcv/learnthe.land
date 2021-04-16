@@ -9,11 +9,13 @@ const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.onload = () => {
-      resolve([{
-        src: imageSrc,
-        width: image.width,
-        height: image.height,
-      }]);
+      resolve([
+        {
+          src: imageSrc,
+          width: image.width,
+          height: image.height,
+        },
+      ]);
     };
     image.src = imageSrc;
   });
@@ -22,20 +24,37 @@ const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
 const loadINaturalistObservationFlashcardImages: (
   species: SpeciesCount
 ) => Promise<FlashcardImage[]> = (species) => {
-  return iNaturalistApi.fetchObservationsForTaxon(species.taxon.id).then((results) => {
-    const extraImages: FlashcardImage[] = [];
-    for (const result of results) {
-      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/square.jpg?1610506716
-      const squarePhotoUrl: string = result.photos[0].url;
-      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/original.jpg?1610506716
-      const originalPhotoUrl = squarePhotoUrl.replace("square", "original");
-      extraImages.push({
-        src: originalPhotoUrl,
-        height: result.photos[0].original_dimensions.height,
-        width: result.photos[0].original_dimensions.width,
-      });
-    }
-    return extraImages;
+  return iNaturalistApi
+    .fetchObservationsForTaxon(species.taxon.id)
+    .then((results) => {
+      const extraImages: FlashcardImage[] = [];
+      for (const result of results) {
+        // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/square.jpg?1610506716
+        const squarePhotoUrl: string = result.photos[0].url;
+        // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/original.jpg?1610506716
+        const originalPhotoUrl = squarePhotoUrl.replace("square", "original");
+        extraImages.push({
+          src: originalPhotoUrl,
+          height: result.photos[0].original_dimensions.height,
+          width: result.photos[0].original_dimensions.width,
+        });
+      }
+      return extraImages;
+    });
+};
+
+const loadImages: (species: SpeciesCount) => Promise<FlashcardImage[]> = (
+  species
+) => {
+  const originalPhotoUrl = species.taxon.default_photo.medium_url.replace(
+    "medium",
+    "original"
+  );
+  return Promise.all([
+    loadFlashcardImage(originalPhotoUrl),
+    loadINaturalistObservationFlashcardImages(species),
+  ]).then((result) => {
+    return Array.prototype.concat.apply([], result);
   });
 };
 
@@ -53,17 +72,10 @@ export const Flashcard = ({
   const [images, setImages] = useState<FlashcardImage[]>([]);
 
   if (images.length === 0) {
-    const originalPhotoUrl = species.taxon.default_photo.medium_url.replace(
-      "medium",
-      "original"
-    );
-    Promise.all([
-      loadFlashcardImage(originalPhotoUrl),
-      loadINaturalistObservationFlashcardImages(species)
-    ]).then((result) => {
-      const flashcardImages = Array.prototype.concat.apply([], result);
+    loadImages(species).then((flashcardImages) => {
+      shuffleArray(flashcardImages);
       setImages(flashcardImages);
-    })
+    });
 
     return (
       <NesContainer title={`Flashcards`}>
@@ -154,3 +166,12 @@ const Hyperlinks = ({ species }: { species: SpeciesCount }) => {
 const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
+
+function shuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+}
