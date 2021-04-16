@@ -3,6 +3,42 @@ import { NesContainer } from "./NesContainer";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
 
+const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
+  imageSrc
+) => {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => {
+      resolve([{
+        src: imageSrc,
+        width: image.width,
+        height: image.height,
+      }]);
+    };
+    image.src = imageSrc;
+  });
+};
+
+const loadINaturalistObservationFlashcardImages: (
+  species: SpeciesCount
+) => Promise<FlashcardImage[]> = (species) => {
+  return iNaturalistApi.fetchObservationsForTaxon(species.taxon.id).then((results) => {
+    const extraImages: FlashcardImage[] = [];
+    for (const result of results) {
+      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/square.jpg?1610506716
+      const squarePhotoUrl: string = result.photos[0].url;
+      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/original.jpg?1610506716
+      const originalPhotoUrl = squarePhotoUrl.replace("square", "original");
+      extraImages.push({
+        src: originalPhotoUrl,
+        height: result.photos[0].original_dimensions.height,
+        width: result.photos[0].original_dimensions.width,
+      });
+    }
+    return extraImages;
+  });
+};
+
 export const Flashcard = ({
   revealed,
   species,
@@ -17,23 +53,17 @@ export const Flashcard = ({
   const [images, setImages] = useState<FlashcardImage[]>([]);
 
   if (images.length === 0) {
-    iNaturalistApi
-      .fetchObservationsForTaxon(species.taxon.id)
-      .then((results) => {
-        const extraImages: FlashcardImage[] = [];
-        for (const result of results) {
-          // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/square.jpg?1610506716
-          const squarePhotoUrl: string = result.photos[0].url;
-          // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/original.jpg?1610506716
-          const originalPhotoUrl = squarePhotoUrl.replace("square", "original");
-          extraImages.push({
-            src: originalPhotoUrl,
-            height: result.photos[0].original_dimensions.height,
-            width: result.photos[0].original_dimensions.width,
-          });
-        }
-        setImages(extraImages);
-      });
+    const originalPhotoUrl = species.taxon.default_photo.medium_url.replace(
+      "medium",
+      "original"
+    );
+    Promise.all([
+      loadFlashcardImage(originalPhotoUrl),
+      loadINaturalistObservationFlashcardImages(species)
+    ]).then((result) => {
+      const flashcardImages = Array.prototype.concat.apply([], result);
+      setImages(flashcardImages);
+    })
 
     return (
       <NesContainer title={`Flashcards`}>
@@ -70,11 +100,6 @@ export const Flashcard = ({
     >
       Reveal
     </button>
-  );
-
-  const originalPhotoUrl = species.taxon.default_photo.medium_url.replace(
-    "medium",
-    "original"
   );
 
   const imageElems = images.map((image) => {
