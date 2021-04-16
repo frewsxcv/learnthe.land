@@ -1,7 +1,5 @@
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Navbar from 'react-bootstrap/Navbar';
+import Container from "react-bootstrap/Container";
+import Navbar from "react-bootstrap/Navbar";
 
 export const NesContainer = ({
   title,
@@ -22,9 +20,7 @@ export const NesContainer = ({
           <Navbar.Brand>{title}</Navbar.Brand>
         </Container>
       </Navbar>
-      <Container className="mt-5">
-        {children}
-      </Container>
+      <Container className="mt-5">{children}</Container>
     </>
   );
 };

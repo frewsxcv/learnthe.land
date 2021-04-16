@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { NesContainer } from "./NesContainer";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 
 const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
   imageSrc
