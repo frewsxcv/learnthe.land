@@ -44,7 +44,7 @@ export const iNaturalistApi = {
       "&quality_grade=research" +
       `&taxon_id=${taxonId}` +
       "&identifications=most_agree" +
-      "&per_page=5";
+      "&per_page=10";
     // '&order_by=votes';
 
     return fetch(url)
