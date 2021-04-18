@@ -21,10 +21,6 @@ const App = () => {
   const [selectedTaxaCategory, setSelectedTaxaCategory] = useState<
     string | undefined
   >();
-  const [allSpecies, setAllSpecies] = useState<SpeciesCount[] | undefined>();
-  const [currentSpecies, setCurrentSpecies] = useState<
-    SpeciesCount | undefined
-  >();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   if (!location) {
@@ -57,39 +53,23 @@ const App = () => {
     );
   }
 
-  if (!allSpecies) {
+  if (!state.allSpecies) {
     return (
       <LoadAllSpeciesStep
         selectedPlace={selectedPlace}
         selectedTaxaCategory={selectedTaxaCategory}
-        onLoad={(allSpecies) => setAllSpecies(allSpecies)}
+        onLoad={(allSpecies) => dispatch({ type: 'ALL_SPECIES_LOADED', allSpecies })}
       />
     );
-  }
-
-  // TODO: make a step for this
-  const numFlashcards = 50;
-
-  if (!currentSpecies) {
-    const randSpeciesIndex = Math.floor(
-      Math.random() * Math.min(numFlashcards, allSpecies.length)
-    );
-    setCurrentSpecies(allSpecies[randSpeciesIndex]);
-    return;
   }
 
   return (
     <Flashcard
       revealed={state.flashcardRevealed}
-      species={currentSpecies}
-      onReveal={() => {
-        dispatch({ type: 'REVEAL_FLASHCARD' })
-      }}
-      onNext={() => {
-        dispatch({ type: 'NEXT_FLASHCARD' })
-        setCurrentSpecies(undefined);
-      }}
-    ></Flashcard>
+      species={state.currentSpecies}
+      onReveal={() => dispatch({ type: 'REVEAL_FLASHCARD' })}
+      onNext={() => dispatch({ type: 'NEXT_FLASHCARD' })}
+    />
   );
 };
 
