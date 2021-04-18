@@ -7,7 +7,7 @@ import { SelectPlaceStep } from "./SelectPlaceStep";
 import { SelectTaxaCategoryStep } from "./SelectTaxaCategoryStep";
 import { LoadAllSpeciesStep } from "./LoadAllSpeciesStep";
 import { Flashcard } from "./Flashcard";
-import { DEFAULT_STATE, State } from "../state";
+import { initialState } from "../state";
 import { reducer } from "../reducer";
 
 // const reactLogo = require("./../assets/img/react_logo.svg");
@@ -25,7 +25,7 @@ const App = () => {
   const [currentSpecies, setCurrentSpecies] = useState<
     SpeciesCount | undefined
   >();
-  const [state, dispatch] = useReducer(reducer, DEFAULT_STATE);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   if (!location) {
     return <LocationStep onLocation={(location) => setLocation(location)} />;

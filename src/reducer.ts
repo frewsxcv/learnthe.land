@@ -1,9 +1,9 @@
 import { State } from "./state";
 import { Action } from "./Action";
 import { Reducer } from 'react'
-import { DEFAULT_STATE } from './state';
+import { initialState } from './state';
 
-export const reducer: Reducer<State, Action> = (state = DEFAULT_STATE, action) => {
+export const reducer: Reducer<State, Action> = (state, action) => {
     console.debug('Action dispatched', action);
     switch (action.type) {
         case 'REVEAL_FLASHCARD': {
