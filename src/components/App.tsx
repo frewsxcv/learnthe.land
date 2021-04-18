@@ -53,7 +53,7 @@ const App = () => {
     );
   }
 
-  if (!state.allSpecies) {
+  if (!state.speciesInRotation) {
     return (
       <LoadAllSpeciesStep
         selectedPlace={selectedPlace}

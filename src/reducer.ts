@@ -6,13 +6,14 @@ import { SpeciesCount } from './inaturalist';
 // TODO: make a step for this
 const numFlashcards = 50;
 
-export const reducer: Reducer<State, Action> = (state, action) => {
+export const reducer: Reducer<State, Action> = (state: State, action: Action): State => {
     console.debug('Action dispatched', action);
     switch (action.type) {
         case 'ALL_SPECIES_LOADED': {
             return {
                 ...state,
-                allSpecies: action.allSpecies,
+                speciesInRotation: action.allSpecies.slice(0, 50),
+                speciesNotInRotation: action.allSpecies.slice(50),
                 currentSpecies: selectRandomSpecies(action.allSpecies),
             };
         }
@@ -25,7 +26,7 @@ export const reducer: Reducer<State, Action> = (state, action) => {
         case 'NEXT_FLASHCARD': {
             return {
                 ...state,
-                currentSpecies: selectRandomSpecies(state.allSpecies),
+                currentSpecies: selectRandomSpecies(state.speciesInRotation),
                 flashcardRevealed: false,
             };
         }
