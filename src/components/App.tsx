@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { hot } from "react-hot-loader";
 import { Place, SpeciesCount } from "../inaturalist";
 import { Location, LocationStep } from "./LocationStep";
@@ -7,6 +7,8 @@ import { SelectPlaceStep } from "./SelectPlaceStep";
 import { SelectTaxaCategoryStep } from "./SelectTaxaCategoryStep";
 import { LoadAllSpeciesStep } from "./LoadAllSpeciesStep";
 import { Flashcard } from "./Flashcard";
+import { DEFAULT_STATE, State } from "../state";
+import { reducer } from "../reducer";
 
 // const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
@@ -23,7 +25,7 @@ const App = () => {
   const [currentSpecies, setCurrentSpecies] = useState<
     SpeciesCount | undefined
   >();
-  const [revealSpecies, setRevealSpecies] = useState<boolean>(false);
+  const [state, dispatch] = useReducer(reducer, DEFAULT_STATE);
 
   if (!location) {
     return <LocationStep onLocation={(location) => setLocation(location)} />;
@@ -78,13 +80,13 @@ const App = () => {
 
   return (
     <Flashcard
-      revealed={revealSpecies}
+      revealed={state.flashcardRevealed}
       species={currentSpecies}
       onReveal={() => {
-        setRevealSpecies(true);
+        dispatch({ type: 'REVEAL_FLASHCARD' })
       }}
       onNext={() => {
-        setRevealSpecies(false);
+        dispatch({ type: 'NEXT_FLASHCARD' })
         setCurrentSpecies(undefined);
       }}
     ></Flashcard>
