@@ -1,4 +1,5 @@
 import { NesContainer } from "./NesContainer";
+import * as React from "react";
 
 export const LocationStep = ({
   onLocation,
