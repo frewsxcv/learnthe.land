@@ -100,3 +100,33 @@ export interface Taxon {
   preferred_establishment_means: string;
   wikipedia_url?: string;
 }
+
+// TODO: is this list exhaustive?
+export type IconicTaxa =
+  | "Animalia"
+  | "Amphibia"
+  | "Arachnida"
+  | "Aves"
+  | "Chromista"
+  | "Fungi"
+  | "Insecta"
+  | "Mammalia"
+  | "Mollusca"
+  | "Reptilia"
+  | "Plantae";
+
+
+// TODO: combine with the above
+export const iconicTaxa = [
+  "Animalia",
+  "Amphibia",
+  "Arachnida",
+  "Aves",
+  "Chromista",
+  "Fungi",
+  "Insecta",
+  "Mammalia",
+  "Mollusca",
+  "Reptilia",
+  "Plantae",
+];

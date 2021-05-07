@@ -44,27 +44,31 @@ const loadINaturalistObservationFlashcardImages: (
     });
 };
 
-const loadImages: (species: SpeciesCount) => Promise<FlashcardImage[]> = (
+const loadImages: (offlineMode: boolean, species: SpeciesCount) => Promise<FlashcardImage[]> = (
+  offlineMode,
   species
 ) => {
   const originalPhotoUrl = species.taxon.default_photo.medium_url.replace(
     "medium",
     "original"
   );
-  return Promise.all([
-    loadFlashcardImage(originalPhotoUrl),
-    loadINaturalistObservationFlashcardImages(species),
-  ]).then((result) => {
+  const promises = [loadFlashcardImage(originalPhotoUrl)];
+  if (!offlineMode) {
+    promises.push(loadINaturalistObservationFlashcardImages(species));
+  }
+  return Promise.all(promises).then((result) => {
     return Array.prototype.concat.apply([], result);
   });
 };
 
 export const Flashcard = ({
+  offlineMode,
   revealed,
   species,
   onReveal,
   onNext,
 }: {
+  offlineMode: boolean;
   revealed: boolean;
   species: SpeciesCount;
   onReveal: () => void;
@@ -73,7 +77,8 @@ export const Flashcard = ({
   const [images, setImages] = useState<FlashcardImage[]>([]);
 
   if (images.length === 0) {
-    loadImages(species).then((flashcardImages) => {
+
+    loadImages(offlineMode, species).then((flashcardImages) => {
       shuffleArray(flashcardImages);
       setImages(flashcardImages);
     });

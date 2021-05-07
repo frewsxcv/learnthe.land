@@ -1,6 +1,7 @@
 import { Place } from "../inaturalist";
 import { NesContainer } from "./NesContainer";
 import Button from "react-bootstrap/Button";
+import * as React from "react";
 
 export const SelectPlaceStep = ({
   places,

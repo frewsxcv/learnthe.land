@@ -1,11 +1,24 @@
 import { NesContainer } from "./NesContainer";
+import { Location } from "../location";
 import * as React from "react";
 
 export const LocationStep = ({
   onLocation,
+  offlineMode,
 }: {
   onLocation: (location: Location) => void;
+  offlineMode: boolean;
 }) => {
+  if (offlineMode) {
+    window.setTimeout(() => {
+      onLocation({
+        latitude: 0.,
+        longitude: 0.,
+      });
+    }, 300);
+    return loading;
+  }
+
   const result = navigator.geolocation.getCurrentPosition(
     (result) => {
       onLocation({
@@ -17,14 +30,11 @@ export const LocationStep = ({
       <p>Could not fetch location</p>
     }
   );
-  return (
-    <NesContainer title="Places">
-      <p>Request location...</p>
-    </NesContainer>
-  );
+  return loading;
 };
 
-export interface Location {
-  longitude: number;
-  latitude: number;
-}
+const loading = (
+  <NesContainer title="Places">
+    <p>Request location...</p>
+  </NesContainer>
+);

@@ -1,7 +1,7 @@
 import React, { useState, useReducer } from "react";
 import { hot } from "react-hot-loader";
-import { Place, SpeciesCount } from "../inaturalist";
-import { Location, LocationStep } from "./LocationStep";
+import { Place } from "../inaturalist";
+import { LocationStep } from "./LocationStep";
 import { PlacesStep } from "./PlacesStep";
 import { SelectPlaceStep } from "./SelectPlaceStep";
 import { SelectTaxaCategoryStep } from "./SelectTaxaCategoryStep";
@@ -14,41 +14,43 @@ import { reducer } from "../reducer";
 import "./../assets/scss/App.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+const OFFLINE_MODE = true;
+
 const App = () => {
-  const [location, setLocation] = useState<Location | undefined>();
-  const [places, setPlaces] = useState<Place[] | undefined>();
-  const [selectedPlace, setSelectedPlace] = useState<Place | undefined>();
-  const [selectedTaxaCategory, setSelectedTaxaCategory] = useState<
-    string | undefined
-  >();
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  if (!location) {
-    return <LocationStep onLocation={(location) => setLocation(location)} />;
+  if (!state.location) {
+    return (
+      <LocationStep
+        offlineMode={OFFLINE_MODE}
+        onLocation={(location) => dispatch({ type: 'LOCATION_LOADED', location })}
+      />
+    );
   }
 
-  if (!places) {
+  if (!state.places) {
     return (
       <PlacesStep
-        location={location}
-        onPlaces={(places) => setPlaces(places)}
+        offlineMode={OFFLINE_MODE}
+        location={state.location}
+        onLoad={(places) => dispatch({ type: 'PLACES_LOADED', places })}
       />
     );
   }
 
-  if (!selectedPlace) {
+  if (!state.selectedPlace) {
     return (
       <SelectPlaceStep
-        places={places}
-        onSelectPlace={(place) => setSelectedPlace(place)}
+        places={state.places}
+        onSelectPlace={(place) => dispatch({ type: 'PLACE_SELECTED', place })}
       />
     );
   }
 
-  if (!selectedTaxaCategory) {
+  if (!state.selectedTaxaCategory) {
     return (
       <SelectTaxaCategoryStep
-        onSelect={(taxaCategory) => setSelectedTaxaCategory(taxaCategory)}
+        onSelect={(taxaCategory) => dispatch({ type: 'TAXA_CATEGORY_SELECTED', taxaCategory })}
       />
     );
   }
@@ -56,8 +58,9 @@ const App = () => {
   if (!state.speciesInRotation) {
     return (
       <LoadAllSpeciesStep
-        selectedPlace={selectedPlace}
-        selectedTaxaCategory={selectedTaxaCategory}
+        offlineMode={OFFLINE_MODE}
+        selectedPlace={state.selectedPlace}
+        selectedTaxaCategory={state.selectedTaxaCategory}
         onLoad={(allSpecies) => dispatch({ type: 'ALL_SPECIES_LOADED', allSpecies })}
       />
     );
@@ -65,6 +68,7 @@ const App = () => {
 
   return (
     <Flashcard
+      offlineMode={OFFLINE_MODE}
       revealed={state.flashcardRevealed}
       species={state.currentSpecies}
       onReveal={() => dispatch({ type: 'REVEAL_FLASHCARD' })}

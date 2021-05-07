@@ -1,30 +1,17 @@
 import { NesContainer } from "./NesContainer";
+import { IconicTaxa, iconicTaxa } from "../inaturalist";
 import Button from "react-bootstrap/Button";
-
-// TODO: is this list exhaustive?
-const iconicTaxa = [
-  "Animalia",
-  "Amphibia",
-  "Arachnida",
-  "Aves",
-  "Chromista",
-  "Fungi",
-  "Insecta",
-  "Mammalia",
-  "Mollusca",
-  "Reptilia",
-  "Plantae",
-];
+import * as React from "react";
 
 export const SelectTaxaCategoryStep = ({
   onSelect,
 }: {
-  onSelect: (string: string) => void;
+  onSelect: (taxaCategory: IconicTaxa) => void;
 }) => {
   const buttons = iconicTaxa.map((iconicTaxon, i) => {
     return (
       <div key={i}>
-        <Button className="mb1" onClick={() => onSelect(iconicTaxon)}>
+        <Button className="mb1" onClick={() => onSelect(iconicTaxon as IconicTaxa)}>
           {iconicTaxon}
         </Button>
       </div>
