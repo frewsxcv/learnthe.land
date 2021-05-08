@@ -3,6 +3,7 @@ import { NesContainer } from "./NesContainer";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
 import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 
 const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
   imageSrc
@@ -91,19 +92,17 @@ export const Flashcard = ({
   }
 
   const lower = revealed ? (
-    <>
-      <p>
-        <Button
-          onClick={() => {
-            onNext();
-            setImages([]);
-          }}
-        >
-          Next
-        </Button>
-      </p>
+    <div className="d-grid gap-3">
+      <Button
+        onClick={() => {
+          onNext();
+          setImages([]);
+        }}
+      >
+        Next
+      </Button>
       <SpeciesFacts species={species} />
-    </>
+    </div>
   ) : (
     <Button onClick={() => onReveal()}>
       Reveal
@@ -126,24 +125,45 @@ export const Flashcard = ({
 
   return (
     <NesContainer title={`Flashcards`}>
-      <div style={{ border: "1px solid black" }}>
-        <Flicking gap={20}>{imageElems}</Flicking>
+      <div className="d-grid gap-3">
+        <div style={{ border: "1px solid black" }}>
+          <Flicking gap={20}>{imageElems}</Flicking>
+        </div>
+        {lower}
       </div>
-      {lower}
     </NesContainer>
   );
 };
 
 const SpeciesFacts = ({ species }: { species: SpeciesCount }) => {
   return (
-    <>
-      <p>{capitalizeFirstLetter(species.taxon.preferred_common_name)}</p>
-      <small>
-        <p>({species.taxon.name})</p>
-        <Hyperlinks species={species} />
-      </small>
-    </>
+    <Card>
+      <Card.Body>
+        <div className="d-grid gap-3">
+          <SpeciesName species={species} />
+          <Hyperlinks species={species} />
+        </div>
+      </Card.Body>
+    </Card>
   );
+};
+
+const SpeciesName = ({ species }: { species: SpeciesCount }) => {
+  const taxonName = capitalizeFirstLetter(species.taxon.name);
+  if (species.taxon.preferred_common_name) {
+    return (
+      <>
+        <div>{capitalizeFirstLetter(species.taxon.preferred_common_name)}</div>
+        <div className="text-secondary">({taxonName})</div>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div>{taxonName}</div>
+      </>
+    );
+  }
 };
 
 type FlashcardImage = {
@@ -164,11 +184,11 @@ const Hyperlinks = ({ species }: { species: SpeciesCount }) => {
   const wikipediaAnchor = wikipediaUrl && <a href={wikipediaUrl}>Wikipedia</a>;
 
   return wikipediaAnchor ? (
-    <p>
+    <div>
       {iNaturalistAnchor} · {wikipediaAnchor}
-    </p>
+    </div>
   ) : (
-    <p>{iNaturalistAnchor}</p>
+    <div>{iNaturalistAnchor}</div>
   );
 };
 

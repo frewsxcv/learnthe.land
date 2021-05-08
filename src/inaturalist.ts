@@ -81,7 +81,7 @@ export interface Taxon {
   iconic_taxon_name: string;
   is_active: boolean;
   name: string;
-  preferred_common_name: string;
+  preferred_common_name?: string;
   rank: string;
   rank_level: number;
   colors: any;
