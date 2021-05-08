@@ -118,10 +118,11 @@ export const Flashcard = ({
     </Button>
   );
 
-  const imageElems = images.map((image) => {
+  const imageElems = images.map((image, i) => {
     const width = (image.width * FLASHCARD_IMAGE_HEIGHT) / image.height;
     return (
       <img
+        key={i}
         width={width}
         height={FLASHCARD_IMAGE_HEIGHT}
         style={{ pointerEvents: "none" }}
