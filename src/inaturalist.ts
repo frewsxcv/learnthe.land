@@ -78,7 +78,7 @@ export interface SpeciesCount {
 export interface Taxon {
   id: number;
   iconic_taxon_id: number;
-  iconic_taxon_name: string;
+  iconic_taxon_name: IconicTaxa;
   is_active: boolean;
   name: string;
   preferred_common_name?: string;
