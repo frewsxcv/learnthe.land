@@ -102,18 +102,10 @@ export const Flashcard = ({
           Next
         </Button>
       </p>
-      <p>{capitalizeFirstLetter(species.taxon.preferred_common_name)}</p>
-      <small>
-        <p>({species.taxon.name})</p>
-        <Hyperlinks species={species} />
-      </small>
+      <SpeciesFacts species={species} />
     </>
   ) : (
-    <Button
-      onClick={() => {
-        onReveal();
-      }}
-    >
+    <Button onClick={() => onReveal()}>
       Reveal
     </Button>
   );
@@ -139,6 +131,18 @@ export const Flashcard = ({
       </div>
       {lower}
     </NesContainer>
+  );
+};
+
+const SpeciesFacts = ({ species }: { species: SpeciesCount }) => {
+  return (
+    <>
+      <p>{capitalizeFirstLetter(species.taxon.preferred_common_name)}</p>
+      <small>
+        <p>({species.taxon.name})</p>
+        <Hyperlinks species={species} />
+      </small>
+    </>
   );
 };
 
