@@ -68,7 +68,7 @@
   },
   "dependencies": {
     "@egjs/react-flicking": "^3.7.0",
-    "bootstrap": "^4.6.0",
+    "bootstrap": "^5",
     "react-bootstrap": "^1.5.2"
   }
 }
