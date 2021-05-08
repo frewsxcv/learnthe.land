@@ -178,17 +178,23 @@ const FLASHCARD_IMAGE_HEIGHT = 400;
 
 const Hyperlinks = ({ species }: { species: SpeciesCount }) => {
   const iNaturalistUrl = `https://www.inaturalist.org/taxa/${species.taxon.id}`;
-  const iNaturalistAnchor = <a href={iNaturalistUrl}>iNaturalist</a>;
+  const iNaturalistAnchor = <HyperlinkButton href={iNaturalistUrl}>iNaturalist</HyperlinkButton>;
 
   const wikipediaUrl = species.taxon.wikipedia_url;
-  const wikipediaAnchor = wikipediaUrl && <a href={wikipediaUrl}>Wikipedia</a>;
+  const wikipediaAnchor = wikipediaUrl && <HyperlinkButton href={wikipediaUrl}>Wikipedia</HyperlinkButton>;
 
   return wikipediaAnchor ? (
     <div>
-      {iNaturalistAnchor} · {wikipediaAnchor}
+      {iNaturalistAnchor} {wikipediaAnchor}
     </div>
   ) : (
     <div>{iNaturalistAnchor}</div>
+  );
+};
+
+const HyperlinkButton = ({ href, children }: { href: string, children: React.ReactNode }) => {
+  return (
+    <Button size="sm" variant="outline-secondary" href={href}>{children}</Button>
   );
 };
 
