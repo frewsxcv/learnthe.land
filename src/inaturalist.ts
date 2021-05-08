@@ -101,22 +101,6 @@ export interface Taxon {
   wikipedia_url?: string;
 }
 
-// TODO: is this list exhaustive?
-export type IconicTaxa =
-  | "Animalia"
-  | "Amphibia"
-  | "Arachnida"
-  | "Aves"
-  | "Chromista"
-  | "Fungi"
-  | "Insecta"
-  | "Mammalia"
-  | "Mollusca"
-  | "Reptilia"
-  | "Plantae";
-
-
-// TODO: combine with the above
 export const iconicTaxa = [
   "Animalia",
   "Amphibia",
@@ -129,4 +113,6 @@ export const iconicTaxa = [
   "Mollusca",
   "Reptilia",
   "Plantae",
-];
+] as const;
+
+type IconicTaxa = typeof iconicTaxa[number];
