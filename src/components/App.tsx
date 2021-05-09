@@ -14,7 +14,7 @@ import { reducer } from "../reducer";
 import "./../assets/scss/App.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const OFFLINE_MODE = true;
+const OFFLINE_MODE = false;
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
