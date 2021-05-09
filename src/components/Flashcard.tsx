@@ -194,7 +194,7 @@ const Hyperlinks = ({ species }: { species: SpeciesCount }) => {
 
 const HyperlinkButton = ({ href, children }: { href: string, children: React.ReactNode }) => {
   return (
-    <Button size="sm" variant="outline-secondary" href={href}>{children}</Button>
+    <Button size="sm" variant="outline-secondary" href={href} target='_blank'>{children}</Button>
   );
 };
 

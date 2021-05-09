@@ -1,6 +1,5 @@
-import React, { useState, useReducer } from "react";
+import React, { useReducer } from "react";
 import { hot } from "react-hot-loader";
-import { Place } from "../inaturalist";
 import { LocationStep } from "./LocationStep";
 import { PlacesStep } from "./PlacesStep";
 import { SelectPlaceStep } from "./SelectPlaceStep";
