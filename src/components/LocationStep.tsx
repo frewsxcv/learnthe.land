@@ -1,4 +1,4 @@
-import { NesContainer } from "./NesContainer";
+import { Frame } from "./Frame";
 import { Location } from "../location";
 import * as React from "react";
 
@@ -34,7 +34,7 @@ export const LocationStep = ({
 };
 
 const loading = (
-  <NesContainer title="Places">
+  <Frame title="Places">
     <p>Request location...</p>
-  </NesContainer>
+  </Frame>
 );

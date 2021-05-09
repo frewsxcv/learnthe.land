@@ -1,5 +1,5 @@
 import { iNaturalistApi } from "../inaturalist";
-import { NesContainer } from "./NesContainer";
+import { Frame } from "./Frame";
 import { SpeciesCount, Place } from "../inaturalist";
 import * as React from "react";
 
@@ -31,9 +31,9 @@ export const LoadAllSpeciesStep = ({
 };
 
 const loading = (
-  <NesContainer title={`Flashcards`}>
+  <Frame title={`Flashcards`}>
     <p>Loading species...</p>
-  </NesContainer>
+  </Frame>
 );
 
 const fakeSpecies: SpeciesCount = {

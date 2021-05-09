@@ -1,5 +1,5 @@
 import { Place } from "../inaturalist";
-import { NesContainer } from "./NesContainer";
+import { Frame } from "./Frame";
 import Button from "react-bootstrap/Button";
 import * as React from "react";
 
@@ -23,5 +23,5 @@ export const SelectPlaceStep = ({
     );
   });
 
-  return <NesContainer title="Places">{placesElems}</NesContainer>;
+  return <Frame title="Places">{placesElems}</Frame>;
 };

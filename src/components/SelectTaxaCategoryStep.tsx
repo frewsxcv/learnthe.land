@@ -1,4 +1,4 @@
-import { NesContainer } from "./NesContainer";
+import { Frame } from "./Frame";
 import { IconicTaxa, iconicTaxa } from "../inaturalist";
 import Button from "react-bootstrap/Button";
 import * as React from "react";
@@ -17,5 +17,5 @@ export const SelectTaxaCategoryStep = ({
       </div>
     );
   });
-  return <NesContainer title={`Taxa Category`}>{buttons}</NesContainer>;
+  return <Frame title={`Taxa Category`}>{buttons}</Frame>;
 };

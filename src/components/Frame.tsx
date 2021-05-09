@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import React from "react";
 
-export const NesContainer = ({
+export const Frame = ({
   title,
   children,
 }: {

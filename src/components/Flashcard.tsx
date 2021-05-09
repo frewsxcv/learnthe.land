@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NesContainer } from "./NesContainer";
+import { Frame } from "./Frame";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
 import Button from "react-bootstrap/Button";
@@ -85,9 +85,9 @@ export const Flashcard = ({
     });
 
     return (
-      <NesContainer title={`Flashcards`}>
+      <Frame title={`Flashcards`}>
         <p>Loading images...</p>
-      </NesContainer>
+      </Frame>
     );
   }
 
@@ -124,14 +124,14 @@ export const Flashcard = ({
   });
 
   return (
-    <NesContainer title={`Flashcards`}>
+    <Frame title={`Flashcards`}>
       <div className="d-grid gap-3">
         <div style={{ border: "1px solid black" }}>
           <Flicking gap={20}>{imageElems}</Flicking>
         </div>
         {lower}
       </div>
-    </NesContainer>
+    </Frame>
   );
 };
 

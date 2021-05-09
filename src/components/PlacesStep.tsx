@@ -1,6 +1,6 @@
 import { iNaturalistApi, Place } from "../inaturalist";
 import { Location } from "../location";
-import { NesContainer } from "./NesContainer";
+import { Frame } from "./Frame";
 import * as React from "react";
 
 export const PlacesStep = ({
@@ -38,7 +38,7 @@ const fakePlace: Place = {
 };
 
 const loading = (
-  <NesContainer title="Places">
+  <Frame title="Places">
     <p>Loading...</p>
-  </NesContainer>
+  </Frame>
 );
