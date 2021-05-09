@@ -202,11 +202,31 @@ const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-function shuffleArray(array) {
-  for (var i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = array[i];
+const shuffleArray = (array: any[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
     array[i] = array[j];
     array[j] = temp;
   }
-}
+};
+
+type FlashcardRating = 'know' | 'dontknow';
+
+const processScoredFlashcard = (flashcard, flashcardRating: FlashcardRating, flashcards) => {
+  /*
+  if (user doesn't know flashcard) {
+    flashcard.streak = 0;
+    return
+  }
+
+  flashcard.streak += 1;
+
+  flashcards.insert(2 ** flashcard.streak);
+
+  if (flashcards.no_streak_count() < 5) {
+    species = speciesNotInRotation.pop(0);
+    flashcards.insert(species);
+  }
+  */
+};
