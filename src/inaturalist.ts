@@ -59,7 +59,7 @@ export interface Place {
   admin_level: number;
   ancestor_place_ids: null;
   bbox_area: number;
-  bounding_box_geojson: object;
+  bounding_box_geojson: { coordinates: any[] };
   display_name: string;
   geometry_geojson: object;
   id: number;
