@@ -22,7 +22,9 @@ const App = () => {
     return (
       <LocationStep
         offlineMode={OFFLINE_MODE}
-        onLocation={(location) => dispatch({ type: 'LOCATION_LOADED', location })}
+        onLocation={(location) =>
+          dispatch({ type: "LOCATION_LOADED", location })
+        }
       />
     );
   }
@@ -32,7 +34,7 @@ const App = () => {
       <PlacesStep
         offlineMode={OFFLINE_MODE}
         location={state.location}
-        onLoad={(places) => dispatch({ type: 'PLACES_LOADED', places })}
+        onLoad={(places) => dispatch({ type: "PLACES_LOADED", places })}
       />
     );
   }
@@ -41,7 +43,7 @@ const App = () => {
     return (
       <SelectPlaceStep
         places={state.places}
-        onSelectPlace={(place) => dispatch({ type: 'PLACE_SELECTED', place })}
+        onSelectPlace={(place) => dispatch({ type: "PLACE_SELECTED", place })}
       />
     );
   }
@@ -49,7 +51,9 @@ const App = () => {
   if (!state.selectedTaxaCategory) {
     return (
       <SelectTaxaCategoryStep
-        onSelect={(taxaCategory) => dispatch({ type: 'TAXA_CATEGORY_SELECTED', taxaCategory })}
+        onSelect={(taxaCategory) =>
+          dispatch({ type: "TAXA_CATEGORY_SELECTED", taxaCategory })
+        }
       />
     );
   }
@@ -60,7 +64,9 @@ const App = () => {
         offlineMode={OFFLINE_MODE}
         selectedPlace={state.selectedPlace}
         selectedTaxaCategory={state.selectedTaxaCategory}
-        onLoad={(allSpecies) => dispatch({ type: 'ALL_SPECIES_LOADED', allSpecies })}
+        onLoad={(allSpecies) =>
+          dispatch({ type: "ALL_SPECIES_LOADED", allSpecies })
+        }
       />
     );
   }
@@ -70,8 +76,8 @@ const App = () => {
       offlineMode={OFFLINE_MODE}
       revealed={state.flashcardRevealed}
       species={state.currentSpecies}
-      onReveal={() => dispatch({ type: 'REVEAL_FLASHCARD' })}
-      onNext={() => dispatch({ type: 'NEXT_FLASHCARD' })}
+      onReveal={() => dispatch({ type: "REVEAL_FLASHCARD" })}
+      onNext={() => dispatch({ type: "NEXT_FLASHCARD" })}
     />
   );
 };

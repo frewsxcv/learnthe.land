@@ -12,8 +12,8 @@ export const LocationStep = ({
   if (offlineMode) {
     window.setTimeout(() => {
       onLocation({
-        latitude: 0.,
-        longitude: 0.,
+        latitude: 0,
+        longitude: 0,
       });
     }, 300);
     return loading;
@@ -27,7 +27,7 @@ export const LocationStep = ({
       });
     },
     () => {
-      <p>Could not fetch location</p>
+      <p>Could not fetch location</p>;
     }
   );
   return loading;

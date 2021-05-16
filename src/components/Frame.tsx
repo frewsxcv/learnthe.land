@@ -18,9 +18,7 @@ export const Frame = ({
           <Navbar.Brand>learnthe.land</Navbar.Brand>
         </Container>
       </Navbar>
-      <Container className="py-3">
-        {children}
-      </Container>
+      <Container className="py-3">{children}</Container>
     </>
   );
 };

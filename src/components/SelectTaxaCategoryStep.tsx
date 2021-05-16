@@ -11,7 +11,10 @@ export const SelectTaxaCategoryStep = ({
   const buttons = iconicTaxa.map((iconicTaxon, i) => {
     return (
       <div key={i}>
-        <Button className="mb1" onClick={() => onSelect(iconicTaxon as IconicTaxa)}>
+        <Button
+          className="mb1"
+          onClick={() => onSelect(iconicTaxon as IconicTaxa)}
+        >
           {iconicTaxon}
         </Button>
       </div>

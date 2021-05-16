@@ -45,10 +45,10 @@ const loadINaturalistObservationFlashcardImages: (
     });
 };
 
-const loadImages: (offlineMode: boolean, species: SpeciesCount) => Promise<FlashcardImage[]> = (
-  offlineMode,
-  species
-) => {
+const loadImages: (
+  offlineMode: boolean,
+  species: SpeciesCount
+) => Promise<FlashcardImage[]> = (offlineMode, species) => {
   const originalPhotoUrl = species.taxon.default_photo.medium_url.replace(
     "medium",
     "original"
@@ -78,7 +78,6 @@ export const Flashcard = ({
   const [images, setImages] = useState<FlashcardImage[]>([]);
 
   if (images.length === 0) {
-
     loadImages(offlineMode, species).then((flashcardImages) => {
       shuffleArray(flashcardImages);
       setImages(flashcardImages);
@@ -104,9 +103,7 @@ export const Flashcard = ({
       <SpeciesFacts species={species} />
     </div>
   ) : (
-    <Button onClick={() => onReveal()}>
-      Reveal
-    </Button>
+    <Button onClick={() => onReveal()}>Reveal</Button>
   );
 
   const imageElems = images.map((image, i) => {
@@ -178,10 +175,14 @@ const FLASHCARD_IMAGE_HEIGHT = 400;
 
 const Hyperlinks = ({ species }: { species: SpeciesCount }) => {
   const iNaturalistUrl = `https://www.inaturalist.org/taxa/${species.taxon.id}`;
-  const iNaturalistAnchor = <HyperlinkButton href={iNaturalistUrl}>iNaturalist</HyperlinkButton>;
+  const iNaturalistAnchor = (
+    <HyperlinkButton href={iNaturalistUrl}>iNaturalist</HyperlinkButton>
+  );
 
   const wikipediaUrl = species.taxon.wikipedia_url;
-  const wikipediaAnchor = wikipediaUrl && <HyperlinkButton href={wikipediaUrl}>Wikipedia</HyperlinkButton>;
+  const wikipediaAnchor = wikipediaUrl && (
+    <HyperlinkButton href={wikipediaUrl}>Wikipedia</HyperlinkButton>
+  );
 
   return wikipediaAnchor ? (
     <div>
@@ -192,9 +193,17 @@ const Hyperlinks = ({ species }: { species: SpeciesCount }) => {
   );
 };
 
-const HyperlinkButton = ({ href, children }: { href: string, children: React.ReactNode }) => {
+const HyperlinkButton = ({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) => {
   return (
-    <Button size="sm" variant="outline-secondary" href={href} target='_blank'>{children}</Button>
+    <Button size="sm" variant="outline-secondary" href={href} target="_blank">
+      {children}
+    </Button>
   );
 };
 
@@ -211,9 +220,13 @@ const shuffleArray = (array: any[]) => {
   }
 };
 
-type FlashcardRating = 'know' | 'dontknow';
+type FlashcardRating = "know" | "dontknow";
 
-const processScoredFlashcard = (flashcard, flashcardRating: FlashcardRating, flashcards) => {
+const processScoredFlashcard = (
+  flashcard,
+  flashcardRating: FlashcardRating,
+  flashcards
+) => {
   /*
   if (user doesn't know flashcard) {
     flashcard.streak = 0;
