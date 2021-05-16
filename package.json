@@ -1,30 +1,9 @@
 {
-  "name": "react-webpack-typescript-starter",
+  "name": "learnthe.land",
   "version": "0.1.0",
-  "description": "Starter kit for React, Webpack (with Hot Module Replacement), Typescript and Babel.",
-  "keywords": [
-    "react",
-    "webpack",
-    "typescript",
-    "babel",
-    "sass",
-    "hmr",
-    "starter",
-    "boilerplate"
-  ],
-  "author": "Viktor Persson",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vikpe/react-webpack-typescript-starter.git"
-  },
-  "bugs": {
-    "url": "https://github.com/vikpe/react-webpack-typescript-starter/issues"
-  },
-  "homepage": "https://github.com/vikpe/react-webpack-typescript-starter",
+  "private": true,
   "scripts": {
     "build": "npm run clean-dist && webpack --config=configs/webpack/prod.js",
-    "clean-dist": "rimraf dist/*",
     "lint": "eslint './src/**/*.{js,ts,tsx}' --quiet",
     "start": "npm run start-dev",
     "start-dev": "webpack serve --config=configs/webpack/dev.js",
@@ -36,6 +15,7 @@
     "@babel/preset-env": "^7.13.10",
     "@babel/preset-react": "^7.12.13",
     "@babel/preset-typescript": "^7.13.0",
+    "@egjs/react-flicking": "^3.7.0",
     "@types/jest": "^26.0.20",
     "@types/leaflet": "^1.7.0",
     "@types/node": "^14.14.34",
@@ -44,6 +24,7 @@
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
     "babel-loader": "^8.2.2",
+    "bootstrap": "^5",
     "css-loader": "^5.1.2",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
@@ -53,12 +34,14 @@
     "html-webpack-plugin": "^5.3.1",
     "image-webpack-loader": "^7.0.1",
     "jest": "^26.6.3",
+    "leaflet": "^1.7.1",
     "node-sass": "^5.0.0",
     "prettier": "^2.2.1",
     "react": "^17.0.1",
+    "react-bootstrap": "^1.5.2",
     "react-dom": "^17.0.1",
     "react-hot-loader": "^4.13.0",
-    "rimraf": "^3.0.2",
+    "react-leaflet": "^3.1.0",
     "sass-loader": "^11.0.1",
     "style-loader": "^2.0.0",
     "typescript": "^4.2.3",
@@ -66,12 +49,5 @@
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.7.3"
-  },
-  "dependencies": {
-    "@egjs/react-flicking": "^3.7.0",
-    "bootstrap": "^5",
-    "leaflet": "^1.7.1",
-    "react-bootstrap": "^1.5.2",
-    "react-leaflet": "^3.1.0"
   }
 }
