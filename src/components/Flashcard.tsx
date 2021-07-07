@@ -4,7 +4,7 @@ import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { Col, Container, Row } from "react-bootstrap";
+import { ButtonGroup, Col, Container, Row } from "react-bootstrap";
 
 const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
   imageSrc
@@ -105,25 +105,11 @@ export const Flashcard = ({
       <SpeciesFacts species={species} />
     </div>
   ) : (
-    <Container>
-      <Row>
-        <Col>
-          <div className="d-grid">
-            <Button onClick={() => flickingRef.current.prev()}>Previous image</Button>
-          </div>
-        </Col>
-        <Col>
-          <div className="d-grid">
-            <Button onClick={() => onReveal()}>Reveal</Button>
-          </div>
-        </Col>
-        <Col>
-          <div className="d-grid">
-            <Button onClick={() => flickingRef.current.next()}>Next image</Button>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+    <ButtonGroup>
+      <Button variant='outline-primary' onClick={() => flickingRef.current.prev()}>Previous image</Button>
+      <Button onClick={() => onReveal()}>Reveal</Button>
+      <Button variant='outline-primary' onClick={() => flickingRef.current.next()}>Next image</Button>
+    </ButtonGroup>
   );
 
   const imageElems = images.map((image, i) => {
