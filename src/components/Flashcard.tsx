@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { ButtonGroup } from "react-bootstrap";
 import { Fade } from "@egjs/flicking-plugins";
+import { ArrowLeft, ArrowRight, Eye, EyeFill, Stack } from "react-bootstrap-icons";
 
 const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
   imageSrc
@@ -95,11 +96,17 @@ export const Flashcard = ({
   }
 
   const prevImageButton = (
-    <Button variant='outline-primary' onClick={() => flickingRef.current.prev()}>Previous image</Button>
+    <Button variant='outline-secondary' onClick={() => flickingRef.current.prev()}>
+      <ArrowLeft />&nbsp;
+      Previous image
+    </Button>
   );
 
   const nextImageButton = (
-    <Button variant='outline-primary' onClick={() => flickingRef.current.next()}>Next image</Button>
+    <Button variant='outline-secondary' onClick={() => flickingRef.current.next()}>
+      Next image
+      &nbsp;<ArrowRight />
+    </Button>
   );
 
   const lower = revealed ? (
@@ -112,7 +119,8 @@ export const Flashcard = ({
             setImages([]);
           }}
         >
-          Next
+          <Stack />&nbsp;
+          Next flashcard
         </Button>
         {nextImageButton}
       </ButtonGroup>
@@ -121,7 +129,10 @@ export const Flashcard = ({
   ) : (
     <ButtonGroup>
       {prevImageButton}
-      <Button onClick={() => onReveal()}>Reveal</Button>
+      <Button onClick={() => onReveal()}>
+        <EyeFill />&nbsp;
+        Reveal flashcard
+      </Button>
       {nextImageButton}
     </ButtonGroup>
   );
