@@ -92,23 +92,35 @@ export const Flashcard = ({
     );
   }
 
+  const prevImageButton = (
+    <Button variant='outline-primary' onClick={() => flickingRef.current.prev()}>Previous image</Button>
+  );
+
+  const nextImageButton = (
+    <Button variant='outline-primary' onClick={() => flickingRef.current.next()}>Next image</Button>
+  );
+
   const lower = revealed ? (
     <div className="d-grid gap-3">
-      <Button
-        onClick={() => {
-          onNext();
-          setImages([]);
-        }}
-      >
-        Next
-      </Button>
+      <ButtonGroup>
+        {prevImageButton}
+        <Button
+          onClick={() => {
+            onNext();
+            setImages([]);
+          }}
+        >
+          Next
+        </Button>
+        {nextImageButton}
+      </ButtonGroup>
       <SpeciesFacts species={species} />
     </div>
   ) : (
     <ButtonGroup>
-      <Button variant='outline-primary' onClick={() => flickingRef.current.prev()}>Previous image</Button>
+      {prevImageButton}
       <Button onClick={() => onReveal()}>Reveal</Button>
-      <Button variant='outline-primary' onClick={() => flickingRef.current.next()}>Next image</Button>
+      {nextImageButton}
     </ButtonGroup>
   );
 
