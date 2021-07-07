@@ -2,9 +2,11 @@ import React, { useRef, useState } from "react";
 import { Frame } from "./Frame";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
+import { Plugin } from "@egjs/react-flicking";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { ButtonGroup, Col, Container, Row } from "react-bootstrap";
+import { ButtonGroup } from "react-bootstrap";
+import { Fade } from "@egjs/flicking-plugins";
 
 const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
   imageSrc
@@ -131,19 +133,25 @@ export const Flashcard = ({
         key={i}
         width={width}
         height={FLASHCARD_IMAGE_HEIGHT}
-        style={{ pointerEvents: "none" }}
+        style={{ pointerEvents: "none", marginRight: "5px", marginLeft: "5px" }}
         src={image.src}
         alt=""
       />
     );
   });
 
+  const flickingPlugins: Plugin[] = [new Fade()];
+
   return (
     <Frame title={`Flashcards`}>
       <div className="d-grid gap-3">
-        <div style={{ border: "1px solid black" }}>
-          <Flicking ref={flickingRef} gap={20}>{imageElems}</Flicking>
-        </div>
+        <Card>
+          <Card.Body>
+            <Flicking ref={flickingRef} plugins={flickingPlugins}>
+              {imageElems}
+            </Flicking>
+          </Card.Body>
+        </Card>
         {lower}
       </div>
     </Frame>
