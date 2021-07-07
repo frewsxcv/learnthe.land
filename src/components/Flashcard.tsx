@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Frame } from "./Frame";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
@@ -76,6 +76,7 @@ export const Flashcard = ({
   onNext: () => void;
 }) => {
   const [images, setImages] = useState<FlashcardImage[]>([]);
+  const flickingRef = useRef<Flicking>();
 
   if (images.length === 0) {
     loadImages(offlineMode, species).then((flashcardImages) => {
@@ -103,7 +104,11 @@ export const Flashcard = ({
       <SpeciesFacts species={species} />
     </div>
   ) : (
-    <Button onClick={() => onReveal()}>Reveal</Button>
+    <div className="d-flex">
+      <Button onClick={() => flickingRef.current.prev()}>Previous image</Button>
+      <Button onClick={() => onReveal()}>Reveal</Button>
+      <Button onClick={() => flickingRef.current.next()}>Next image</Button>
+    </div>
   );
 
   const imageElems = images.map((image, i) => {
@@ -124,7 +129,7 @@ export const Flashcard = ({
     <Frame title={`Flashcards`}>
       <div className="d-grid gap-3">
         <div style={{ border: "1px solid black" }}>
-          <Flicking gap={20}>{imageElems}</Flicking>
+          <Flicking ref={flickingRef} gap={20}>{imageElems}</Flicking>
         </div>
         {lower}
       </div>
