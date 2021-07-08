@@ -114,6 +114,7 @@ export const Flashcard = ({
       <ButtonGroup>
         {prevImageButton}
         <Button
+          style={{width: '33%'}}
           onClick={() => {
             onNext();
             setImages([]);
@@ -129,7 +130,7 @@ export const Flashcard = ({
   ) : (
     <ButtonGroup>
       {prevImageButton}
-      <Button onClick={() => onReveal()}>
+      <Button style={{width: '33%'}} onClick={() => onReveal()}>
         <EyeFill />&nbsp;
         Reveal flashcard
       </Button>
