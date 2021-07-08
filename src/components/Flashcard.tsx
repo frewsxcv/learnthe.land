@@ -159,7 +159,7 @@ export const Flashcard = ({
       <div className="d-grid gap-3">
         <Card>
           <Card.Body>
-            <Flicking ref={flickingRef} plugins={flickingPlugins}>
+            <Flicking circular={true} ref={flickingRef} plugins={flickingPlugins}>
               {imageElems}
             </Flicking>
           </Card.Body>
