@@ -108,7 +108,11 @@ export const Flashcard = ({
 
     return (
       <Frame title={`Flashcards`}>
-        <p>Loading images...</p>
+        <Card>
+          <Card.Body>
+            <p style={{height: FLASHCARD_IMAGE_HEIGHT, margin: 0}}>Loading images...</p>
+          </Card.Body>
+        </Card>
       </Frame>
     );
   }
