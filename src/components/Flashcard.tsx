@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { MutableRefObject, useRef, useState } from "react";
 import { Frame } from "./Frame";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
@@ -66,6 +66,24 @@ const loadImages: (
   });
 };
 
+const FlashcardPreviousImageButton = ({ flicking }: { flicking: Flicking }) => {
+  return (
+    <Button variant='outline-secondary' onClick={() => flicking.prev()}>
+      <ArrowLeft />&nbsp;
+      Previous image
+    </Button>
+  );
+};
+
+const FlashcardNextImageButton = ({ flicking }: { flicking: Flicking }) => {
+  return (
+    <Button variant='outline-secondary' onClick={() => flicking.next()}>
+      Next image
+      &nbsp;<ArrowRight />
+    </Button>
+  );
+};
+
 export const Flashcard = ({
   offlineMode,
   revealed,
@@ -95,24 +113,10 @@ export const Flashcard = ({
     );
   }
 
-  const prevImageButton = (
-    <Button variant='outline-secondary' onClick={() => flickingRef.current.prev()}>
-      <ArrowLeft />&nbsp;
-      Previous image
-    </Button>
-  );
-
-  const nextImageButton = (
-    <Button variant='outline-secondary' onClick={() => flickingRef.current.next()}>
-      Next image
-      &nbsp;<ArrowRight />
-    </Button>
-  );
-
   const lower = revealed ? (
     <div className="d-grid gap-3">
       <ButtonGroup>
-        {prevImageButton}
+        <FlashcardPreviousImageButton flicking={flickingRef.current} />
         <Button
           style={{ flexBasis: '33%' }}
           onClick={() => {
@@ -123,18 +127,18 @@ export const Flashcard = ({
           <Stack />&nbsp;
           Next flashcard
         </Button>
-        {nextImageButton}
+        <FlashcardNextImageButton flicking={flickingRef.current} />
       </ButtonGroup>
       <SpeciesFacts species={species} />
     </div>
   ) : (
     <ButtonGroup>
-      {prevImageButton}
+      <FlashcardPreviousImageButton flicking={flickingRef.current} />
       <Button style={{ flexBasis: '33%' }} onClick={() => onReveal()}>
         <EyeFill />&nbsp;
         Reveal flashcard
       </Button>
-      {nextImageButton}
+      <FlashcardNextImageButton flicking={flickingRef.current} />
     </ButtonGroup>
   );
 
