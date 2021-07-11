@@ -66,21 +66,61 @@ const loadImages: (
   });
 };
 
-const FlashcardPreviousImageButton = ({ flicking }: { flicking: Flicking }) => {
+const FlashcardPreviousImageButton = ({ flickingRef }: { flickingRef: MutableRefObject<Flicking> }) => {
   return (
-    <Button variant='outline-secondary' onClick={() => flicking.prev()}>
+    <Button variant='outline-secondary' onClick={() => flickingRef.current.prev()}>
       <ArrowLeft />&nbsp;
       Previous image
     </Button>
   );
 };
 
-const FlashcardNextImageButton = ({ flicking }: { flicking: Flicking }) => {
+const FlashcardNextImageButton = ({ flickingRef }: { flickingRef: MutableRefObject<Flicking> }) => {
   return (
-    <Button variant='outline-secondary' onClick={() => flicking.next()}>
+    <Button variant='outline-secondary' onClick={() => flickingRef.current.next()}>
       Next image
       &nbsp;<ArrowRight />
     </Button>
+  );
+};
+
+const FlashcardButtons = ({
+  revealed,
+  flickingRef,
+  species,
+  onReveal,
+  onNext,
+}: {
+  revealed: boolean,
+  flickingRef: MutableRefObject<Flicking>,
+  species: SpeciesCount;
+  onReveal: () => void;
+  onNext: () => void;
+}) => {
+  return revealed ? (
+    <div className="d-grid gap-3">
+      <ButtonGroup>
+        <FlashcardPreviousImageButton flickingRef={flickingRef} />
+        <Button
+          style={{ flexBasis: '33%' }}
+          onClick={onNext}
+        >
+          <Stack />&nbsp;
+          Next flashcard
+        </Button>
+        <FlashcardNextImageButton flickingRef={flickingRef} />
+      </ButtonGroup>
+      <SpeciesFacts species={species} />
+    </div>
+  ) : (
+    <ButtonGroup>
+      <FlashcardPreviousImageButton flickingRef={flickingRef} />
+      <Button style={{ flexBasis: '33%' }} onClick={() => onReveal()}>
+        <EyeFill />&nbsp;
+        Reveal flashcard
+      </Button>
+      <FlashcardNextImageButton flickingRef={flickingRef} />
+    </ButtonGroup>
   );
 };
 
@@ -110,41 +150,13 @@ export const Flashcard = ({
       <Frame title={`Flashcards`}>
         <Card>
           <Card.Body>
-            <p style={{height: FLASHCARD_IMAGE_HEIGHT, margin: 0}}>Loading images...</p>
+            <p style={{ height: FLASHCARD_IMAGE_HEIGHT, margin: 0 }}>Loading images...</p>
           </Card.Body>
         </Card>
       </Frame>
     );
   }
 
-  const lower = revealed ? (
-    <div className="d-grid gap-3">
-      <ButtonGroup>
-        <FlashcardPreviousImageButton flicking={flickingRef.current} />
-        <Button
-          style={{ flexBasis: '33%' }}
-          onClick={() => {
-            onNext();
-            setImages([]);
-          }}
-        >
-          <Stack />&nbsp;
-          Next flashcard
-        </Button>
-        <FlashcardNextImageButton flicking={flickingRef.current} />
-      </ButtonGroup>
-      <SpeciesFacts species={species} />
-    </div>
-  ) : (
-    <ButtonGroup>
-      <FlashcardPreviousImageButton flicking={flickingRef.current} />
-      <Button style={{ flexBasis: '33%' }} onClick={() => onReveal()}>
-        <EyeFill />&nbsp;
-        Reveal flashcard
-      </Button>
-      <FlashcardNextImageButton flicking={flickingRef.current} />
-    </ButtonGroup>
-  );
 
   const imageElems = images.map((image, i) => {
     const width = (image.width * FLASHCARD_IMAGE_HEIGHT) / image.height;
@@ -172,7 +184,15 @@ export const Flashcard = ({
             </Flicking>
           </Card.Body>
         </Card>
-        {lower}
+        <FlashcardButtons
+          revealed={revealed}
+          flickingRef={flickingRef}
+          species={species}
+          onNext={() => {
+            onNext();
+            setImages([]);
+          }}
+          onReveal={onReveal} />
       </div>
     </Frame>
   );
