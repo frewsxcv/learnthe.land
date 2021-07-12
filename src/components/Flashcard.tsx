@@ -67,14 +67,14 @@ const loadImages: (
 };
 
 const FlashcardPreviousImageButton = ({
-  flickingRef,
   disabled,
+  onClick,
 }: {
-  flickingRef: MutableRefObject<Flicking>,
   disabled: boolean,
+  onClick?: () => void,
 }) => {
   return (
-    <Button disabled={disabled} variant='outline-secondary' onClick={() => flickingRef.current.prev()}>
+    <Button disabled={disabled} variant='outline-secondary' onClick={onClick}>
       <ArrowLeft />&nbsp;
       Previous image
     </Button>
@@ -82,14 +82,14 @@ const FlashcardPreviousImageButton = ({
 };
 
 const FlashcardNextImageButton = ({
-  flickingRef,
   disabled,
+  onClick,
 }: {
-  flickingRef: MutableRefObject<Flicking>,
   disabled: boolean,
+  onClick?: () => void,
 }) => {
   return (
-    <Button disabled={disabled} variant='outline-secondary' onClick={() => flickingRef.current.next()}>
+    <Button disabled={disabled} variant='outline-secondary' onClick={onClick}>
       Next image
       &nbsp;<ArrowRight />
     </Button>
@@ -98,27 +98,31 @@ const FlashcardNextImageButton = ({
 
 const FlashcardButtons = ({
   revealed,
-  flickingRef,
+  onPrevClick,
+  onNextClick,
   onReveal,
   onNext,
+  disabled,
   nextPrevDisabled,
 }: {
   revealed: boolean,
-  flickingRef: MutableRefObject<Flicking>,
-  onReveal: () => void;
-  onNext: () => void;
-  nextPrevDisabled: boolean;
+  onPrevClick?: () => void;
+  onNextClick?: () => void;
+  onReveal?: () => void;
+  onNext?: () => void;
+  disabled?: boolean;
+  nextPrevDisabled?: boolean;
 }) => {
   const middleButtonStyle = { flexBasis: '33%' };
   const onMiddleButtonClick = revealed ? onNext : onReveal;
   const middleButtonBody = revealed ? (<><Stack />&nbsp;Next flashcard)</>) : (<><EyeFill />&nbsp;Reveal flashcard</>);
   return (
     <ButtonGroup>
-      <FlashcardPreviousImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
-      <Button style={middleButtonStyle} onClick={onMiddleButtonClick}>
+      <FlashcardPreviousImageButton disabled={disabled || nextPrevDisabled} onClick={onPrevClick} />
+      <Button style={middleButtonStyle} disabled={disabled} onClick={onMiddleButtonClick}>
         {middleButtonBody}
       </Button>
-      <FlashcardNextImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
+      <FlashcardNextImageButton disabled={disabled || nextPrevDisabled} onClick={onNextClick} />
     </ButtonGroup>
   );
 };
@@ -148,11 +152,14 @@ export const Flashcard = ({
 
     return (
       <Frame title={`Flashcards`}>
-        <Card>
-          <Card.Body>
-            <p style={{ height: FLASHCARD_IMAGE_HEIGHT, margin: 0 }}>Loading images...</p>
-          </Card.Body>
-        </Card>
+        <div className="d-grid gap-3">
+          <Card>
+            <Card.Body>
+              <p style={{ height: FLASHCARD_IMAGE_HEIGHT, margin: 0 }}>Loading images...</p>
+            </Card.Body>
+          </Card>
+          <FlashcardButtons revealed={false} disabled={true} />
+        </div>
       </Frame>
     );
   }
@@ -194,7 +201,8 @@ export const Flashcard = ({
         </Card>
         <FlashcardButtons
           revealed={revealed}
-          flickingRef={flickingRef}
+          onPrevClick={() => flickingRef.current.prev()}
+          onNextClick={() => flickingRef.current.next()}
           onNext={() => {
             onNext();
             setImages([]);
