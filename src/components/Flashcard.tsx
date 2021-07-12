@@ -116,7 +116,7 @@ const FlashcardButtons = ({
     <ButtonGroup>
       <FlashcardPreviousImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
       <Button style={middleButtonStyle} onClick={onMiddleButtonClick}>
-         {middleButtonBody}
+        {middleButtonBody}
       </Button>
       <FlashcardNextImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
     </ButtonGroup>
@@ -182,8 +182,8 @@ export const Flashcard = ({
         <Card>
           <Card.Body>
             <Flicking
-              onMoveStart={() => {setIsMoving(true)}}
-              onMoveEnd={() => {setIsMoving(false)}}
+              onMoveStart={() => { setIsMoving(true) }}
+              onMoveEnd={() => { setIsMoving(false) }}
               circular={true}
               ref={flickingRef}
               plugins={flickingPlugins}
