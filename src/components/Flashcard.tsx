@@ -99,14 +99,12 @@ const FlashcardNextImageButton = ({
 const FlashcardButtons = ({
   revealed,
   flickingRef,
-  species,
   onReveal,
   onNext,
   nextPrevDisabled,
 }: {
   revealed: boolean,
   flickingRef: MutableRefObject<Flicking>,
-  species: SpeciesCount;
   onReveal: () => void;
   onNext: () => void;
   nextPrevDisabled: boolean;
@@ -124,7 +122,6 @@ const FlashcardButtons = ({
         </Button>
         <FlashcardNextImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
       </ButtonGroup>
-      <SpeciesFacts species={species} />
     </div>
   ) : (
     <ButtonGroup>
@@ -189,6 +186,8 @@ export const Flashcard = ({
 
   const flickingPlugins: Plugin[] = [new Fade()];
 
+  const speciesFacts = revealed ? (<SpeciesFacts species={species} />) : null;
+
   return (
     <Frame title={`Flashcards`}>
       <div className="d-grid gap-3">
@@ -208,13 +207,13 @@ export const Flashcard = ({
         <FlashcardButtons
           revealed={revealed}
           flickingRef={flickingRef}
-          species={species}
           onNext={() => {
             onNext();
             setImages([]);
           }}
           onReveal={onReveal}
           nextPrevDisabled={isMoving} />
+        {speciesFacts}
       </div>
     </Frame>
   );
