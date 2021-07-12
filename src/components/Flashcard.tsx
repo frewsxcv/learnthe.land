@@ -110,23 +110,13 @@ const FlashcardButtons = ({
   nextPrevDisabled: boolean;
 }) => {
   const middleButtonStyle = { flexBasis: '33%' };
-  return revealed ? (
-    <div className="d-grid gap-3">
-      <ButtonGroup>
-        <FlashcardPreviousImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
-        <Button style={middleButtonStyle} onClick={onNext}>
-          <Stack />&nbsp;
-          Next flashcard
-        </Button>
-        <FlashcardNextImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
-      </ButtonGroup>
-    </div>
-  ) : (
+  const onMiddleButtonClick = revealed ? onNext : onReveal;
+  const middleButtonBody = revealed ? (<><Stack />&nbsp;Next flashcard)</>) : (<><EyeFill />&nbsp;Reveal flashcard</>);
+  return (
     <ButtonGroup>
       <FlashcardPreviousImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
-      <Button style={middleButtonStyle} onClick={() => onReveal()}>
-        <EyeFill />&nbsp;
-        Reveal flashcard
+      <Button style={middleButtonStyle} onClick={onMiddleButtonClick}>
+         {middleButtonBody}
       </Button>
       <FlashcardNextImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
     </ButtonGroup>
