@@ -66,18 +66,30 @@ const loadImages: (
   });
 };
 
-const FlashcardPreviousImageButton = ({ flickingRef }: { flickingRef: MutableRefObject<Flicking> }) => {
+const FlashcardPreviousImageButton = ({
+  flickingRef,
+  disabled,
+}: {
+  flickingRef: MutableRefObject<Flicking>,
+  disabled: boolean,
+}) => {
   return (
-    <Button variant='outline-secondary' onClick={() => flickingRef.current.prev()}>
+    <Button disabled={disabled} variant='outline-secondary' onClick={() => flickingRef.current.prev()}>
       <ArrowLeft />&nbsp;
       Previous image
     </Button>
   );
 };
 
-const FlashcardNextImageButton = ({ flickingRef }: { flickingRef: MutableRefObject<Flicking> }) => {
+const FlashcardNextImageButton = ({
+  flickingRef,
+  disabled,
+}: {
+  flickingRef: MutableRefObject<Flicking>,
+  disabled: boolean,
+}) => {
   return (
-    <Button variant='outline-secondary' onClick={() => flickingRef.current.next()}>
+    <Button disabled={disabled} variant='outline-secondary' onClick={() => flickingRef.current.next()}>
       Next image
       &nbsp;<ArrowRight />
     </Button>
@@ -90,17 +102,19 @@ const FlashcardButtons = ({
   species,
   onReveal,
   onNext,
+  nextPrevDisabled,
 }: {
   revealed: boolean,
   flickingRef: MutableRefObject<Flicking>,
   species: SpeciesCount;
   onReveal: () => void;
   onNext: () => void;
+  nextPrevDisabled: boolean;
 }) => {
   return revealed ? (
     <div className="d-grid gap-3">
       <ButtonGroup>
-        <FlashcardPreviousImageButton flickingRef={flickingRef} />
+        <FlashcardPreviousImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
         <Button
           style={{ flexBasis: '33%' }}
           onClick={onNext}
@@ -108,18 +122,18 @@ const FlashcardButtons = ({
           <Stack />&nbsp;
           Next flashcard
         </Button>
-        <FlashcardNextImageButton flickingRef={flickingRef} />
+        <FlashcardNextImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
       </ButtonGroup>
       <SpeciesFacts species={species} />
     </div>
   ) : (
     <ButtonGroup>
-      <FlashcardPreviousImageButton flickingRef={flickingRef} />
+      <FlashcardPreviousImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
       <Button style={{ flexBasis: '33%' }} onClick={() => onReveal()}>
         <EyeFill />&nbsp;
         Reveal flashcard
       </Button>
-      <FlashcardNextImageButton flickingRef={flickingRef} />
+      <FlashcardNextImageButton disabled={nextPrevDisabled} flickingRef={flickingRef} />
     </ButtonGroup>
   );
 };
@@ -138,6 +152,7 @@ export const Flashcard = ({
   onNext: () => void;
 }) => {
   const [images, setImages] = useState<FlashcardImage[]>([]);
+  const [isMoving, setIsMoving] = useState<boolean>(false);
   const flickingRef = useRef<Flicking>();
 
   if (images.length === 0) {
@@ -179,7 +194,13 @@ export const Flashcard = ({
       <div className="d-grid gap-3">
         <Card>
           <Card.Body>
-            <Flicking circular={true} ref={flickingRef} plugins={flickingPlugins}>
+            <Flicking
+              onMoveStart={() => {setIsMoving(true)}}
+              onMoveEnd={() => {setIsMoving(false)}}
+              circular={true}
+              ref={flickingRef}
+              plugins={flickingPlugins}
+            >
               {imageElems}
             </Flicking>
           </Card.Body>
@@ -192,7 +213,8 @@ export const Flashcard = ({
             onNext();
             setImages([]);
           }}
-          onReveal={onReveal} />
+          onReveal={onReveal}
+          nextPrevDisabled={isMoving} />
       </div>
     </Frame>
   );
