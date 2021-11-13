@@ -50,7 +50,7 @@ export const iNaturalistApi = {
     return fetch(url)
       .then((response) => response.json())
       .then((json) => {
-        return json.results;
+        return json.results as Observation[];
       });
   },
 };
@@ -99,6 +99,21 @@ export interface Taxon {
   observations_count: number;
   preferred_establishment_means: string;
   wikipedia_url?: string;
+}
+
+export interface Observation {
+  photos: Photo[];
+}
+
+export interface Photo {
+  id: number;
+  license_code: string;
+  url: string;
+  attribution: string;
+  original_dimensions: {
+    width: number;
+    height: number;
+  }
 }
 
 export const iconicTaxa = [

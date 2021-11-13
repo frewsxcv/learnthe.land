@@ -9,8 +9,9 @@ import { ButtonGroup } from "react-bootstrap";
 import { Fade } from "@egjs/flicking-plugins";
 import { ArrowLeft, ArrowRight, Eye, EyeFill, Stack } from "react-bootstrap-icons";
 
-const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
-  imageSrc
+const loadFlashcardImage: (imageSrc: string, attribution: string) => Promise<FlashcardImage[]> = (
+  imageSrc,
+  attribution,
 ) => {
   return new Promise((resolve, reject) => {
     const image = new Image();
@@ -20,6 +21,7 @@ const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
           src: imageSrc,
           width: image.width,
           height: image.height,
+          attribution,
         },
       ]);
     };
@@ -28,7 +30,7 @@ const loadFlashcardImage: (imageSrc: string) => Promise<FlashcardImage[]> = (
 };
 
 const loadINaturalistObservationFlashcardImages: (
-  species: SpeciesCount
+  species: SpeciesCount,
 ) => Promise<FlashcardImage[]> = (species) => {
   return iNaturalistApi
     .fetchObservationsForTaxon(species.taxon.id)
@@ -43,6 +45,7 @@ const loadINaturalistObservationFlashcardImages: (
           src: originalPhotoUrl,
           height: result.photos[0].original_dimensions.height,
           width: result.photos[0].original_dimensions.width,
+          attribution: result.photos[0].attribution,
         });
       }
       return extraImages;
@@ -57,7 +60,7 @@ const loadImages: (
     "medium",
     "original"
   );
-  const promises = [loadFlashcardImage(originalPhotoUrl)];
+  const promises = [loadFlashcardImage(originalPhotoUrl, species.taxon.default_photo.attribution)];
   if (!offlineMode) {
     promises.push(loadINaturalistObservationFlashcardImages(species));
   }
@@ -168,14 +171,23 @@ export const Flashcard = ({
   const imageElems = images.map((image, i) => {
     const width = (image.width * FLASHCARD_IMAGE_HEIGHT) / image.height;
     return (
-      <img
-        key={i}
-        width={width}
-        height={FLASHCARD_IMAGE_HEIGHT}
-        style={{ pointerEvents: "none", marginRight: "5px", marginLeft: "5px" }}
-        src={image.src}
-        alt=""
-      />
+      <div>
+        <img
+          key={i}
+          width={width}
+          height={FLASHCARD_IMAGE_HEIGHT}
+          style={{ pointerEvents: "none", marginRight: "5px", marginLeft: "5px" }}
+          src={image.src}
+          alt=""
+        />
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          fontSize: '10px',
+          background: 'black',
+          color: 'white',
+        }}>{image.attribution}</div>
+      </div>
     );
   });
 
@@ -248,6 +260,7 @@ const SpeciesName = ({ species }: { species: SpeciesCount }) => {
 
 type FlashcardImage = {
   src: string;
+  attribution: string;
   // original height
   height: number;
   // original width
