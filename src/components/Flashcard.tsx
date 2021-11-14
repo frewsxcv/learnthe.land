@@ -171,7 +171,7 @@ export const Flashcard = ({
   const imageElems = images.map((image, i) => {
     const width = (image.width * FLASHCARD_IMAGE_HEIGHT) / image.height;
     return (
-      <div>
+      <div style={{position: 'relative'}}>
         <img
           key={i}
           width={width}
@@ -182,10 +182,14 @@ export const Flashcard = ({
         />
         <div style={{
           position: 'absolute',
-          top: 0,
-          fontSize: '10px',
-          background: 'black',
+          left: '50%',
+          bottom: '4px',
+          fontSize: '7px',
+          padding: '2px 4px',
+          background: 'rgba(0, 0, 0, 50%)',
           color: 'white',
+          transform: 'translate(-50%, 0)',
+          whiteSpace: 'nowrap',
         }}>{image.attribution}</div>
       </div>
     );
