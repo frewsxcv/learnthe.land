@@ -1,7 +1,7 @@
 import { Frame } from "./Frame";
 import { IconicTaxa, iconicTaxa } from "../inaturalist";
-import Button from "react-bootstrap/Button";
 import * as React from "react";
+import { SelectionGrid, SelectionGridItem } from "./SelectionGrid";
 
 export const SelectTaxaCategoryStep = ({
   onSelect,
@@ -10,15 +10,15 @@ export const SelectTaxaCategoryStep = ({
 }) => {
   const buttons = iconicTaxa.map((iconicTaxon, i) => {
     return (
-      <div key={i}>
-        <Button
-          className="mb1"
-          onClick={() => onSelect(iconicTaxon as IconicTaxa)}
-        >
-          {iconicTaxon}
-        </Button>
-      </div>
+      <SelectionGridItem header={iconicTaxon} onSelect={() => onSelect(iconicTaxon as IconicTaxa)} key={i}>
+      </SelectionGridItem>
     );
   });
-  return <Frame title={`Taxa Category`}>{buttons}</Frame>;
+  return (
+    <Frame title={"Taxa Category"}>
+      <SelectionGrid>
+        {buttons}
+      </SelectionGrid>
+    </Frame>
+  );
 };

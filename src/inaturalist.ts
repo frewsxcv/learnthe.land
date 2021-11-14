@@ -130,4 +130,4 @@ export const iconicTaxa = [
   "Plantae",
 ] as const;
 
-type IconicTaxa = typeof iconicTaxa[number];
+export type IconicTaxa = typeof iconicTaxa[number];
