@@ -171,9 +171,8 @@ export const Flashcard = ({
   const imageElems = images.map((image, i) => {
     const width = (image.width * FLASHCARD_IMAGE_HEIGHT) / image.height;
     return (
-      <div style={{position: 'relative'}}>
+      <div style={{position: 'relative'}} key={i}>
         <img
-          key={i}
           width={width}
           height={FLASHCARD_IMAGE_HEIGHT}
           style={{ pointerEvents: "none", marginRight: "5px", marginLeft: "5px" }}
