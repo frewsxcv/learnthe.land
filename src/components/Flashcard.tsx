@@ -244,7 +244,9 @@ const SpeciesFacts = ({ species }: { species: SpeciesCount }) => {
 };
 
 const SpeciesName = ({ species }: { species: SpeciesCount }) => {
-  const taxonName = capitalizeFirstLetter(species.taxon.name);
+  const taxonName = (
+    <em>{capitalizeFirstLetter(species.taxon.name)}</em>
+  );
   if (species.taxon.preferred_common_name) {
     return (
       <>
