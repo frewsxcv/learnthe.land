@@ -117,6 +117,7 @@ export interface Photo {
 }
 
 export const iconicTaxa = [
+  "Actinopterygii",
   "Animalia",
   "Amphibia",
   "Arachnida",
@@ -128,6 +129,23 @@ export const iconicTaxa = [
   "Mollusca",
   "Reptilia",
   "Plantae",
+  "Protozoa",
 ] as const;
 
 export type IconicTaxa = typeof iconicTaxa[number];
+
+export const iconicTaxaDescription: Record<IconicTaxa, string | null> = {
+  "Actinopterygii": "Ray-Finned Fishes",
+  "Animalia": "Animals",
+  "Amphibia": "Amphibians",
+  "Arachnida": "Arachnids",
+  "Aves": "Birds",
+  "Chromista": null,
+  "Fungi": "including Lichens",
+  "Insecta": "Insects",
+  "Mammalia": "Mammals",
+  "Mollusca": "Mollusks",
+  "Reptilia": "Reptiles",
+  "Plantae": "Plants",
+  "Protozoa": null,
+}

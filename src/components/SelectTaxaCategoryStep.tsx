@@ -1,4 +1,4 @@
-import { IconicTaxa, iconicTaxa } from "../inaturalist";
+import { IconicTaxa, iconicTaxa, iconicTaxaDescription } from "../inaturalist";
 import * as React from "react";
 import { SelectionGrid, SelectionGridItem } from "./SelectionGrid";
 
@@ -8,8 +8,11 @@ export const SelectTaxaCategoryStep = ({
   onSelect: (taxaCategory: IconicTaxa) => void;
 }) => {
   const buttons = iconicTaxa.map((iconicTaxon, i) => {
+    const header = iconicTaxaDescription[iconicTaxon] ?
+      `${iconicTaxon} (${iconicTaxaDescription[iconicTaxon]})` :
+      iconicTaxon;
     return (
-      <SelectionGridItem header={iconicTaxon} onSelect={() => onSelect(iconicTaxon as IconicTaxa)} key={i}>
+      <SelectionGridItem header={header} onSelect={() => onSelect(iconicTaxon as IconicTaxa)} key={i}>
       </SelectionGridItem>
     );
   });
