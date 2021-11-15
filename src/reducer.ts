@@ -117,10 +117,8 @@ const processScoredFlashcard = (
 
       const minAttempts = Math.min(...flashcardsInRotation.map(flashcard => flashcard.attempts));
       const indexToInsert =
-        flashcardsInRotation.length -
-        flashcardsInRotation.slice().reverse().findIndex(flashcard => flashcard.attempts === minAttempts) +
-        1;
-        // 0;
+        flashcardsInRotation.slice().findIndex(flashcard => flashcard.attempts === minAttempts) +
+        1; // explain this
       const newFlashcard = flashcardsNotInRotation.splice(0, 1)[0]; // TODO: what to do about these indexings?
       console.assert(newFlashcard);
 
