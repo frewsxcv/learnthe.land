@@ -122,10 +122,10 @@ const FlashcardButtons = ({
     middle = (
       <>
         <Button variant="danger" style={{ flex: '0 0 20%' }} disabled={disabled} onClick={() => onRateClick("dontknow")}>
-          <><HandThumbsDown /></>
+          <><HandThumbsDown /> Didn’t know it</>
         </Button>
         <Button variant="success" style={{ flex: '0 0 20%' }} disabled={disabled} onClick={() => onRateClick("know")}>
-          <><HandThumbsUp /></>
+          <><HandThumbsUp /> Knew it</>
         </Button>
       </>
     );
