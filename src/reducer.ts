@@ -108,19 +108,30 @@ const processScoredFlashcard = (
     2 ** flashcard.streak;
   flashcardsInRotation.splice(indexToInsert, 0, flashcard);
 
-  if (flashcardsInRotation.filter(flashcard => flashcard.attempts === 0).length === 0) {
-    const numFlashcardsUserDoesntKnow = flashcardsInRotation.filter(flashcard => flashcard.streak === 0).length;
-    if (numFlashcardsUserDoesntKnow < 5) {
-      const minAttempts = Math.min(...flashcardsInRotation.map(flashcard => flashcard.attempts));
-      const indexToInsert =
-        flashcardsInRotation.slice().findIndex(flashcard => flashcard.attempts === minAttempts)
-        + 1; // If we didn’t add one here, and if the user continues to press "Know", then they would only see new cards instead of cycling in old ones.
-      const newFlashcard = flashcardsNotInRotation.splice(0, 1)[0]; // TODO: what to do about these indexings?
-      console.assert(newFlashcard);
+  if (shouldAddNewFlashcard(flashcardsInRotation)) {
+    const minAttempts = Math.min(...flashcardsInRotation.map(flashcard => flashcard.attempts));
+    const indexToInsert =
+      flashcardsInRotation.slice().findIndex(flashcard => flashcard.attempts === minAttempts)
+      + 1; // If we didn’t add one here, and if the user continues to press "Know", then they would only see new cards instead of cycling in old ones.
+    const newFlashcard = flashcardsNotInRotation.splice(0, 1)[0]; // TODO: what to do about these indexings?
+    console.assert(newFlashcard);
 
-      flashcardsInRotation.splice(indexToInsert, 0, newFlashcard);
-    }
+    flashcardsInRotation.splice(indexToInsert, 0, newFlashcard);
   }
 
   console.debug('New flashcards state', flashcardsInRotation);
+};
+
+const shouldAddNewFlashcard = (flashcardsInRotation: FlashcardData[]): boolean => {
+  return allFlashcardsHaveBeenAttempted(flashcardsInRotation) &&
+    doesntKnowFewerThanFiveFlashcards(flashcardsInRotation);
+};
+
+const allFlashcardsHaveBeenAttempted = (flashcardsInRotation: FlashcardData[]): boolean => {
+  return flashcardsInRotation.filter(flashcard => flashcard.attempts === 0).length === 0;
+};
+
+const doesntKnowFewerThanFiveFlashcards = (flashcardsInRotation: FlashcardData[]): boolean => {
+    const numFlashcardsUserDoesntKnow = flashcardsInRotation.filter(flashcard => flashcard.streak === 0).length;
+    return numFlashcardsUserDoesntKnow < 5;
 };
