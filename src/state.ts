@@ -11,6 +11,7 @@ export type State = {
   flashcardsNotInRotation?: FlashcardData[];
   currentFlashcard?: FlashcardData;
   flashcardRevealed: boolean;
+  score: number;
 };
 
 export const initialState: State = {
@@ -22,4 +23,5 @@ export const initialState: State = {
   flashcardsNotInRotation: undefined,
   currentFlashcard: undefined,
   flashcardRevealed: false,
+  score: 0,
 };

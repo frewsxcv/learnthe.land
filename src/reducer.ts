@@ -60,6 +60,7 @@ export const reducer: Reducer<State, Action> = (
         ...state,
         currentFlashcard: popFirstSpecies(state.flashcardsInRotation),
         flashcardRevealed: false,
+        score: calculateScore(state.flashcardsInRotation),
       };
     }
     default: {
@@ -81,6 +82,12 @@ const popRandomSpecies = (allFlashcards: FlashcardData[]) => {
 const popFirstSpecies = (allFlashcards: FlashcardData[]) => {
   return allFlashcards.splice(0, 1)[0];
 };
+
+const calculateScore = (flashcards: FlashcardData[]) => {
+  return flashcards.reduce((sum, flashcard) => {
+    return sum + (10 * Math.min(flashcard.streak, 3));
+  }, 0);
+}
 
 // TODO: explain the magic numbers in this function
 const processScoredFlashcard = (
