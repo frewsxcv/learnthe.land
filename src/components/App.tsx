@@ -12,14 +12,19 @@ import { reducer } from "../reducer";
 // const reactLogo = require("./../assets/img/react_logo.svg");
 import "./../assets/scss/App.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Frame } from "./Frame";
 
 const OFFLINE_MODE = false;
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  let inner: JSX.Element;
+  let frameTitle: string;
+
   if (!state.location) {
-    return (
+    frameTitle = "Places";
+    inner = (
       <LocationStep
         offlineMode={OFFLINE_MODE}
         onLocation={(location) =>
@@ -27,39 +32,35 @@ const App = () => {
         }
       />
     );
-  }
-
-  if (!state.places) {
-    return (
+  } else if (!state.places) {
+    frameTitle = "Places";
+    inner = (
       <PlacesStep
         offlineMode={OFFLINE_MODE}
         location={state.location}
         onLoad={(places) => dispatch({ type: "PLACES_LOADED", places })}
       />
     );
-  }
-
-  if (!state.selectedPlace) {
-    return (
+  } else if (!state.selectedPlace) {
+    frameTitle = "Places";
+    inner = (
       <SelectPlaceStep
         places={state.places}
         onSelectPlace={(place) => dispatch({ type: "PLACE_SELECTED", place })}
       />
     );
-  }
-
-  if (!state.selectedTaxaCategory) {
-    return (
+  } else if (!state.selectedTaxaCategory) {
+    frameTitle = "Taxa Category";
+    inner = (
       <SelectTaxaCategoryStep
         onSelect={(taxaCategory) =>
           dispatch({ type: "TAXA_CATEGORY_SELECTED", taxaCategory })
         }
       />
     );
-  }
-
-  if (!state.flashcardsInRotation) {
-    return (
+  } else if (!state.flashcardsInRotation) {
+    frameTitle = "Flashcards";
+    inner = (
       <LoadAllSpeciesStep
         offlineMode={OFFLINE_MODE}
         selectedPlace={state.selectedPlace}
@@ -69,17 +70,24 @@ const App = () => {
         }
       />
     );
+  } else {
+    frameTitle = "Flashcards";
+    inner = (
+      <Flashcard
+        offlineMode={OFFLINE_MODE}
+        revealed={state.flashcardRevealed}
+        data={state.currentFlashcard}
+        onReveal={() => dispatch({ type: "REVEAL_FLASHCARD" })}
+        onRateClick={(rating) => dispatch({ type: "SCORE_FLASHCARD", flashcardRating: rating })}
+      />
+    );
   }
 
   return (
-    <Flashcard
-      offlineMode={OFFLINE_MODE}
-      revealed={state.flashcardRevealed}
-      data={state.currentFlashcard}
-      onReveal={() => dispatch({ type: "REVEAL_FLASHCARD" })}
-      onRateClick={(rating) => dispatch({ type: "SCORE_FLASHCARD", flashcardRating: rating })}
-    />
-  );
+    <Frame title={frameTitle}>
+      {inner}
+    </Frame>
+  )
 };
 
 declare let module: Record<string, unknown>;

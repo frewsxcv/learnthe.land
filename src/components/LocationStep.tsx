@@ -1,4 +1,3 @@
-import { Frame } from "./Frame";
 import { Location } from "../location";
 import * as React from "react";
 
@@ -34,7 +33,5 @@ export const LocationStep = ({
 };
 
 const loading = (
-  <Frame title="Places">
-    <p>Request location...</p>
-  </Frame>
+  <p>Request location...</p>
 );

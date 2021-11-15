@@ -1,6 +1,5 @@
 import { iNaturalistApi, Place } from "../inaturalist";
 import { Location } from "../location";
-import { Frame } from "./Frame";
 import * as React from "react";
 
 export const PlacesStep = ({
@@ -38,7 +37,5 @@ const fakePlace: Place = {
 };
 
 const loading = (
-  <Frame title="Places">
-    <p>Loading...</p>
-  </Frame>
+  <p>Loading...</p>
 );

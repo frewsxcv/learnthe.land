@@ -1,4 +1,3 @@
-import { Frame } from "./Frame";
 import { IconicTaxa, iconicTaxa } from "../inaturalist";
 import * as React from "react";
 import { SelectionGrid, SelectionGridItem } from "./SelectionGrid";
@@ -15,10 +14,8 @@ export const SelectTaxaCategoryStep = ({
     );
   });
   return (
-    <Frame title={"Taxa Category"}>
-      <SelectionGrid>
-        {buttons}
-      </SelectionGrid>
-    </Frame>
+    <SelectionGrid>
+      {buttons}
+    </SelectionGrid>
   );
 };

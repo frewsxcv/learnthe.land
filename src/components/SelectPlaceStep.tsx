@@ -1,5 +1,4 @@
 import { Place } from "../inaturalist";
-import { Frame } from "./Frame";
 import * as React from "react";
 import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
 import { SelectionGrid, SelectionGridItem } from "./SelectionGrid";
@@ -41,11 +40,9 @@ export const SelectPlaceStep = ({
   });
 
   return (
-    <Frame title="Places">
-      <SelectionGrid>
-        {placesElems}
-      </SelectionGrid>
-    </Frame>
+    <SelectionGrid>
+      {placesElems}
+    </SelectionGrid>
   );
 };
 

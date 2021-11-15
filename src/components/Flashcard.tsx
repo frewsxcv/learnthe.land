@@ -1,5 +1,4 @@
 import React, { MutableRefObject, useRef, useState } from "react";
-import { Frame } from "./Frame";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
 import { Plugin } from "@egjs/react-flicking";
@@ -170,16 +169,14 @@ export const Flashcard = ({
     });
 
     return (
-      <Frame title={`Flashcards`}>
-        <div className="d-grid gap-3">
-          <Card>
-            <Card.Body>
-              <p style={{ height: FLASHCARD_IMAGE_HEIGHT, margin: 0 }}>Loading images...</p>
-            </Card.Body>
-          </Card>
-          <FlashcardButtons revealed={false} disabled={true} />
-        </div>
-      </Frame>
+      <div className="d-grid gap-3">
+        <Card>
+          <Card.Body>
+            <p style={{ height: FLASHCARD_IMAGE_HEIGHT, margin: 0 }}>Loading images...</p>
+          </Card.Body>
+        </Card>
+        <FlashcardButtons revealed={false} disabled={true} />
+      </div>
     );
   }
 
@@ -215,34 +212,32 @@ export const Flashcard = ({
   const speciesFacts = revealed ? (<SpeciesFacts species={data.species} />) : null;
 
   return (
-    <Frame title={`Flashcards`}>
-      <div className="d-grid gap-3">
-        <Card>
-          <Card.Body>
-            <Flicking
-              onMoveStart={() => { setIsMoving(true) }}
-              onMoveEnd={() => { setIsMoving(false) }}
-              circular={true}
-              ref={flickingRef}
-              plugins={flickingPlugins}
-            >
-              {imageElems}
-            </Flicking>
-          </Card.Body>
-        </Card>
-        <FlashcardButtons
-          revealed={revealed}
-          onPrevClick={() => flickingRef.current.prev()}
-          onNextClick={() => flickingRef.current.next()}
-          onRateClick={(rating: FlashcardRating) => {
-            onRateClick(rating);
-            setImages([]);
-          }}
-          onReveal={onReveal}
-          nextPrevDisabled={isMoving} />
-        {speciesFacts}
-      </div>
-    </Frame>
+    <div className="d-grid gap-3">
+      <Card>
+        <Card.Body>
+          <Flicking
+            onMoveStart={() => { setIsMoving(true) }}
+            onMoveEnd={() => { setIsMoving(false) }}
+            circular={true}
+            ref={flickingRef}
+            plugins={flickingPlugins}
+          >
+            {imageElems}
+          </Flicking>
+        </Card.Body>
+      </Card>
+      <FlashcardButtons
+        revealed={revealed}
+        onPrevClick={() => flickingRef.current.prev()}
+        onNextClick={() => flickingRef.current.next()}
+        onRateClick={(rating: FlashcardRating) => {
+          onRateClick(rating);
+          setImages([]);
+        }}
+        onReveal={onReveal}
+        nextPrevDisabled={isMoving} />
+      {speciesFacts}
+    </div>
   );
 };
 

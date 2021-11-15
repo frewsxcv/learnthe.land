@@ -1,5 +1,4 @@
 import { iNaturalistApi } from "../inaturalist";
-import { Frame } from "./Frame";
 import { SpeciesCount, Place } from "../inaturalist";
 import * as React from "react";
 
@@ -31,9 +30,7 @@ export const LoadAllSpeciesStep = ({
 };
 
 const loading = (
-  <Frame title={`Flashcards`}>
-    <p>Loading species...</p>
-  </Frame>
+  <p>Loading species...</p>
 );
 
 const fakeSpecies: SpeciesCount = {
