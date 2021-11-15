@@ -1,5 +1,6 @@
 import { IconicTaxa, Place, SpeciesCount } from "./inaturalist";
 import { Location } from "./location";
+import { FlashcardRating } from "./flashcard-rating";
 
 export type Action =
   | { type: "LOCATION_LOADED"; location: Location }
@@ -8,4 +9,4 @@ export type Action =
   | { type: "TAXA_CATEGORY_SELECTED"; taxaCategory: IconicTaxa }
   | { type: "ALL_SPECIES_LOADED"; allSpecies: SpeciesCount[] }
   | { type: "REVEAL_FLASHCARD" }
-  | { type: "NEXT_FLASHCARD" };
+  | { type: "SCORE_FLASHCARD"; flashcardRating: FlashcardRating }

@@ -2,9 +2,11 @@ import { State } from "./state";
 import { Action } from "./Action";
 import { Reducer } from "react";
 import { SpeciesCount } from "./inaturalist";
+import { FlashcardRating } from "./flashcard-rating";
+import { FlashcardData } from "./flashcard-data";
 
 // TODO: make a step for this
-const numFlashcards = 50;
+const initialFlashcardCount = 10;
 
 export const reducer: Reducer<State, Action> = (
   state: State,
@@ -37,11 +39,13 @@ export const reducer: Reducer<State, Action> = (
       };
     }
     case "ALL_SPECIES_LOADED": {
+      const flashcardsInRotation = action.allSpecies.slice(0, 10).map(species => { return { species, streak: 0 }; });
+      // TODO: shuffle the initial flashcards in rotation
       return {
         ...state,
-        speciesInRotation: action.allSpecies.slice(0, 50),
-        speciesNotInRotation: action.allSpecies.slice(50),
-        currentSpecies: selectRandomSpecies(action.allSpecies),
+        flashcardsInRotation,
+        flashcardsNotInRotation: action.allSpecies.slice(10).map(species => { return { species, streak: 0 }; }),
+        currentFlashcard: popRandomSpecies(flashcardsInRotation),
       };
     }
     case "REVEAL_FLASHCARD": {
@@ -50,10 +54,11 @@ export const reducer: Reducer<State, Action> = (
         flashcardRevealed: true,
       };
     }
-    case "NEXT_FLASHCARD": {
+    case "SCORE_FLASHCARD": {
+      processScoredFlashcard(state.currentFlashcard, action.flashcardRating, state.flashcardsInRotation, state.flashcardsNotInRotation);
       return {
         ...state,
-        currentSpecies: selectRandomSpecies(state.speciesInRotation),
+        currentFlashcard: popFirstSpecies(state.flashcardsInRotation),
         flashcardRevealed: false,
       };
     }
@@ -65,10 +70,47 @@ export const reducer: Reducer<State, Action> = (
   }
 };
 
-const selectRandomSpecies = (allSpecies: SpeciesCount[]) => {
+const popRandomSpecies = (allFlashcards: FlashcardData[]) => {
   const randSpeciesIndex = Math.floor(
-    Math.random() * Math.min(numFlashcards, allSpecies.length)
+    Math.random() * allFlashcards.length
   );
 
-  return allSpecies[randSpeciesIndex];
+  return allFlashcards.splice(randSpeciesIndex, 1)[0];
+};
+
+const popFirstSpecies = (allFlashcards: FlashcardData[]) => {
+  return allFlashcards.splice(0, 1)[0];
+};
+
+// TODO: explain the magic numbers in this function
+const processScoredFlashcard = (
+  flashcard: FlashcardData,
+  latestFlashcardRating: FlashcardRating,
+  flashcardsInRotation: FlashcardData[],
+  flashcardsNotInRotation: FlashcardData[],
+) => {
+  if (latestFlashcardRating === "dontknow") {
+    flashcard.streak = 0;
+  } else {
+    console.assert(latestFlashcardRating === "know");
+    flashcard.streak += 1;
+  }
+
+  // TODO: add number of attempts to the flashcard data
+
+  // TODO: introduce randomness
+  flashcardsInRotation.splice(2 ** (1 + flashcard.streak), 0, flashcard);
+
+  const numFlashcardsUserDoesntKnow = flashcardsInRotation.filter(flashcard => flashcard.streak === 0).length;
+
+  if (numFlashcardsUserDoesntKnow < 5) {
+    const newFlashcard = flashcardsNotInRotation.splice(0, 3)[0]; // TODO: what to do about these indexings?
+    console.assert(newFlashcard);
+
+    console.debug('Adding a new card', newFlashcard);
+
+    flashcardsInRotation.splice(1, 0, newFlashcard);
+  }
+
+  console.debug('New flashcards state', flashcardsInRotation);
 };

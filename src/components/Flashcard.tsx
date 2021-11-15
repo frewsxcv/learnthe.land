@@ -8,6 +8,8 @@ import Card from "react-bootstrap/Card";
 import { ButtonGroup } from "react-bootstrap";
 import { Fade } from "@egjs/flicking-plugins";
 import { ArrowLeft, ArrowRight, Eye, EyeFill, Stack } from "react-bootstrap-icons";
+import { FlashcardData } from "../flashcard-data";
+import { FlashcardRating } from "../flashcard-rating";
 
 const loadFlashcardImage: (imageSrc: string, attribution: string) => Promise<FlashcardImage[]> = (
   imageSrc,
@@ -104,7 +106,7 @@ const FlashcardButtons = ({
   onPrevClick,
   onNextClick,
   onReveal,
-  onNext,
+  onRateClick,
   disabled,
   nextPrevDisabled,
 }: {
@@ -112,19 +114,33 @@ const FlashcardButtons = ({
   onPrevClick?: () => void;
   onNextClick?: () => void;
   onReveal?: () => void;
-  onNext?: () => void;
+  onRateClick?: (rating: FlashcardRating) => void;
   disabled?: boolean;
   nextPrevDisabled?: boolean;
 }) => {
-  const middleButtonStyle = { flexBasis: '33%' };
-  const onMiddleButtonClick = revealed ? onNext : onReveal;
-  const middleButtonBody = revealed ? (<><Stack />&nbsp;Next flashcard)</>) : (<><EyeFill />&nbsp;Reveal flashcard</>);
+  let middle;
+  if (revealed) {
+    middle = (
+      <>
+        <Button variant="warning" style={{ flexBasis: '16.5%' }} disabled={disabled} onClick={() => onRateClick("dontknow")}>
+          <><EyeFill />&nbsp;Didn’t Know</>
+        </Button>
+        <Button variant="success" style={{ flexBasis: '16.5%' }} disabled={disabled} onClick={() => onRateClick("know")}>
+          <><EyeFill />&nbsp;Did Know</>
+        </Button>
+      </>
+    );
+  } else {
+    middle = (
+      <Button style={{ flexBasis: '33%' }} disabled={disabled} onClick={onReveal}>
+        <><EyeFill />&nbsp;Reveal flashcard</>
+      </Button>
+    );
+  }
   return (
     <ButtonGroup>
       <FlashcardPreviousImageButton disabled={disabled || nextPrevDisabled} onClick={onPrevClick} />
-      <Button style={middleButtonStyle} disabled={disabled} onClick={onMiddleButtonClick}>
-        {middleButtonBody}
-      </Button>
+      {middle}
       <FlashcardNextImageButton disabled={disabled || nextPrevDisabled} onClick={onNextClick} />
     </ButtonGroup>
   );
@@ -133,22 +149,22 @@ const FlashcardButtons = ({
 export const Flashcard = ({
   offlineMode,
   revealed,
-  species,
+  data,
   onReveal,
-  onNext,
+  onRateClick,
 }: {
   offlineMode: boolean;
   revealed: boolean;
-  species: SpeciesCount;
+  data: FlashcardData;
   onReveal: () => void;
-  onNext: () => void;
+  onRateClick: (rating: FlashcardRating) => void;
 }) => {
   const [images, setImages] = useState<FlashcardImage[]>([]);
   const [isMoving, setIsMoving] = useState<boolean>(false);
   const flickingRef = useRef<Flicking>();
 
   if (images.length === 0) {
-    loadImages(offlineMode, species).then((flashcardImages) => {
+    loadImages(offlineMode, data.species).then((flashcardImages) => {
       shuffleArray(flashcardImages);
       setImages(flashcardImages);
     });
@@ -196,7 +212,7 @@ export const Flashcard = ({
 
   const flickingPlugins: Plugin[] = [new Fade()];
 
-  const speciesFacts = revealed ? (<SpeciesFacts species={species} />) : null;
+  const speciesFacts = revealed ? (<SpeciesFacts species={data.species} />) : null;
 
   return (
     <Frame title={`Flashcards`}>
@@ -218,8 +234,8 @@ export const Flashcard = ({
           revealed={revealed}
           onPrevClick={() => flickingRef.current.prev()}
           onNextClick={() => flickingRef.current.next()}
-          onNext={() => {
-            onNext();
+          onRateClick={(rating: FlashcardRating) => {
+            onRateClick(rating);
             setImages([]);
           }}
           onReveal={onReveal}
@@ -319,28 +335,4 @@ const shuffleArray = (array: any[]) => {
     array[i] = array[j];
     array[j] = temp;
   }
-};
-
-type FlashcardRating = "know" | "dontknow";
-
-const processScoredFlashcard = (
-  flashcard,
-  flashcardRating: FlashcardRating,
-  flashcards
-) => {
-  /*
-  if (user doesn't know flashcard) {
-    flashcard.streak = 0;
-    return
-  }
-
-  flashcard.streak += 1;
-
-  flashcards.insert(2 ** flashcard.streak);
-
-  if (flashcards.no_streak_count() < 5) {
-    species = speciesNotInRotation.pop(0);
-    flashcards.insert(species);
-  }
-  */
 };

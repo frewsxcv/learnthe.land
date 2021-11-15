@@ -58,7 +58,7 @@ const App = () => {
     );
   }
 
-  if (!state.speciesInRotation) {
+  if (!state.flashcardsInRotation) {
     return (
       <LoadAllSpeciesStep
         offlineMode={OFFLINE_MODE}
@@ -75,9 +75,9 @@ const App = () => {
     <Flashcard
       offlineMode={OFFLINE_MODE}
       revealed={state.flashcardRevealed}
-      species={state.currentSpecies}
+      data={state.currentFlashcard}
       onReveal={() => dispatch({ type: "REVEAL_FLASHCARD" })}
-      onNext={() => dispatch({ type: "NEXT_FLASHCARD" })}
+      onRateClick={(rating) => dispatch({ type: "SCORE_FLASHCARD", flashcardRating: rating })}
     />
   );
 };

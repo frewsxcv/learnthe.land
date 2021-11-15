@@ -1,3 +1,4 @@
+import { FlashcardData } from "./flashcard-data";
 import { IconicTaxa, Place, SpeciesCount } from "./inaturalist";
 import { Location } from "./location";
 
@@ -6,9 +7,9 @@ export type State = {
   places?: Place[];
   selectedPlace?: Place;
   selectedTaxaCategory?: IconicTaxa;
-  speciesInRotation?: SpeciesCount[];
-  speciesNotInRotation?: SpeciesCount[];
-  currentSpecies?: SpeciesCount;
+  flashcardsInRotation?: FlashcardData[];
+  flashcardsNotInRotation?: FlashcardData[];
+  currentFlashcard?: FlashcardData;
   flashcardRevealed: boolean;
 };
 
@@ -17,8 +18,8 @@ export const initialState: State = {
   places: undefined,
   selectedPlace: undefined,
   selectedTaxaCategory: undefined,
-  speciesInRotation: undefined,
-  speciesNotInRotation: undefined,
-  currentSpecies: undefined,
+  flashcardsInRotation: undefined,
+  flashcardsNotInRotation: undefined,
+  currentFlashcard: undefined,
   flashcardRevealed: false,
 };
