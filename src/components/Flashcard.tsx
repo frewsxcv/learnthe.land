@@ -121,17 +121,17 @@ const FlashcardButtons = ({
   if (revealed) {
     middle = (
       <>
-        <Button variant="danger" style={{ flexBasis: '16%' }} disabled={disabled} onClick={() => onRateClick("dontknow")}>
+        <Button variant="danger" style={{ flex: '0 0 20%' }} disabled={disabled} onClick={() => onRateClick("dontknow")}>
           <><HandThumbsDown /></>
         </Button>
-        <Button variant="success" style={{ flexBasis: '16%' }} disabled={disabled} onClick={() => onRateClick("know")}>
+        <Button variant="success" style={{ flex: '0 0 20%' }} disabled={disabled} onClick={() => onRateClick("know")}>
           <><HandThumbsUp /></>
         </Button>
       </>
     );
   } else {
     middle = (
-      <Button style={{ flexBasis: '32%' }} disabled={disabled} onClick={onReveal}>
+      <Button style={{ flex: '0 0 40%' }} disabled={disabled} onClick={onReveal}>
         <><EyeFill />&nbsp;Reveal</>
       </Button>
     );
@@ -162,52 +162,58 @@ export const Flashcard = ({
   const [isMoving, setIsMoving] = useState<boolean>(false);
   const flickingRef = useRef<Flicking>();
 
+  let inner: JSX.Element;
+
   if (images.length === 0) {
     loadImages(offlineMode, data.species).then((flashcardImages) => {
       shuffleArray(flashcardImages);
       setImages(flashcardImages);
     });
 
-    return (
-      <div className="d-grid gap-3">
-        <Card>
-          <Card.Body>
-            <p style={{ height: FLASHCARD_IMAGE_HEIGHT, margin: 0 }}>Loading images...</p>
-          </Card.Body>
-        </Card>
-        <FlashcardButtons revealed={false} disabled={true} />
-      </div>
+    inner = (
+      <p style={{ height: FLASHCARD_IMAGE_HEIGHT, margin: 0 }}>Loading images...</p>
+    );
+  } else {
+    const imageElems = images.map((image, i) => {
+      const width = (image.width * FLASHCARD_IMAGE_HEIGHT) / image.height;
+      return (
+        <div style={{position: 'relative'}} key={i}>
+          <img
+            width={width}
+            height={FLASHCARD_IMAGE_HEIGHT}
+            style={{ pointerEvents: "none", marginRight: "5px", marginLeft: "5px" }}
+            src={image.src}
+            alt=""
+          />
+          <div style={{
+            position: 'absolute',
+            left: '50%',
+            bottom: '4px',
+            fontSize: '7px',
+            padding: '2px 4px',
+            background: 'rgba(0, 0, 0, 50%)',
+            color: 'white',
+            transform: 'translate(-50%, 0)',
+            whiteSpace: 'nowrap',
+          }}>{image.attribution}</div>
+        </div>
+      );
+    });
+
+    const flickingPlugins: Plugin[] = [new Fade()];
+
+    inner = (
+      <Flicking
+        onMoveStart={() => { setIsMoving(true) }}
+        onMoveEnd={() => { setIsMoving(false) }}
+        circular={true}
+        ref={flickingRef}
+        plugins={flickingPlugins}
+      >
+        {imageElems}
+      </Flicking>
     );
   }
-
-
-  const imageElems = images.map((image, i) => {
-    const width = (image.width * FLASHCARD_IMAGE_HEIGHT) / image.height;
-    return (
-      <div style={{position: 'relative'}} key={i}>
-        <img
-          width={width}
-          height={FLASHCARD_IMAGE_HEIGHT}
-          style={{ pointerEvents: "none", marginRight: "5px", marginLeft: "5px" }}
-          src={image.src}
-          alt=""
-        />
-        <div style={{
-          position: 'absolute',
-          left: '50%',
-          bottom: '4px',
-          fontSize: '7px',
-          padding: '2px 4px',
-          background: 'rgba(0, 0, 0, 50%)',
-          color: 'white',
-          transform: 'translate(-50%, 0)',
-          whiteSpace: 'nowrap',
-        }}>{image.attribution}</div>
-      </div>
-    );
-  });
-
-  const flickingPlugins: Plugin[] = [new Fade()];
 
   const speciesFacts = revealed ? (<SpeciesFacts species={data.species} />) : null;
 
@@ -215,19 +221,12 @@ export const Flashcard = ({
     <div className="d-grid gap-3">
       <Card>
         <Card.Body>
-          <Flicking
-            onMoveStart={() => { setIsMoving(true) }}
-            onMoveEnd={() => { setIsMoving(false) }}
-            circular={true}
-            ref={flickingRef}
-            plugins={flickingPlugins}
-          >
-            {imageElems}
-          </Flicking>
+          {inner}
         </Card.Body>
       </Card>
       <FlashcardButtons
         revealed={revealed}
+        disabled={images.length === 0}
         onPrevClick={() => flickingRef.current.prev()}
         onNextClick={() => flickingRef.current.next()}
         onRateClick={(rating: FlashcardRating) => {
@@ -236,7 +235,9 @@ export const Flashcard = ({
         }}
         onReveal={onReveal}
         nextPrevDisabled={isMoving} />
-      {speciesFacts}
+      <div style={{height: '200px'}}> {/* Add this height so the browser viewport doesn't jump when the species facts aren't visible */}
+        {speciesFacts}
+      </div>
     </div>
   );
 };
