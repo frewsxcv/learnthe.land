@@ -20,10 +20,8 @@ const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   let inner: JSX.Element;
-  let frameTitle: string;
 
   if (!state.location) {
-    frameTitle = "Places";
     inner = (
       <LocationStep
         offlineMode={OFFLINE_MODE}
@@ -33,7 +31,6 @@ const App = () => {
       />
     );
   } else if (!state.places) {
-    frameTitle = "Places";
     inner = (
       <PlacesStep
         offlineMode={OFFLINE_MODE}
@@ -42,7 +39,6 @@ const App = () => {
       />
     );
   } else if (!state.selectedPlace) {
-    frameTitle = "Places";
     inner = (
       <SelectPlaceStep
         places={state.places}
@@ -50,7 +46,6 @@ const App = () => {
       />
     );
   } else if (!state.selectedTaxaCategory) {
-    frameTitle = "Taxa Category";
     inner = (
       <SelectTaxaCategoryStep
         onSelect={(taxaCategory) =>
@@ -59,7 +54,6 @@ const App = () => {
       />
     );
   } else if (!state.flashcardsInRotation) {
-    frameTitle = "Flashcards";
     inner = (
       <LoadAllSpeciesStep
         offlineMode={OFFLINE_MODE}
@@ -71,7 +65,6 @@ const App = () => {
       />
     );
   } else {
-    frameTitle = "Flashcards";
     inner = (
       <Flashcard
         offlineMode={OFFLINE_MODE}
@@ -84,7 +77,7 @@ const App = () => {
   }
 
   return (
-    <Frame title={frameTitle}>
+    <Frame selectedPlace={state.selectedPlace} selectedTaxaCategory={state.selectedTaxaCategory} score={state.score}>
       {inner}
     </Frame>
   )
