@@ -6,7 +6,7 @@ import { FlashcardRating } from "./flashcard-rating";
 import { FlashcardData } from "./flashcard-data";
 
 // TODO: make a step for this
-const initialFlashcardCount = 10;
+const initialFlashcardCount = 5;
 
 export const reducer: Reducer<State, Action> = (
   state: State,
@@ -39,12 +39,12 @@ export const reducer: Reducer<State, Action> = (
       };
     }
     case "ALL_SPECIES_LOADED": {
-      const flashcardsInRotation = action.allSpecies.slice(0, 10).map(species => { return { species, streak: 0 }; });
+      const flashcardsInRotation = action.allSpecies.slice(0, initialFlashcardCount).map(species => { return { species, streak: 0, attempts: 0 }; });
       // TODO: shuffle the initial flashcards in rotation
       return {
         ...state,
         flashcardsInRotation,
-        flashcardsNotInRotation: action.allSpecies.slice(10).map(species => { return { species, streak: 0 }; }),
+        flashcardsNotInRotation: action.allSpecies.slice(10).map(species => { return { species, streak: 0, attempts: 0 }; }),
         currentFlashcard: popRandomSpecies(flashcardsInRotation),
       };
     }
@@ -96,20 +96,38 @@ const processScoredFlashcard = (
     flashcard.streak += 1;
   }
 
-  // TODO: add number of attempts to the flashcard data
+  flashcard.attempts += 1;
 
   // TODO: introduce randomness
-  flashcardsInRotation.splice(2 ** (1 + flashcard.streak), 0, flashcard);
 
-  const numFlashcardsUserDoesntKnow = flashcardsInRotation.filter(flashcard => flashcard.streak === 0).length;
+  // Insert the rated card somewhere else
+  const lowestStreak = Math.min(...flashcardsInRotation.map(flashcard => flashcard.streak));
+  const indexToInsert =
+    flashcardsInRotation.length -
+    flashcardsInRotation.slice().reverse().findIndex(flashcard => flashcard.streak === lowestStreak) +
+    2 ** flashcard.streak;
+  flashcardsInRotation.splice(indexToInsert, 0, flashcard);
 
-  if (numFlashcardsUserDoesntKnow < 5) {
-    const newFlashcard = flashcardsNotInRotation.splice(0, 3)[0]; // TODO: what to do about these indexings?
-    console.assert(newFlashcard);
+  if (flashcardsInRotation.filter(flashcard => flashcard.attempts === 0).length === 0) {
+    const numFlashcardsUserDoesntKnow = flashcardsInRotation.filter(flashcard => flashcard.streak === 0).length;
+    if (numFlashcardsUserDoesntKnow < 5) {
+      // const newFlashcard = flashcardsNotInRotation.splice(0, 1)[0]; // TODO: what to do about these indexings?
+      // console.assert(newFlashcard);
+      // flashcardsInRotation.splice(1, 0, newFlashcard);
 
-    console.debug('Adding a new card', newFlashcard);
+      const minAttempts = Math.min(...flashcardsInRotation.map(flashcard => flashcard.attempts));
+      const indexToInsert =
+        flashcardsInRotation.length -
+        flashcardsInRotation.slice().reverse().findIndex(flashcard => flashcard.attempts === minAttempts) +
+        1;
+        // 0;
+      const newFlashcard = flashcardsNotInRotation.splice(0, 1)[0]; // TODO: what to do about these indexings?
+      console.assert(newFlashcard);
 
-    flashcardsInRotation.splice(1, 0, newFlashcard);
+      console.debug('Adding a new card', newFlashcard);
+
+      flashcardsInRotation.splice(indexToInsert, 0, newFlashcard);
+    }
   }
 
   console.debug('New flashcards state', flashcardsInRotation);
