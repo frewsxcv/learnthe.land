@@ -40,7 +40,7 @@ export const iNaturalistApi = {
       "https://api.inaturalist.org" +
       "/v1/observations" +
       "?photos=true" +
-      "&popular=true" +
+      // "&popular=true" +
       "&quality_grade=research" +
       `&taxon_id=${taxonId}` +
       "&identifications=most_agree" +
