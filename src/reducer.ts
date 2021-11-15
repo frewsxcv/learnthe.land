@@ -118,8 +118,6 @@ const processScoredFlashcard = (
       const newFlashcard = flashcardsNotInRotation.splice(0, 1)[0]; // TODO: what to do about these indexings?
       console.assert(newFlashcard);
 
-      console.debug('Adding a new card', newFlashcard);
-
       flashcardsInRotation.splice(indexToInsert, 0, newFlashcard);
     }
   }
