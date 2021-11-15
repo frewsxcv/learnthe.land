@@ -3,6 +3,7 @@ import Navbar from "react-bootstrap/Navbar";
 import React from "react";
 import { IconicTaxa, Place } from "../inaturalist";
 import { Globe } from "react-bootstrap-icons";
+import { Nav } from "react-bootstrap";
 
 export const Frame = ({
   children,
@@ -30,6 +31,10 @@ export const Frame = ({
       <Navbar expand="sm" variant="dark" bg="primary">
         <Container>
           <Navbar.Brand><Globe />&nbsp;Learn the Land</Navbar.Brand>
+          <Navbar.Toggle />
+          <Navbar.Collapse>
+            <Navbar.Text className="ms-auto"><a target="_blank" href="https://github.com/frewsxcv/learnthe.land">Source</a></Navbar.Text>
+          </Navbar.Collapse>
         </Container>
       </Navbar>
       <Navbar expand="sm" variant="light" bg="light">
