@@ -56,11 +56,12 @@ export const reducer: Reducer<State, Action> = (
     }
     case "SCORE_FLASHCARD": {
       processScoredFlashcard(state.currentFlashcard, action.flashcardRating, state.flashcardsInRotation, state.flashcardsNotInRotation);
+      const score = calculateScore(state.flashcardsInRotation);
       return {
         ...state,
         currentFlashcard: popFirstSpecies(state.flashcardsInRotation),
         flashcardRevealed: false,
-        score: calculateScore(state.flashcardsInRotation),
+        score,
       };
     }
     default: {
