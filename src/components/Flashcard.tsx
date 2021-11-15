@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { ButtonGroup } from "react-bootstrap";
 import { Fade } from "@egjs/flicking-plugins";
-import { ArrowLeft, ArrowRight, Eye, EyeFill, Stack } from "react-bootstrap-icons";
+import { ArrowLeft, ArrowRight, Eye, EyeFill, Stack, HandThumbsUp, HandThumbsDown } from "react-bootstrap-icons";
 import { FlashcardData } from "../flashcard-data";
 import { FlashcardRating } from "../flashcard-rating";
 
@@ -80,7 +80,7 @@ const FlashcardPreviousImageButton = ({
   return (
     <Button disabled={disabled} variant='outline-secondary' onClick={onClick}>
       <ArrowLeft />&nbsp;
-      Previous image
+      Prev. image
     </Button>
   );
 };
@@ -121,18 +121,18 @@ const FlashcardButtons = ({
   if (revealed) {
     middle = (
       <>
-        <Button variant="warning" style={{ flexBasis: '16.5%' }} disabled={disabled} onClick={() => onRateClick("dontknow")}>
-          <><EyeFill />&nbsp;Didn’t Know</>
+        <Button variant="danger" style={{ flexBasis: '16%' }} disabled={disabled} onClick={() => onRateClick("dontknow")}>
+          <><HandThumbsDown /></>
         </Button>
-        <Button variant="success" style={{ flexBasis: '16.5%' }} disabled={disabled} onClick={() => onRateClick("know")}>
-          <><EyeFill />&nbsp;Did Know</>
+        <Button variant="success" style={{ flexBasis: '16%' }} disabled={disabled} onClick={() => onRateClick("know")}>
+          <><HandThumbsUp /></>
         </Button>
       </>
     );
   } else {
     middle = (
-      <Button style={{ flexBasis: '33%' }} disabled={disabled} onClick={onReveal}>
-        <><EyeFill />&nbsp;Reveal flashcard</>
+      <Button style={{ flexBasis: '32%' }} disabled={disabled} onClick={onReveal}>
+        <><EyeFill />&nbsp;Reveal</>
       </Button>
     );
   }
