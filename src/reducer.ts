@@ -109,6 +109,13 @@ const processScoredFlashcard = (
   flashcardsInRotation.splice(indexToInsert, 0, flashcard);
 
   if (shouldAddNewFlashcard(flashcardsInRotation)) {
+    addNewFlashcard(flashcardsInRotation, flashcardsNotInRotation);
+  }
+
+  console.debug('New flashcards state', flashcardsInRotation);
+};
+
+const addNewFlashcard = (flashcardsInRotation: FlashcardData[], flashcardsNotInRotation: FlashcardData[]): void => {
     const minAttempts = Math.min(...flashcardsInRotation.map(flashcard => flashcard.attempts));
     const indexToInsert =
       flashcardsInRotation.slice().findIndex(flashcard => flashcard.attempts === minAttempts)
@@ -117,9 +124,6 @@ const processScoredFlashcard = (
     console.assert(newFlashcard);
 
     flashcardsInRotation.splice(indexToInsert, 0, newFlashcard);
-  }
-
-  console.debug('New flashcards state', flashcardsInRotation);
 };
 
 const shouldAddNewFlashcard = (flashcardsInRotation: FlashcardData[]): boolean => {
