@@ -111,14 +111,10 @@ const processScoredFlashcard = (
   if (flashcardsInRotation.filter(flashcard => flashcard.attempts === 0).length === 0) {
     const numFlashcardsUserDoesntKnow = flashcardsInRotation.filter(flashcard => flashcard.streak === 0).length;
     if (numFlashcardsUserDoesntKnow < 5) {
-      // const newFlashcard = flashcardsNotInRotation.splice(0, 1)[0]; // TODO: what to do about these indexings?
-      // console.assert(newFlashcard);
-      // flashcardsInRotation.splice(1, 0, newFlashcard);
-
       const minAttempts = Math.min(...flashcardsInRotation.map(flashcard => flashcard.attempts));
       const indexToInsert =
-        flashcardsInRotation.slice().findIndex(flashcard => flashcard.attempts === minAttempts) +
-        1; // explain this
+        flashcardsInRotation.slice().findIndex(flashcard => flashcard.attempts === minAttempts)
+        + 1; // If we didn’t add one here, and if the user continues to press "Know", then they would only see new cards instead of cycling in old ones.
       const newFlashcard = flashcardsNotInRotation.splice(0, 1)[0]; // TODO: what to do about these indexings?
       console.assert(newFlashcard);
 
