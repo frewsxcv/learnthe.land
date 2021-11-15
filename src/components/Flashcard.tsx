@@ -1,10 +1,10 @@
-import React, { MutableRefObject, useRef, useState } from "react";
+import React, { CSSProperties, MutableRefObject, useRef, useState } from "react";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
 import { Plugin } from "@egjs/react-flicking";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { ButtonGroup } from "react-bootstrap";
+import { ButtonGroup, Col, Row } from "react-bootstrap";
 import { Fade } from "@egjs/flicking-plugins";
 import { ArrowLeft, ArrowRight, Eye, EyeFill, Stack, HandThumbsUp, HandThumbsDown } from "react-bootstrap-icons";
 import { FlashcardData } from "../flashcard-data";
@@ -73,12 +73,14 @@ const loadImages: (
 const FlashcardPreviousImageButton = ({
   disabled,
   onClick,
+  style,
 }: {
   disabled: boolean,
   onClick?: () => void,
+  style?: CSSProperties,
 }) => {
   return (
-    <Button disabled={disabled} variant='outline-secondary' onClick={onClick}>
+    <Button disabled={disabled} variant='outline-secondary' onClick={onClick} style={style}>
       <ArrowLeft />&nbsp;
       Prev. image
     </Button>
@@ -88,12 +90,14 @@ const FlashcardPreviousImageButton = ({
 const FlashcardNextImageButton = ({
   disabled,
   onClick,
+  style,
 }: {
   disabled: boolean,
   onClick?: () => void,
+  style?: CSSProperties,
 }) => {
   return (
-    <Button disabled={disabled} variant='outline-secondary' onClick={onClick}>
+    <Button disabled={disabled} variant='outline-secondary' onClick={onClick} style={style}>
       Next image
       &nbsp;<ArrowRight />
     </Button>
@@ -121,27 +125,45 @@ const FlashcardButtons = ({
   if (revealed) {
     middle = (
       <>
-        <Button variant="danger" style={{ flex: '0 0 20%' }} disabled={disabled} onClick={() => onRateClick("dontknow")}>
+        <Button style={{width: '50%'}} variant="danger" disabled={disabled} onClick={() => onRateClick("dontknow")}>
           <><HandThumbsDown /> Didn’t know it</>
         </Button>
-        <Button variant="success" style={{ flex: '0 0 20%' }} disabled={disabled} onClick={() => onRateClick("know")}>
+        <Button style={{width: '50%'}} variant="success" disabled={disabled} onClick={() => onRateClick("know")}>
           <><HandThumbsUp /> Knew it</>
         </Button>
       </>
     );
   } else {
     middle = (
-      <Button style={{ flex: '0 0 40%' }} disabled={disabled} onClick={onReveal}>
+      <Button disabled={disabled} onClick={onReveal}>
         <><EyeFill />&nbsp;Reveal</>
       </Button>
     );
   }
   return (
-    <ButtonGroup>
-      <FlashcardPreviousImageButton disabled={disabled || nextPrevDisabled} onClick={onPrevClick} />
-      {middle}
-      <FlashcardNextImageButton disabled={disabled || nextPrevDisabled} onClick={onNextClick} />
-    </ButtonGroup>
+    <>
+      <Row className="d-lg-none">
+        <Col xs={12} className="d-grid">
+          <ButtonGroup>
+            <FlashcardPreviousImageButton style={{width: '50%'}} disabled={disabled || nextPrevDisabled} onClick={onPrevClick} />
+            <FlashcardNextImageButton style={{width: '50%'}} disabled={disabled || nextPrevDisabled} onClick={onNextClick} />
+          </ButtonGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col lg={3} xl={2} className="d-none d-lg-grid">
+          <FlashcardPreviousImageButton disabled={disabled || nextPrevDisabled} onClick={onPrevClick} />
+        </Col>
+        <Col lg={6} xl={{span: 6, offset: 1}} className="d-grid">
+          <ButtonGroup>
+            {middle}
+          </ButtonGroup>
+        </Col>
+        <Col lg={3} xl={{span: 2, offset: 1}} className="d-none d-lg-grid">
+          <FlashcardNextImageButton disabled={disabled || nextPrevDisabled} onClick={onNextClick} />
+        </Col>
+      </Row>
+    </>
   );
 };
 
