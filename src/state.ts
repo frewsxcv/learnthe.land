@@ -7,9 +7,11 @@ export type State = {
   places?: Place[];
   selectedPlace?: Place;
   selectedTaxaCategory?: IconicTaxa;
-  flashcardsInRotation?: FlashcardData[];
-  flashcardsNotInRotation?: FlashcardData[];
-  currentFlashcard?: FlashcardData;
+  flashcards?: {
+    inRotation: FlashcardData[];
+    notInRotation: FlashcardData[];
+    current: FlashcardData;
+  };
   flashcardRevealed: boolean;
   score: number;
 };
@@ -19,9 +21,7 @@ export const initialState: State = {
   places: undefined,
   selectedPlace: undefined,
   selectedTaxaCategory: undefined,
-  flashcardsInRotation: undefined,
-  flashcardsNotInRotation: undefined,
-  currentFlashcard: undefined,
+  flashcards: undefined,
   flashcardRevealed: false,
   score: 0,
 };

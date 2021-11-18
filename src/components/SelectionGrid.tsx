@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 
 export const SelectionGrid = ({ children }: { children: React.ReactNode }) => {

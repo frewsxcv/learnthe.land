@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "jsx": "react",
+    "module": "es6",
+    "moduleResolution": "node",
+    "target": "es5",
+    "strict": true
+  }
+}

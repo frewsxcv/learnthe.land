@@ -1,6 +1,6 @@
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import React from "react";
+import * as React from "react";
 import { IconicTaxa, Place } from "../inaturalist";
 import { Globe } from "react-bootstrap-icons";
 import { Nav } from "react-bootstrap";

@@ -43,9 +43,11 @@ export const reducer: Reducer<State, Action> = (
       // TODO: shuffle the initial flashcards in rotation
       return {
         ...state,
-        flashcardsInRotation,
-        flashcardsNotInRotation: action.allSpecies.slice(10).map(species => { return { species, streak: 0, attempts: 0 }; }),
-        currentFlashcard: popRandomSpecies(flashcardsInRotation),
+        flashcards: {
+          inRotation: flashcardsInRotation,
+          notInRotation: action.allSpecies.slice(10).map(species => { return { species, streak: 0, attempts: 0 }; }),
+          current: popRandomSpecies(flashcardsInRotation),
+        },
       };
     }
     case "REVEAL_FLASHCARD": {
@@ -55,11 +57,17 @@ export const reducer: Reducer<State, Action> = (
       };
     }
     case "SCORE_FLASHCARD": {
-      processScoredFlashcard(state.currentFlashcard, action.flashcardRating, state.flashcardsInRotation, state.flashcardsNotInRotation);
-      const score = calculateScore(state.flashcardsInRotation);
+      if (!state.flashcards) {
+        throw new Error("foo");
+      }
+      processScoredFlashcard(state.flashcards.current, action.flashcardRating, state.flashcards.inRotation, state.flashcards.notInRotation);
+      const score = calculateScore(state.flashcards.inRotation);
       return {
         ...state,
-        currentFlashcard: popFirstSpecies(state.flashcardsInRotation),
+        flashcards: {
+          ...state.flashcards,
+          current: popFirstSpecies(state.flashcards.inRotation),
+        },
         flashcardRevealed: false,
         score,
       };

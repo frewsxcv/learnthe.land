@@ -25,7 +25,7 @@ const fakePlace: Place = {
   admin_level: 1,
   ancestor_place_ids: null,
   bbox_area: 1,
-  bounding_box_geojson: {},
+  bounding_box_geojson: { coordinates: [] },
   display_name: "Faketown",
   geometry_geojson: {},
   id: 1,

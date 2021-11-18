@@ -1,4 +1,5 @@
-import React, { useReducer } from "react";
+import * as React from "react";
+import { useReducer } from "react";
 import { hot } from "react-hot-loader";
 import { LocationStep } from "./LocationStep";
 import { PlacesStep } from "./PlacesStep";
@@ -53,7 +54,7 @@ const App = () => {
         }
       />
     );
-  } else if (!state.flashcardsInRotation) {
+  } else if (!state.flashcards) {
     inner = (
       <LoadAllSpeciesStep
         offlineMode={OFFLINE_MODE}
@@ -69,7 +70,7 @@ const App = () => {
       <Flashcard
         offlineMode={OFFLINE_MODE}
         revealed={state.flashcardRevealed}
-        data={state.currentFlashcard}
+        data={state.flashcards.current}
         onReveal={() => dispatch({ type: "REVEAL_FLASHCARD" })}
         onRateClick={(rating) => dispatch({ type: "SCORE_FLASHCARD", flashcardRating: rating })}
       />

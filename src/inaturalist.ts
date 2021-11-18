@@ -1,5 +1,7 @@
+import { Location } from "./location";
+
 export const iNaturalistApi = {
-  fetchPlaces: (location) => {
+  fetchPlaces: (location: Location) => {
     const url =
       "https://api.inaturalist.org" +
       "/v1/places/nearby" +

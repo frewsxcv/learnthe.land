@@ -1,4 +1,5 @@
-import React, { CSSProperties, MutableRefObject, useRef, useState } from "react";
+import * as React from "react";
+import { CSSProperties, MutableRefObject, useRef, useState } from "react";
 import { iNaturalistApi, SpeciesCount } from "../inaturalist";
 import Flicking from "@egjs/react-flicking";
 import { Plugin } from "@egjs/react-flicking";
@@ -125,10 +126,10 @@ const FlashcardButtons = ({
   if (revealed) {
     middle = (
       <>
-        <Button style={{width: '50%'}} variant="danger" disabled={disabled} onClick={() => onRateClick("dontknow")}>
+        <Button style={{width: '50%'}} variant="danger" disabled={disabled} onClick={() => onRateClick && onRateClick("dontknow")}>
           <><HandThumbsDown /> Didn’t know it</>
         </Button>
-        <Button style={{width: '50%'}} variant="success" disabled={disabled} onClick={() => onRateClick("know")}>
+        <Button style={{width: '50%'}} variant="success" disabled={disabled} onClick={() => onRateClick && onRateClick("know")}>
           <><HandThumbsUp /> Knew it</>
         </Button>
       </>
@@ -140,19 +141,20 @@ const FlashcardButtons = ({
       </Button>
     );
   }
+  const nextPrevButtonsDisabled = !!disabled || !!nextPrevDisabled
   return (
     <>
       <Row className="d-lg-none">
         <Col xs={12} className="d-grid">
           <ButtonGroup>
-            <FlashcardPreviousImageButton style={{width: '50%'}} disabled={disabled || nextPrevDisabled} onClick={onPrevClick} />
-            <FlashcardNextImageButton style={{width: '50%'}} disabled={disabled || nextPrevDisabled} onClick={onNextClick} />
+            <FlashcardPreviousImageButton style={{width: '50%'}} disabled={nextPrevButtonsDisabled} onClick={onPrevClick} />
+            <FlashcardNextImageButton style={{width: '50%'}} disabled={nextPrevButtonsDisabled} onClick={onNextClick} />
           </ButtonGroup>
         </Col>
       </Row>
       <Row>
         <Col lg={3} xl={2} className="d-none d-lg-grid">
-          <FlashcardPreviousImageButton disabled={disabled || nextPrevDisabled} onClick={onPrevClick} />
+          <FlashcardPreviousImageButton disabled={nextPrevButtonsDisabled} onClick={onPrevClick} />
         </Col>
         <Col lg={6} xl={{span: 6, offset: 1}} className="d-grid">
           <ButtonGroup>
@@ -160,7 +162,7 @@ const FlashcardButtons = ({
           </ButtonGroup>
         </Col>
         <Col lg={3} xl={{span: 2, offset: 1}} className="d-none d-lg-grid">
-          <FlashcardNextImageButton disabled={disabled || nextPrevDisabled} onClick={onNextClick} />
+          <FlashcardNextImageButton disabled={nextPrevButtonsDisabled} onClick={onNextClick} />
         </Col>
       </Row>
     </>
@@ -182,7 +184,7 @@ export const Flashcard = ({
 }) => {
   const [images, setImages] = useState<FlashcardImage[]>([]);
   const [isMoving, setIsMoving] = useState<boolean>(false);
-  const flickingRef = useRef<Flicking>();
+  const flickingRef = useRef<Flicking>(null);
 
   let inner: JSX.Element;
 
@@ -249,8 +251,8 @@ export const Flashcard = ({
       <FlashcardButtons
         revealed={revealed}
         disabled={images.length === 0}
-        onPrevClick={() => flickingRef.current.prev()}
-        onNextClick={() => flickingRef.current.next()}
+        onPrevClick={() => flickingRef.current?.prev()}
+        onNextClick={() => flickingRef.current?.next()}
         onRateClick={(rating: FlashcardRating) => {
           onRateClick(rating);
           setImages([]);
