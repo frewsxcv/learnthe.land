@@ -269,10 +269,7 @@ export const Flashcard = ({
     );
   }
 
-  const speciesFacts = revealed ? (
-    <SpeciesFacts
-      species={data.species}
-    />) : null;
+  const speciesFacts = revealed ? <SpeciesFacts species={data.species} /> : null;
 
   return (
     <>
