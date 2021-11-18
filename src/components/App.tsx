@@ -13,7 +13,8 @@ import { reducer } from '../reducer';
 // const reactLogo = require("./../assets/img/react_logo.svg");
 import './../assets/scss/App.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Frame } from './Frame';
+import { TopNavbars } from './TopNavbars';
+import { Container } from 'react-bootstrap';
 
 const OFFLINE_MODE = false;
 
@@ -24,40 +25,50 @@ const App = () => {
 
   if (!state.location) {
     inner = (
-      <LocationStep
-        offlineMode={OFFLINE_MODE}
-        onLocation={(location) => dispatch({ type: 'LOCATION_LOADED', location })}
-      />
+      <Container className="py-3">
+        <LocationStep
+          offlineMode={OFFLINE_MODE}
+          onLocation={(location) => dispatch({ type: 'LOCATION_LOADED', location })}
+        />
+      </Container>
     );
   } else if (!state.places) {
     inner = (
-      <PlacesStep
-        offlineMode={OFFLINE_MODE}
-        location={state.location}
-        onLoad={(places) => dispatch({ type: 'PLACES_LOADED', places })}
-      />
+      <Container className="py-3">
+        <PlacesStep
+          offlineMode={OFFLINE_MODE}
+          location={state.location}
+          onLoad={(places) => dispatch({ type: 'PLACES_LOADED', places })}
+        />
+      </Container>
     );
   } else if (!state.selectedPlace) {
     inner = (
-      <SelectPlaceStep
-        places={state.places}
-        onSelectPlace={(place) => dispatch({ type: 'PLACE_SELECTED', place })}
-      />
+      <Container className="py-3">
+        <SelectPlaceStep
+          places={state.places}
+          onSelectPlace={(place) => dispatch({ type: 'PLACE_SELECTED', place })}
+        />
+      </Container>
     );
   } else if (!state.selectedTaxaCategory) {
     inner = (
-      <SelectTaxaCategoryStep
-        onSelect={(taxaCategory) => dispatch({ type: 'TAXA_CATEGORY_SELECTED', taxaCategory })}
-      />
+      <Container className="py-3">
+        <SelectTaxaCategoryStep
+          onSelect={(taxaCategory) => dispatch({ type: 'TAXA_CATEGORY_SELECTED', taxaCategory })}
+        />
+      </Container>
     );
   } else if (!state.flashcards) {
     inner = (
-      <LoadAllSpeciesStep
-        offlineMode={OFFLINE_MODE}
-        selectedPlace={state.selectedPlace}
-        selectedTaxaCategory={state.selectedTaxaCategory}
-        onLoad={(allSpecies) => dispatch({ type: 'ALL_SPECIES_LOADED', allSpecies })}
-      />
+      <Container className="py-3">
+        <LoadAllSpeciesStep
+          offlineMode={OFFLINE_MODE}
+          selectedPlace={state.selectedPlace}
+          selectedTaxaCategory={state.selectedTaxaCategory}
+          onLoad={(allSpecies) => dispatch({ type: 'ALL_SPECIES_LOADED', allSpecies })}
+        />
+      </Container>
     );
   } else {
     inner = (
@@ -72,13 +83,14 @@ const App = () => {
   }
 
   return (
-    <Frame
-      selectedPlace={state.selectedPlace}
-      selectedTaxaCategory={state.selectedTaxaCategory}
-      score={state.score}
-    >
+    <>
+      <TopNavbars
+        selectedPlace={state.selectedPlace}
+        selectedTaxaCategory={state.selectedTaxaCategory}
+        score={state.score}
+      />
       {inner}
-    </Frame>
+    </>
   );
 };
 

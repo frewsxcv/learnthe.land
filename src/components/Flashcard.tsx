@@ -5,7 +5,7 @@ import Flicking from '@egjs/react-flicking';
 import { Plugin } from '@egjs/react-flicking';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { ButtonGroup, Col, Row } from 'react-bootstrap';
+import { ButtonGroup, Col, Container, Row } from 'react-bootstrap';
 import { Fade } from '@egjs/flicking-plugins';
 import {
   ArrowLeft,
@@ -161,8 +161,8 @@ const FlashcardButtons = ({
   }
   const nextPrevButtonsDisabled = !!disabled || !!nextPrevDisabled;
   return (
-    <>
-      <Row className="d-lg-none">
+    <Container>
+      <Row className="d-lg-none w-100">
         <Col xs={12} className="d-grid">
           <ButtonGroup>
             <FlashcardPreviousImageButton
@@ -178,7 +178,7 @@ const FlashcardButtons = ({
           </ButtonGroup>
         </Col>
       </Row>
-      <Row>
+      <Row className="w-100">
         <Col lg={3} xl={2} className="d-none d-lg-grid">
           <FlashcardPreviousImageButton disabled={nextPrevButtonsDisabled} onClick={onPrevClick} />
         </Col>
@@ -189,7 +189,7 @@ const FlashcardButtons = ({
           <FlashcardNextImageButton disabled={nextPrevButtonsDisabled} onClick={onNextClick} />
         </Col>
       </Row>
-    </>
+    </Container>
   );
 };
 
@@ -269,37 +269,46 @@ export const Flashcard = ({
     );
   }
 
-  const speciesFacts = revealed ? <SpeciesFacts species={data.species} /> : null;
+  const speciesFacts = revealed ? (
+    <SpeciesFacts
+      species={data.species}
+    />) : null;
 
   return (
-    <div className="d-grid gap-3">
-      <Card>
-        <Card.Body>{inner}</Card.Body>
-      </Card>
-      <FlashcardButtons
-        revealed={revealed}
-        disabled={images.length === 0}
-        onPrevClick={() => flickingRef.current?.prev()}
-        onNextClick={() => flickingRef.current?.next()}
-        onRateClick={(rating: FlashcardRating) => {
-          onRateClick(rating);
-          setImages([]);
-        }}
-        onReveal={onReveal}
-        nextPrevDisabled={isMoving}
-      />
-      <div style={{ height: '200px' }}>
-        {' '}
-        {/* Add this height so the browser viewport doesn't jump when the species facts aren't visible */}
+    <>
+      <div className="d-grid gap-3 py-4" style={{ backgroundColor: 'white', position: 'relative' }}>
+        {inner}
         {speciesFacts}
       </div>
-    </div>
+      <nav className="navbar navbar-light bg-light">
+        <FlashcardButtons
+          revealed={revealed}
+          disabled={images.length === 0}
+          onPrevClick={() => flickingRef.current?.prev()}
+          onNextClick={() => flickingRef.current?.next()}
+          onRateClick={(rating: FlashcardRating) => {
+            onRateClick(rating);
+            setImages([]);
+          }}
+          onReveal={onReveal}
+          nextPrevDisabled={isMoving}
+        />
+      </nav>
+    </>
   );
 };
 
 const SpeciesFacts = ({ species }: { species: SpeciesCount }) => {
   return (
-    <Card>
+    <Card
+      style={{
+        position: 'absolute',
+        zIndex: ' 10',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        top: '50%',
+      }}
+    >
       <Card.Body>
         <div className="d-grid gap-3">
           <SpeciesName species={species} />

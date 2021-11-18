@@ -3,10 +3,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import * as React from 'react';
 import { IconicTaxa, Place } from '../inaturalist';
 import { Globe } from 'react-bootstrap-icons';
-import { Nav } from 'react-bootstrap';
 
-export const Frame = ({
-  children,
+export const TopNavbars = ({
   selectedPlace,
   selectedTaxaCategory,
   score,
@@ -52,7 +50,6 @@ export const Frame = ({
           </div>
         </Container>
       </Navbar>
-      <Container className="py-3">{children}</Container>
     </>
   );
 };
