@@ -1,8 +1,8 @@
-import { iNaturalistApi } from "../inaturalist";
-import { SpeciesCount, Place } from "../inaturalist";
-import * as React from "react";
+import { iNaturalistApi } from '../inaturalist';
+import { SpeciesCount, Place } from '../inaturalist';
+import * as React from 'react';
 
-const reactLogo = require("./../assets/img/react_logo.svg");
+const reactLogo = require('./../assets/img/react_logo.svg');
 
 export const LoadAllSpeciesStep = ({
   offlineMode,
@@ -20,44 +20,40 @@ export const LoadAllSpeciesStep = ({
     return loading;
   }
 
-  iNaturalistApi
-    .fetchAllSpeciesForPlace(selectedTaxaCategory, selectedPlace)
-    .then((species) => {
-      onLoad(species);
-    });
+  iNaturalistApi.fetchAllSpeciesForPlace(selectedTaxaCategory, selectedPlace).then((species) => {
+    onLoad(species);
+  });
 
   return loading;
 };
 
-const loading = (
-  <p>Loading species...</p>
-);
+const loading = <p>Loading species...</p>;
 
 const fakeSpecies: SpeciesCount = {
   count: 10,
   taxon: {
     id: 1,
     iconic_taxon_id: 1,
-    iconic_taxon_name: "Aves",
+    iconic_taxon_name: 'Aves',
     is_active: true,
-    name: "Rock Pigeon",
-    preferred_common_name: "Pigeon",
-    rank: "foo",
+    name: 'Rock Pigeon',
+    preferred_common_name: 'Pigeon',
+    rank: 'foo',
     rank_level: 1,
     colors: null,
     conservation_status: null,
     conservation_statuses: null,
     default_photo: {
       id: 1,
-      attribution: "foo",
-      license_code: "foo",
+      attribution: 'foo',
+      license_code: 'foo',
       url: reactLogo.default,
       medium_url: reactLogo.default,
       square_url: reactLogo.default,
     },
     establishment_means: null,
     observations_count: 10,
-    preferred_establishment_means: "foo",
-    wikipedia_url: "https://wikipedia.org/",
+    preferred_establishment_means: 'foo',
+    wikipedia_url: 'https://wikipedia.org/',
   },
 };

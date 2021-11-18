@@ -1,4 +1,4 @@
-import { SpeciesCount } from "./inaturalist";
+import { SpeciesCount } from './inaturalist';
 
 export type FlashcardData = {
   species: SpeciesCount;

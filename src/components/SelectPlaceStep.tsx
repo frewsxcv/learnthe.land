@@ -1,7 +1,7 @@
-import { Place } from "../inaturalist";
-import * as React from "react";
-import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
-import { SelectionGrid, SelectionGridItem } from "./SelectionGrid";
+import { Place } from '../inaturalist';
+import * as React from 'react';
+import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
+import { SelectionGrid, SelectionGridItem } from './SelectionGrid';
 
 export const SelectPlaceStep = ({
   places,
@@ -16,7 +16,7 @@ export const SelectPlaceStep = ({
     };
     return (
       <SelectionGridItem header={place.display_name} onSelect={onSelect} key={i}>
-        <div style={{ height: "150px", display: "flex" }}>
+        <div style={{ height: '150px', display: 'flex' }}>
           <MapContainer
             attributionControl={false}
             touchZoom={false}
@@ -39,11 +39,7 @@ export const SelectPlaceStep = ({
     );
   });
 
-  return (
-    <SelectionGrid>
-      {placesElems}
-    </SelectionGrid>
-  );
+  return <SelectionGrid>{placesElems}</SelectionGrid>;
 };
 
 const PlaceLayer = ({ place }: { place: Place }) => {

@@ -1,9 +1,9 @@
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
-import * as React from "react";
-import { IconicTaxa, Place } from "../inaturalist";
-import { Globe } from "react-bootstrap-icons";
-import { Nav } from "react-bootstrap";
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
+import * as React from 'react';
+import { IconicTaxa, Place } from '../inaturalist';
+import { Globe } from 'react-bootstrap-icons';
+import { Nav } from 'react-bootstrap';
 
 export const Frame = ({
   children,
@@ -30,24 +30,29 @@ export const Frame = ({
     <>
       <Navbar expand="sm" variant="dark" bg="primary">
         <Container>
-          <Navbar.Brand><Globe />&nbsp;Learn the Land</Navbar.Brand>
+          <Navbar.Brand>
+            <Globe />
+            &nbsp;Learn the Land
+          </Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse>
-            <Navbar.Text className="ms-auto"><a target="_blank" href="https://github.com/frewsxcv/learnthe.land">Source</a></Navbar.Text>
+            <Navbar.Text className="ms-auto">
+              <a target="_blank" href="https://github.com/frewsxcv/learnthe.land" rel="noreferrer">
+                Source
+              </a>
+            </Navbar.Text>
           </Navbar.Collapse>
         </Container>
       </Navbar>
       <Navbar expand="sm" variant="light" bg="light">
         <Container>
-          <div className="d-flex" style={{width: "100%"}}>
+          <div className="d-flex" style={{ width: '100%' }}>
             <div>{subNavbarTitle}</div>
             <div className="ms-auto">Score: {score}</div>
           </div>
         </Container>
       </Navbar>
-      <Container className="py-3">
-        {children}
-      </Container>
+      <Container className="py-3">{children}</Container>
     </>
   );
 };

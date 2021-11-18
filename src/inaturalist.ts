@@ -1,10 +1,10 @@
-import { Location } from "./location";
+import { Location } from './location';
 
 export const iNaturalistApi = {
   fetchPlaces: (location: Location) => {
     const url =
-      "https://api.inaturalist.org" +
-      "/v1/places/nearby" +
+      'https://api.inaturalist.org' +
+      '/v1/places/nearby' +
       `?nelat=${location.latitude}` +
       `&nelng=${location.longitude}` +
       `&swlat=${location.latitude}` +
@@ -23,10 +23,10 @@ export const iNaturalistApi = {
   // TODO: parameterize iconic_taxa with an enum
   fetchAllSpeciesForPlace: (iconicTaxa: string, place: Place) => {
     const url =
-      "https://api.inaturalist.org" +
-      "/v1/observations/species_counts" +
-      "?captive=false" +
-      "&quality_grade=research" +
+      'https://api.inaturalist.org' +
+      '/v1/observations/species_counts' +
+      '?captive=false' +
+      '&quality_grade=research' +
       `&place_id=${place.id}` +
       `&iconic_taxa=${iconicTaxa}`;
 
@@ -39,14 +39,14 @@ export const iNaturalistApi = {
 
   fetchObservationsForTaxon: (taxonId: number) => {
     const url =
-      "https://api.inaturalist.org" +
-      "/v1/observations" +
-      "?photos=true" +
+      'https://api.inaturalist.org' +
+      '/v1/observations' +
+      '?photos=true' +
       // "&popular=true" +
-      "&quality_grade=research" +
+      '&quality_grade=research' +
       `&taxon_id=${taxonId}` +
-      "&identifications=most_agree" +
-      "&per_page=10";
+      '&identifications=most_agree' +
+      '&per_page=10';
     // '&order_by=votes';
 
     return fetch(url)
@@ -115,39 +115,39 @@ export interface Photo {
   original_dimensions: {
     width: number;
     height: number;
-  }
+  };
 }
 
 export const iconicTaxa = [
-  "Actinopterygii",
-  "Animalia",
-  "Amphibia",
-  "Arachnida",
-  "Aves",
-  "Chromista",
-  "Fungi",
-  "Insecta",
-  "Mammalia",
-  "Mollusca",
-  "Reptilia",
-  "Plantae",
-  "Protozoa",
+  'Actinopterygii',
+  'Animalia',
+  'Amphibia',
+  'Arachnida',
+  'Aves',
+  'Chromista',
+  'Fungi',
+  'Insecta',
+  'Mammalia',
+  'Mollusca',
+  'Reptilia',
+  'Plantae',
+  'Protozoa',
 ] as const;
 
 export type IconicTaxa = typeof iconicTaxa[number];
 
 export const iconicTaxaDescription: Record<IconicTaxa, string | null> = {
-  "Actinopterygii": "Ray-Finned Fishes",
-  "Animalia": "Animals",
-  "Amphibia": "Amphibians",
-  "Arachnida": "Arachnids",
-  "Aves": "Birds",
-  "Chromista": null,
-  "Fungi": "including Lichens",
-  "Insecta": "Insects",
-  "Mammalia": "Mammals",
-  "Mollusca": "Mollusks",
-  "Reptilia": "Reptiles",
-  "Plantae": "Plants",
-  "Protozoa": null,
-}
+  Actinopterygii: 'Ray-Finned Fishes',
+  Animalia: 'Animals',
+  Amphibia: 'Amphibians',
+  Arachnida: 'Arachnids',
+  Aves: 'Birds',
+  Chromista: null,
+  Fungi: 'including Lichens',
+  Insecta: 'Insects',
+  Mammalia: 'Mammals',
+  Mollusca: 'Mollusks',
+  Reptilia: 'Reptiles',
+  Plantae: 'Plants',
+  Protozoa: null,
+};

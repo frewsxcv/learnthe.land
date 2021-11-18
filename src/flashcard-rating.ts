@@ -1,1 +1,1 @@
-export type FlashcardRating = "know" | "dontknow";
+export type FlashcardRating = 'know' | 'dontknow';

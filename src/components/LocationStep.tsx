@@ -1,5 +1,5 @@
-import { Location } from "../location";
-import * as React from "react";
+import { Location } from '../location';
+import * as React from 'react';
 
 export const LocationStep = ({
   onLocation,
@@ -32,6 +32,4 @@ export const LocationStep = ({
   return loading;
 };
 
-const loading = (
-  <p>Request location...</p>
-);
+const loading = <p>Request location...</p>;
