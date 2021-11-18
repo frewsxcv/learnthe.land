@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CSSProperties, MutableRefObject, useRef, useState } from 'react';
+import { CSSProperties, useRef, useState } from 'react';
 import { iNaturalistApi, SpeciesCount } from '../inaturalist';
 import Flicking from '@egjs/react-flicking';
 import { Plugin } from '@egjs/react-flicking';
@@ -10,9 +10,7 @@ import { Fade } from '@egjs/flicking-plugins';
 import {
   ArrowLeft,
   ArrowRight,
-  Eye,
   EyeFill,
-  Stack,
   HandThumbsUp,
   HandThumbsDown,
 } from 'react-bootstrap-icons';
@@ -23,7 +21,7 @@ const loadFlashcardImage: (imageSrc: string, attribution: string) => Promise<Fla
   imageSrc,
   attribution
 ) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const image = new Image();
     image.onload = () => {
       resolve([
@@ -371,7 +369,7 @@ const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const shuffleArray = (array: any[]) => {
+const shuffleArray = (array: unknown[]) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const temp = array[i];
