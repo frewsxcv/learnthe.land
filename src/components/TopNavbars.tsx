@@ -42,7 +42,7 @@ export const TopNavbars = ({
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Navbar expand="sm" variant="light" bg="light">
+      <Navbar expand="sm" variant="light" bg="light" className="border-bottom">
         <Container>
           <div className="d-flex" style={{ width: '100%' }}>
             <div>{subNavbarTitle}</div>

@@ -5,7 +5,7 @@ import Flicking from '@egjs/react-flicking';
 import { Plugin } from '@egjs/react-flicking';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { ButtonGroup, Col, Container, Row } from 'react-bootstrap';
+import { ButtonGroup, Col, Container, Navbar, Row } from 'react-bootstrap';
 import { Fade } from '@egjs/flicking-plugins';
 import {
   ArrowLeft,
@@ -277,7 +277,7 @@ export const Flashcard = ({
         {inner}
         {speciesFacts}
       </div>
-      <nav className="navbar navbar-light bg-light">
+      <Navbar variant="light" bg="light" className="border-top" expand={false}>
         <FlashcardButtons
           revealed={revealed}
           disabled={images.length === 0}
@@ -290,7 +290,7 @@ export const Flashcard = ({
           onReveal={onReveal}
           nextPrevDisabled={isMoving}
         />
-      </nav>
+      </Navbar>
     </>
   );
 };
