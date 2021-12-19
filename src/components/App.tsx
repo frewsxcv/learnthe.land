@@ -12,6 +12,8 @@ import { reducer } from '../reducer';
 
 // const reactLogo = require("./../assets/img/react_logo.svg");
 import './../assets/scss/App.scss';
+import '@egjs/flicking/dist/flicking.css';
+import 'leaflet/dist/leaflet.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { TopNavbars } from './TopNavbars';
 import { Container } from 'react-bootstrap';

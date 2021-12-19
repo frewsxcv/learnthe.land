@@ -2,6 +2,7 @@ import { Place } from '../inaturalist';
 import * as React from 'react';
 import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
 import { SelectionGrid, SelectionGridItem } from './SelectionGrid';
+import { FeatureGroup } from 'leaflet';
 
 export const SelectPlaceStep = ({
   places,
@@ -44,11 +45,16 @@ export const SelectPlaceStep = ({
 
 const PlaceLayer = ({ place }: { place: Place }) => {
   const map = useMap();
+
   return (
     <GeoJSON
       data={place.geometry_geojson as any}
       onEachFeature={(_feature, layer) => {
-        map.fitBounds((layer as any).getBounds());
+        if (layer instanceof FeatureGroup) {
+          map.fitBounds(layer.getBounds());
+        } else {
+          console.warn('Could not retrieve bounds of GeoJSON');
+        }
       }}
     />
   );

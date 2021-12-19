@@ -27,7 +27,13 @@ const fakePlace: Place = {
   bbox_area: 1,
   bounding_box_geojson: { coordinates: [] },
   display_name: 'Faketown',
-  geometry_geojson: {},
+  geometry_geojson: {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [125.6, 10.1],
+    },
+  },
   id: 1,
   location: 'faketown',
   name: 'faketown',
