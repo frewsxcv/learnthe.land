@@ -2,7 +2,7 @@ import { GeoJsonObject } from 'geojson';
 import { Location } from './location';
 
 export const iNaturalistApi = {
-  fetchPlaces: (location: Location) => {
+  fetchPlaces: async (location: Location) => {
     const url =
       'https://api.inaturalist.org' +
       '/v1/places/nearby' +
@@ -11,18 +11,15 @@ export const iNaturalistApi = {
       `&swlat=${location.latitude}` +
       `&swlng=${location.longitude}`;
 
-    return fetch(url)
-      .then((response) => response.json())
-      .then((json) => {
-        // TODO: do we care about `json.community`?
-        return json.results.standard as Place[];
-      });
+    const response = await fetch(url);
+    const json = await response.json();
+    return json.results.standard as Place[];
   },
 
   // TODO: limit observations to above a certain count? so we get more common species
   // TODO: filter month?
   // TODO: parameterize iconic_taxa with an enum
-  fetchAllSpeciesForPlace: (iconicTaxa: string, place: Place) => {
+  fetchAllSpeciesForPlace: async (iconicTaxa: string, place: Place) => {
     const url =
       'https://api.inaturalist.org' +
       '/v1/observations/species_counts' +
@@ -31,14 +28,12 @@ export const iNaturalistApi = {
       `&place_id=${place.id}` +
       `&iconic_taxa=${iconicTaxa}`;
 
-    return fetch(url)
-      .then((response) => response.json())
-      .then((json) => {
-        return json.results as SpeciesCount[];
-      });
+    const response = await fetch(url);
+    const json = await response.json();
+    return json.results as SpeciesCount[];
   },
 
-  fetchObservationsForTaxon: (taxonId: number) => {
+  fetchObservationsForTaxon: async (taxonId: number) => {
     const url =
       'https://api.inaturalist.org' +
       '/v1/observations' +
@@ -50,11 +45,9 @@ export const iNaturalistApi = {
       '&per_page=10';
     // '&order_by=votes';
 
-    return fetch(url)
-      .then((response) => response.json())
-      .then((json) => {
-        return json.results as Observation[];
-      });
+    const response = await fetch(url);
+    const json = await response.json();
+    return json.results as Observation[];
   },
 };
 
