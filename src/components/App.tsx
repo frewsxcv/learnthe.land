@@ -11,7 +11,7 @@ import { initialState } from '../state';
 import { reducer } from '../reducer';
 
 // const reactLogo = require("./../assets/img/react_logo.svg");
-import './../assets/scss/App.scss';
+import './../assets/css/App.css';
 import '@egjs/flicking/dist/flicking.css';
 import 'leaflet/dist/leaflet.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
