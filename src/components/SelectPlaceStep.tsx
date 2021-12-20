@@ -48,7 +48,7 @@ const PlaceLayer = ({ place }: { place: Place }) => {
 
   return (
     <GeoJSON
-      data={place.geometry_geojson as any}
+      data={place.geometry_geojson}
       onEachFeature={(_feature, layer) => {
         if (layer instanceof FeatureGroup) {
           map.fitBounds(layer.getBounds());

@@ -1,3 +1,4 @@
+import { GeoJsonObject } from 'geojson';
 import { Location } from './location';
 
 export const iNaturalistApi = {
@@ -63,7 +64,7 @@ export interface Place {
   bbox_area: number;
   bounding_box_geojson: { coordinates: any[] };
   display_name: string;
-  geometry_geojson: object;
+  geometry_geojson: GeoJsonObject;
   id: number;
   location: string;
   name: string;
