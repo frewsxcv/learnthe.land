@@ -6,5 +6,12 @@
     "moduleResolution": "node",
     "target": "es5",
     "strict": true
-  }
+  },
+  "exclude": [
+    "node_Modules",
+    "tests/__coverage__",
+    "tests/__mocks__",
+    "dist",
+    "configs"
+  ]
 }
