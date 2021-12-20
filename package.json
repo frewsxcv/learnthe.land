@@ -49,7 +49,7 @@
     "style-loader": "^2.0.0",
     "typescript": "^4.2.3",
     "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4",
     "webpack-merge": "^5.7.3",
     "webpack": "^5.25.0"
   }
