@@ -11,7 +11,7 @@ import { reducer } from '../reducer';
 
 // const reactLogo = require("./../assets/img/react_logo.svg");
 import './../assets/css/App.css';
-import '@egjs/flicking/dist/flicking.css';
+// import '@egjs/flicking/dist/flicking.css'; // FIXME: Why doesn't this import the CSS?
 import 'leaflet/dist/leaflet.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { TopNavbars } from './TopNavbars';
