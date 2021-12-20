@@ -18,7 +18,7 @@ export const LocationStep = ({
     return loading;
   }
 
-  const result = navigator.geolocation.getCurrentPosition(
+  navigator.geolocation.getCurrentPosition(
     (result) => {
       onLocation({
         latitude: result.coords.latitude,

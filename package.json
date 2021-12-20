@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rm -rf dist && webpack --config=configs/webpack/prod.js",
-    "lint": "eslint './src/**/*.{js,ts,tsx}' --quiet",
+    "lint": "eslint './src/**/*.{js,ts,tsx}'",
     "start": "npm run start-dev",
     "start-dev": "webpack serve --config=configs/webpack/dev.js",
     "test": "jest --coverage --watchAll --config=configs/jest.json"

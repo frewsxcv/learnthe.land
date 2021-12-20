@@ -1,5 +1,5 @@
 import { FlashcardData } from './flashcard-data';
-import { IconicTaxa, Place, SpeciesCount } from './inaturalist';
+import { IconicTaxa, Place } from './inaturalist';
 import { Location } from './location';
 
 export type State = {
