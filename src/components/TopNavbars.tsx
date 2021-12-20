@@ -9,7 +9,6 @@ export const TopNavbars = ({
   selectedTaxaCategory,
   score,
 }: {
-  children: React.ReactNode;
   selectedPlace?: Place;
   selectedTaxaCategory?: IconicTaxa;
   score: number;
@@ -32,8 +31,8 @@ export const TopNavbars = ({
             <Globe />
             &nbsp;Learn the Land
           </Navbar.Brand>
-          <Navbar.Toggle />
-          <Navbar.Collapse>
+          <Navbar.Toggle aria-controls="navbar" />
+          <Navbar.Collapse id="navbar" role="collapse">
             <Navbar.Text className="ms-auto">
               <a target="_blank" href="https://github.com/frewsxcv/learnthe.land" rel="noreferrer">
                 Source

@@ -12,7 +12,7 @@ export const SelectionGridItem = ({
 }: {
   header: string;
   onSelect(): void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) => {
   return (
     <Col xs={12} sm={6} lg={4}>
