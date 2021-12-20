@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useReducer } from 'react';
-import { hot } from 'react-hot-loader';
 import { LocationStep } from './LocationStep';
 import { PlacesStep } from './PlacesStep';
 import { SelectPlaceStep } from './SelectPlaceStep';
@@ -96,6 +95,4 @@ const App = () => {
   );
 };
 
-declare let module: Record<string, unknown>;
-
-export default hot(module)(App);
+export default App;

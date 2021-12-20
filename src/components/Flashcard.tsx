@@ -16,6 +16,7 @@ import {
 } from 'react-bootstrap-icons';
 import { FlashcardData } from '../flashcard-data';
 import { FlashcardRating } from '../flashcard-rating';
+import '@egjs/flicking/dist/flicking.css';
 
 const loadFlashcardImage: (imageSrc: string, attribution: string) => Promise<FlashcardImage[]> = (
   imageSrc,
