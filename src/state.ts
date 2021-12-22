@@ -2,18 +2,27 @@ import { FlashcardData } from './flashcard-data';
 import { IconicTaxa, Place } from './inaturalist';
 import { Location } from './location';
 
-export type State = {
+export type State<T = LoadedFlashcards | UnloadedFlashcards> = BaseState & T;
+
+type BaseState = {
   location?: Location;
   places?: Place[];
   selectedPlace?: Place;
   selectedTaxaCategory?: IconicTaxa;
-  flashcards?: {
+  flashcardRevealed: boolean;
+  score: number;
+};
+
+export type UnloadedFlashcards = {
+  flashcards: undefined;
+};
+
+export type LoadedFlashcards = {
+  flashcards: {
     inRotation: FlashcardData[];
     notInRotation: FlashcardData[];
     current: FlashcardData;
   };
-  flashcardRevealed: boolean;
-  score: number;
 };
 
 export const initialState: State = {

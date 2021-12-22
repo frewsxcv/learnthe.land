@@ -1,4 +1,4 @@
-import { State } from './state';
+import { LoadedFlashcards, State } from './state';
 import { Action } from './Action';
 import { Reducer } from 'react';
 import { FlashcardRating } from './flashcard-rating';
@@ -68,15 +68,9 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
         state.flashcards.inRotation,
         state.flashcards.notInRotation
       );
-      const score = calculateScore(state.flashcards.inRotation);
       return {
-        ...state,
-        flashcards: {
-          ...state.flashcards,
-          current: popFirstSpecies(state.flashcards.inRotation),
-        },
-        flashcardRevealed: false,
-        score,
+        ...loadNextFlashcard(state),
+        score: calculateScore(state.flashcards.inRotation),
       };
     }
     default: {
@@ -85,6 +79,17 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
       return state;
     }
   }
+};
+
+const loadNextFlashcard = (state: State<LoadedFlashcards>): State<LoadedFlashcards> => {
+  return {
+    ...state,
+    flashcards: {
+      ...state.flashcards,
+      current: popFirstSpecies(state.flashcards.inRotation),
+    },
+    flashcardRevealed: false,
+  };
 };
 
 const popRandomSpecies = (allFlashcards: FlashcardData[]) => {
