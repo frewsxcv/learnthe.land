@@ -3,6 +3,7 @@ import { Action } from './Action';
 import { Reducer } from 'react';
 import { FlashcardRating } from './flashcard-rating';
 import { FlashcardData } from './flashcard-data';
+import { SpeciesCount } from './inaturalist';
 
 // TODO: make a step for this
 const initialFlashcardCount = 5;
@@ -35,20 +36,14 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
       };
     }
     case 'ALL_SPECIES_LOADED': {
-      const flashcardsInRotation = action.allSpecies
-        .slice(0, initialFlashcardCount)
-        .map((species) => {
-          return { species, streak: 0, attempts: 0 };
-        });
+      const { inRotation, notInRotation } = fetchInitialFlashcards(action.allSpecies);
       // TODO: shuffle the initial flashcards in rotation
       return {
         ...state,
         flashcards: {
-          inRotation: flashcardsInRotation,
-          notInRotation: action.allSpecies.slice(10).map((species) => {
-            return { species, streak: 0, attempts: 0 };
-          }),
-          current: popRandomSpecies(flashcardsInRotation),
+          inRotation,
+          notInRotation,
+          current: popRandomSpecies(inRotation),
         },
       };
     }
@@ -79,6 +74,18 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
       return state;
     }
   }
+};
+
+const fetchInitialFlashcards = (
+  allSpecies: SpeciesCount[]
+): { inRotation: FlashcardData[]; notInRotation: FlashcardData[] } => {
+  const inRotation = allSpecies.slice(0, initialFlashcardCount).map((species) => {
+    return { species, streak: 0, attempts: 0 };
+  });
+  const notInRotation = allSpecies.slice(initialFlashcardCount).map((species) => {
+    return { species, streak: 0, attempts: 0 };
+  });
+  return { inRotation, notInRotation };
 };
 
 const loadNextFlashcard = (state: State<LoadedFlashcards>): State<LoadedFlashcards> => {
