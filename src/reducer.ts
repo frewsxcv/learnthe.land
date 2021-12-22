@@ -43,7 +43,7 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
         flashcards: {
           inRotation,
           notInRotation,
-          current: popRandomSpecies(inRotation),
+          current: popRandom(inRotation),
         },
       };
     }
@@ -93,20 +93,19 @@ const loadNextFlashcard = (state: State<LoadedFlashcards>): State<LoadedFlashcar
     ...state,
     flashcards: {
       ...state.flashcards,
-      current: popFirstSpecies(state.flashcards.inRotation),
+      current: popFirst(state.flashcards.inRotation),
     },
     flashcardRevealed: false,
   };
 };
 
-const popRandomSpecies = (allFlashcards: FlashcardData[]) => {
-  const randSpeciesIndex = Math.floor(Math.random() * allFlashcards.length);
-
-  return allFlashcards.splice(randSpeciesIndex, 1)[0];
+const popRandom = <T>(items: T[]) => {
+  const randIndex = Math.floor(Math.random() * items.length);
+  return items.splice(randIndex, 1)[0];
 };
 
-const popFirstSpecies = (allFlashcards: FlashcardData[]) => {
-  return allFlashcards.splice(0, 1)[0];
+const popFirst = <T>(items: T[]) => {
+  return items.splice(0, 1)[0];
 };
 
 const calculateScore = (flashcards: FlashcardData[]) => {
