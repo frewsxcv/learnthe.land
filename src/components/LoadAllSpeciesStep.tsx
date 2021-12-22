@@ -15,16 +15,28 @@ export const LoadAllSpeciesStep = ({
   selectedPlace: Place;
   onLoad: (species: SpeciesCount[]) => void;
 }) => {
-  if (offlineMode) {
-    window.setTimeout(() => onLoad([fakeSpecies]), 300);
-    return loading;
-  }
-
-  iNaturalistApi.fetchAllSpeciesForPlace(selectedTaxaCategory, selectedPlace).then((species) => {
-    onLoad(species);
-  });
-
+  loadAllSpecies({ offlineMode, selectedTaxaCategory, selectedPlace }).then((species) =>
+    onLoad(species)
+  );
   return loading;
+};
+
+const loadAllSpecies = ({
+  offlineMode,
+  selectedTaxaCategory,
+  selectedPlace,
+}: {
+  offlineMode: boolean;
+  selectedTaxaCategory: string;
+  selectedPlace: Place;
+}): Promise<SpeciesCount[]> => {
+  if (offlineMode) {
+    return new Promise((resolve) => {
+      window.setTimeout(() => resolve([fakeSpecies]), 300);
+    });
+  } else {
+    return iNaturalistApi.fetchAllSpeciesForPlace(selectedTaxaCategory, selectedPlace);
+  }
 };
 
 const loading = <p>Loading species...</p>;
