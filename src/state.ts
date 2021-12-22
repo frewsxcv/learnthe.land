@@ -1,4 +1,4 @@
-import { FlashcardData } from './flashcard-data';
+import { FlashcardManager } from './flashcard-manager';
 import { IconicTaxa, Place } from './inaturalist';
 import { Location } from './location';
 
@@ -18,11 +18,7 @@ export type UnloadedFlashcards = {
 };
 
 export type LoadedFlashcards = {
-  flashcards: {
-    inRotation: FlashcardData[];
-    notInRotation: FlashcardData[];
-    current: FlashcardData;
-  };
+  flashcards: FlashcardManager;
 };
 
 export const initialState: State = {

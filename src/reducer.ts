@@ -1,12 +1,8 @@
-import { LoadedFlashcards, State } from './state';
+import { State } from './state';
 import { Action } from './Action';
 import { Reducer } from 'react';
-import { FlashcardRating } from './flashcard-rating';
 import { FlashcardData } from './flashcard-data';
-import { SpeciesCount } from './inaturalist';
-
-// TODO: make a step for this
-const initialFlashcardCount = 5;
+import { FlashcardManager } from './flashcard-manager';
 
 export const reducer: Reducer<State, Action> = (state: State, action: Action): State => {
   console.debug('Action dispatched', action);
@@ -36,15 +32,9 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
       };
     }
     case 'ALL_SPECIES_LOADED': {
-      const { inRotation, notInRotation } = fetchInitialFlashcards(action.allSpecies);
-      // TODO: shuffle the initial flashcards in rotation
       return {
         ...state,
-        flashcards: {
-          inRotation,
-          notInRotation,
-          current: popRandom(inRotation),
-        },
+        flashcards: new FlashcardManager(action.allSpecies),
       };
     }
     case 'REVEAL_FLASHCARD': {
@@ -57,14 +47,11 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
       if (!state.flashcards) {
         throw new Error('foo');
       }
-      processScoredFlashcard(
-        state.flashcards.current,
-        action.flashcardRating,
-        state.flashcards.inRotation,
-        state.flashcards.notInRotation
-      );
+      state.flashcards.processScoredFlashcard(state.flashcards.current, action.flashcardRating);
+      state.flashcards.loadNextFlashcard();
       return {
-        ...loadNextFlashcard(state),
+        ...state,
+        flashcardRevealed: false,
         score: calculateScore(state.flashcards.inRotation),
       };
     }
@@ -76,107 +63,8 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
   }
 };
 
-const fetchInitialFlashcards = (
-  allSpecies: SpeciesCount[]
-): { inRotation: FlashcardData[]; notInRotation: FlashcardData[] } => {
-  const inRotation = allSpecies.slice(0, initialFlashcardCount).map((species) => {
-    return { species, streak: 0, attempts: 0 };
-  });
-  const notInRotation = allSpecies.slice(initialFlashcardCount).map((species) => {
-    return { species, streak: 0, attempts: 0 };
-  });
-  return { inRotation, notInRotation };
-};
-
-const loadNextFlashcard = (state: State<LoadedFlashcards>): State<LoadedFlashcards> => {
-  return {
-    ...state,
-    flashcards: {
-      ...state.flashcards,
-      current: popFirst(state.flashcards.inRotation),
-    },
-    flashcardRevealed: false,
-  };
-};
-
-const popRandom = <T>(items: T[]) => {
-  const randIndex = Math.floor(Math.random() * items.length);
-  return items.splice(randIndex, 1)[0];
-};
-
-const popFirst = <T>(items: T[]) => {
-  return items.splice(0, 1)[0];
-};
-
 const calculateScore = (flashcards: FlashcardData[]) => {
   return flashcards.reduce((sum, flashcard) => {
     return sum + 10 * Math.min(flashcard.streak, 3);
   }, 0);
-};
-
-// TODO: explain the magic numbers in this function
-const processScoredFlashcard = (
-  flashcard: FlashcardData,
-  latestFlashcardRating: FlashcardRating,
-  flashcardsInRotation: FlashcardData[],
-  flashcardsNotInRotation: FlashcardData[]
-) => {
-  if (latestFlashcardRating === 'dontknow') {
-    flashcard.streak = 0;
-  } else {
-    console.assert(latestFlashcardRating === 'know');
-    flashcard.streak += 1;
-  }
-
-  flashcard.attempts += 1;
-
-  // TODO: introduce randomness
-
-  // Insert the rated card somewhere else
-  const lowestStreak = Math.min(...flashcardsInRotation.map((flashcard) => flashcard.streak));
-  const indexToInsert =
-    flashcardsInRotation.length -
-    flashcardsInRotation
-      .slice()
-      .reverse()
-      .findIndex((flashcard) => flashcard.streak === lowestStreak) +
-    2 ** flashcard.streak;
-  flashcardsInRotation.splice(indexToInsert, 0, flashcard);
-
-  if (shouldAddNewFlashcard(flashcardsInRotation)) {
-    addNewFlashcard(flashcardsInRotation, flashcardsNotInRotation);
-  }
-
-  console.debug('New flashcards state', flashcardsInRotation);
-};
-
-const addNewFlashcard = (
-  flashcardsInRotation: FlashcardData[],
-  flashcardsNotInRotation: FlashcardData[]
-): void => {
-  const minAttempts = Math.min(...flashcardsInRotation.map((flashcard) => flashcard.attempts));
-  const indexToInsert =
-    flashcardsInRotation.slice().findIndex((flashcard) => flashcard.attempts === minAttempts) + 1; // If we didn’t add one here, and if the user continues to press "Know", then they would only see new cards instead of cycling in old ones.
-  const newFlashcard = flashcardsNotInRotation.splice(0, 1)[0]; // TODO: what to do about these indexings?
-  console.assert(newFlashcard);
-
-  flashcardsInRotation.splice(indexToInsert, 0, newFlashcard);
-};
-
-const shouldAddNewFlashcard = (flashcardsInRotation: FlashcardData[]): boolean => {
-  return (
-    allFlashcardsHaveBeenAttempted(flashcardsInRotation) &&
-    doesntKnowFewerThanFiveFlashcards(flashcardsInRotation)
-  );
-};
-
-const allFlashcardsHaveBeenAttempted = (flashcardsInRotation: FlashcardData[]): boolean => {
-  return flashcardsInRotation.filter((flashcard) => flashcard.attempts === 0).length === 0;
-};
-
-const doesntKnowFewerThanFiveFlashcards = (flashcardsInRotation: FlashcardData[]): boolean => {
-  const numFlashcardsUserDoesntKnow = flashcardsInRotation.filter(
-    (flashcard) => flashcard.streak === 0
-  ).length;
-  return numFlashcardsUserDoesntKnow < 5;
 };
