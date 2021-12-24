@@ -79,6 +79,9 @@ const App = () => {
         data={state.flashcards.current}
         onReveal={() => dispatch({ type: 'REVEAL_FLASHCARD' })}
         onRateClick={(rating) => dispatch({ type: 'SCORE_FLASHCARD', flashcardRating: rating })}
+        onLoadImageMetadata={(images) =>
+          dispatch({ type: 'FLASHCARD_IMAGE_METADATA_LOADED', images })
+        }
       />
     );
   }

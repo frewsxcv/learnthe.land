@@ -14,64 +14,9 @@ import {
   HandThumbsUp,
   HandThumbsDown,
 } from 'react-bootstrap-icons';
-import { FlashcardData } from '../flashcard-data';
+import { FlashcardData, FlashcardImage } from '../flashcard-data';
 import { FlashcardRating } from '../flashcard-rating';
 import '@egjs/flicking/dist/flicking.css';
-
-const loadFlashcardImage: (imageSrc: string, attribution: string) => Promise<FlashcardImage[]> = (
-  imageSrc,
-  attribution
-) => {
-  return new Promise((resolve) => {
-    const image = new Image();
-    image.onload = () => {
-      resolve([
-        {
-          src: imageSrc,
-          width: image.width,
-          height: image.height,
-          attribution,
-        },
-      ]);
-    };
-    image.src = imageSrc;
-  });
-};
-
-const loadINaturalistObservationFlashcardImages: (
-  species: SpeciesCount
-) => Promise<FlashcardImage[]> = (species) => {
-  return iNaturalistApi.fetchObservationsForTaxon(species.taxon.id).then((results) => {
-    const extraImages: FlashcardImage[] = [];
-    for (const result of results) {
-      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/square.jpg?1610506716
-      const squarePhotoUrl: string = result.photos[0].url;
-      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/original.jpg?1610506716
-      const originalPhotoUrl = squarePhotoUrl.replace('square', 'original');
-      extraImages.push({
-        src: originalPhotoUrl,
-        height: result.photos[0].original_dimensions.height,
-        width: result.photos[0].original_dimensions.width,
-        attribution: result.photos[0].attribution,
-      });
-    }
-    return extraImages;
-  });
-};
-
-const loadImages: (offlineMode: boolean, species: SpeciesCount) => Promise<FlashcardImage[]> = (
-  offlineMode,
-  species
-) => {
-  const originalPhotoUrl = species.taxon.default_photo.medium_url.replace('medium', 'original');
-  const promises = [loadFlashcardImage(originalPhotoUrl, species.taxon.default_photo.attribution)];
-  if (!offlineMode) {
-    promises.push(loadINaturalistObservationFlashcardImages(species));
-  }
-  return Promise.all(promises).then((result) => {
-    return Array.prototype.concat.apply([], result);
-  });
-};
 
 const FlashcardPreviousImageButton = ({
   disabled,
@@ -200,28 +145,28 @@ export const Flashcard = ({
   data,
   onReveal,
   onRateClick,
+  onLoadImageMetadata,
 }: {
   offlineMode: boolean;
   revealed: boolean;
   data: FlashcardData;
   onReveal: () => void;
   onRateClick: (rating: FlashcardRating) => void;
+  onLoadImageMetadata: (images: FlashcardImage[]) => void;
 }) => {
-  const [images, setImages] = useState<FlashcardImage[]>([]);
   const [isMoving, setIsMoving] = useState<boolean>(false);
   const flickingRef = useRef<Flicking>(null);
 
   let inner: JSX.Element;
 
-  if (images.length === 0) {
-    loadImages(offlineMode, data.species).then((flashcardImages) => {
-      shuffleArray(flashcardImages);
-      setImages(flashcardImages);
+  if (data.images.length === 0) {
+    loadImageMetadata(offlineMode, data.species).then((flashcardImages) => {
+      onLoadImageMetadata(flashcardImages);
     });
 
     inner = <p style={{ height: FLASHCARD_IMAGE_HEIGHT, margin: 0 }}>Loading images...</p>;
   } else {
-    const imageElems = images.map((image, i) => {
+    const imageElems = data.images.map((image, i) => {
       const width = (image.width * FLASHCARD_IMAGE_HEIGHT) / image.height;
       return (
         <div style={{ position: 'relative' }} key={i}>
@@ -253,6 +198,11 @@ export const Flashcard = ({
 
     const flickingPlugins: Plugin[] = [new Fade()];
 
+    // Without this, seeing the same flashcard images again would have misaligned images for some reason
+    if (!isMoving) {
+      flickingRef.current?.resize();
+    }
+
     inner = (
       <Flicking
         onMoveStart={() => {
@@ -281,19 +231,71 @@ export const Flashcard = ({
       <Navbar variant="light" bg="light" className="border-top" expand={false}>
         <FlashcardButtons
           revealed={revealed}
-          disabled={images.length === 0}
+          disabled={data.images.length === 0}
           onPrevClick={() => flickingRef.current?.prev()}
           onNextClick={() => flickingRef.current?.next()}
-          onRateClick={(rating: FlashcardRating) => {
-            onRateClick(rating);
-            setImages([]);
-          }}
+          onRateClick={(rating: FlashcardRating) => onRateClick(rating)}
           onReveal={onReveal}
           nextPrevDisabled={isMoving}
         />
       </Navbar>
     </>
   );
+};
+
+const loadImageMetadata: (
+  offlineMode: boolean,
+  species: SpeciesCount
+) => Promise<FlashcardImage[]> = (offlineMode, species) => {
+  const originalPhotoUrl = species.taxon.default_photo.medium_url.replace('medium', 'original');
+  const promises = [loadFlashcardImage(originalPhotoUrl, species.taxon.default_photo.attribution)];
+  if (!offlineMode) {
+    promises.push(loadINaturalistObservationFlashcardImages(species));
+  }
+  return Promise.all(promises).then((result) => {
+    return Array.prototype.concat.apply([], result);
+  });
+};
+
+const loadFlashcardImage: (imageSrc: string, attribution: string) => Promise<FlashcardImage[]> = (
+  imageSrc,
+  attribution
+) => {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => {
+      resolve([
+        {
+          src: imageSrc,
+          width: image.width,
+          height: image.height,
+          attribution,
+        },
+      ]);
+    };
+    image.src = imageSrc;
+  });
+};
+
+const loadINaturalistObservationFlashcardImages: (
+  species: SpeciesCount
+) => Promise<FlashcardImage[]> = (species) => {
+  return iNaturalistApi.fetchObservationsForTaxon(species.taxon.id).then((results) => {
+    const extraImages: FlashcardImage[] = [];
+    for (const result of results) {
+      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/square.jpg?1610506716
+      const squarePhotoUrl: string = result.photos[0].url;
+      // e.g. https://inaturalist-open-data.s3.amazonaws.com/photos/109982257/original.jpg?1610506716
+      const originalPhotoUrl = squarePhotoUrl.replace('square', 'original');
+      extraImages.push({
+        src: originalPhotoUrl,
+        height: result.photos[0].original_dimensions.height,
+        width: result.photos[0].original_dimensions.width,
+        attribution: result.photos[0].attribution,
+      });
+    }
+    return extraImages;
+  });
 };
 
 const SpeciesFacts = ({ species }: { species: SpeciesCount }) => {
@@ -335,15 +337,6 @@ const SpeciesName = ({ species }: { species: SpeciesCount }) => {
   }
 };
 
-type FlashcardImage = {
-  src: string;
-  attribution: string;
-  // original height
-  height: number;
-  // original width
-  width: number;
-};
-
 const FLASHCARD_IMAGE_HEIGHT = 400;
 
 const Hyperlinks = ({ species }: { species: SpeciesCount }) => {
@@ -374,13 +367,4 @@ const HyperlinkButton = ({ href, children }: { href: string; children: React.Rea
 
 const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
-const shuffleArray = (array: unknown[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
-  }
 };

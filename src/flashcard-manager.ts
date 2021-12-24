@@ -43,7 +43,7 @@ export class FlashcardManager {
     this.inRotation.splice(indexToInsert, 0, flashcard);
 
     if (shouldAddNewFlashcard(this.inRotation)) {
-      addNewFlashcard(this.inRotation, this.inRotation);
+      addNewFlashcard(this.inRotation, this.notInRotation);
     }
 
     console.debug('New flashcards state', this.inRotation);
@@ -89,10 +89,10 @@ const fetchInitialFlashcards = (
   allSpecies: SpeciesCount[]
 ): { inRotation: FlashcardData[]; notInRotation: FlashcardData[] } => {
   const inRotation = allSpecies.slice(0, initialFlashcardCount).map((species) => {
-    return { species, streak: 0, attempts: 0 };
+    return { species, streak: 0, attempts: 0, images: [] };
   });
   const notInRotation = allSpecies.slice(initialFlashcardCount).map((species) => {
-    return { species, streak: 0, attempts: 0 };
+    return { species, streak: 0, attempts: 0, images: [] };
   });
   return { inRotation, notInRotation };
 };

@@ -55,6 +55,14 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
         score: calculateScore(state.flashcards.inRotation),
       };
     }
+    case 'FLASHCARD_IMAGE_METADATA_LOADED': {
+      if (!state.flashcards) {
+        throw new Error('foo');
+      }
+      shuffleArray(action.images);
+      state.flashcards.current.images = action.images;
+      return { ...state };
+    }
     default: {
       // Redux has its own action that gets called upon initializing, and we need to handle
       // that here.
@@ -67,4 +75,13 @@ const calculateScore = (flashcards: FlashcardData[]) => {
   return flashcards.reduce((sum, flashcard) => {
     return sum + 10 * Math.min(flashcard.streak, 3);
   }, 0);
+};
+
+const shuffleArray = (array: unknown[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
 };
