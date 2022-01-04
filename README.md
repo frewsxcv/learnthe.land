@@ -4,7 +4,7 @@ Flashcard web app for naturalists, powered by iNaturalist.
 
 ## License
 
-rgis is released under [The Anti-Capitalist Software License (version 1.4)](https://anticapitalist.software/).
+learnthe.land is released under [The Anti-Capitalist Software License (version 1.4)](https://anticapitalist.software/).
 
 ## Development
 
