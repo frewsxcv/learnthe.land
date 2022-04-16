@@ -89,10 +89,10 @@ const fetchInitialFlashcards = (
   allSpecies: SpeciesCount[]
 ): { inRotation: FlashcardData[]; notInRotation: FlashcardData[] } => {
   const inRotation = allSpecies.slice(0, initialFlashcardCount).map((species) => {
-    return { species, streak: 0, attempts: 0, images: [] };
+    return { species, streak: 0, attempts: 0, images: [], ancestors: undefined };
   });
   const notInRotation = allSpecies.slice(initialFlashcardCount).map((species) => {
-    return { species, streak: 0, attempts: 0, images: [] };
+    return { species, streak: 0, attempts: 0, images: [], ancestors: undefined };
   });
   return { inRotation, notInRotation };
 };

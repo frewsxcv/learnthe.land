@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { CSSProperties, useRef, useState } from 'react';
-import { iNaturalistApi, SpeciesCount } from '../inaturalist';
+import { iNaturalistApi, SpeciesCount, Taxon } from '../inaturalist';
 import Flicking from '@egjs/react-flicking';
 import { Plugin } from '@egjs/react-flicking';
 import Button from 'react-bootstrap/Button';
@@ -146,6 +146,7 @@ export const Flashcard = ({
   onReveal,
   onRateClick,
   onLoadImageMetadata,
+  onLoadAncestors,
 }: {
   offlineMode: boolean;
   revealed: boolean;
@@ -153,6 +154,7 @@ export const Flashcard = ({
   onReveal: () => void;
   onRateClick: (rating: FlashcardRating) => void;
   onLoadImageMetadata: (images: FlashcardImage[]) => void;
+  onLoadAncestors: (taxon: Taxon[]) => void;
 }) => {
   const [isMoving, setIsMoving] = useState<boolean>(false);
   const flickingRef = useRef<Flicking>(null);
@@ -165,6 +167,9 @@ export const Flashcard = ({
     });
 
     inner = <p style={{ height: FLASHCARD_IMAGE_HEIGHT, margin: 0 }}>Loading images...</p>;
+  } else if (data.ancestors === undefined) {
+    iNaturalistApi.fetchAncestorTaxa(data.species.taxon).then(onLoadAncestors);
+    inner = <p style={{ height: FLASHCARD_IMAGE_HEIGHT, margin: 0 }}>Loading ancestors...</p>;
   } else {
     const imageElems = data.images.map((image, i) => {
       const width = (image.width * FLASHCARD_IMAGE_HEIGHT) / image.height;

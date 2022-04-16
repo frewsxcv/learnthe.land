@@ -78,6 +78,7 @@ const App = () => {
         onLoadImageMetadata={(images) =>
           dispatch({ type: 'FLASHCARD_IMAGE_METADATA_LOADED', images })
         }
+        onLoadAncestors={(ancestors) => dispatch({ type: 'FLASHCARD_ANCESTORS_LOADED', ancestors })}
       />
     );
   }

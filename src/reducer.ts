@@ -63,6 +63,13 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
       state.flashcards.current.images = action.images;
       return { ...state };
     }
+    case 'FLASHCARD_ANCESTORS_LOADED': {
+      if (!state.flashcards) {
+        throw new Error('foo');
+      }
+      state.flashcards.current.ancestors = action.ancestors;
+      return { ...state };
+    }
     default: {
       // Redux has its own action that gets called upon initializing, and we need to handle
       // that here.
