@@ -16,6 +16,7 @@ import 'leaflet/dist/leaflet.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { TopNavbars } from './TopNavbars';
 import { Container } from 'react-bootstrap';
+import { onSelectTaxaCategory } from '../event-handlers';
 
 const OFFLINE_MODE = false;
 
@@ -56,19 +57,14 @@ const App = () => {
     inner = (
       <Container className="py-3">
         <SelectTaxaCategoryStep
-          onSelect={(taxaCategory) => dispatch({ type: 'TAXA_CATEGORY_SELECTED', taxaCategory })}
+          onSelect={onSelectTaxaCategory(state.selectedPlace, OFFLINE_MODE, dispatch)}
         />
       </Container>
     );
   } else if (!state.flashcards) {
     inner = (
       <Container className="py-3">
-        <LoadAllSpeciesStep
-          offlineMode={OFFLINE_MODE}
-          selectedPlace={state.selectedPlace}
-          selectedTaxaCategory={state.selectedTaxaCategory}
-          onLoad={(allSpecies) => dispatch({ type: 'ALL_SPECIES_LOADED', allSpecies })}
-        />
+        <LoadAllSpeciesStep />
       </Container>
     );
   } else {

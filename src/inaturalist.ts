@@ -22,7 +22,7 @@ export const iNaturalistApi = {
   // TODO: limit observations to above a certain count? so we get more common species
   // TODO: filter month?
   // TODO: parameterize iconic_taxa with an enum
-  fetchAllSpeciesForPlace: async (iconicTaxa: string, place: Place) => {
+  fetchAllSpeciesForPlace: async (iconicTaxa: IconicTaxa, place: Place) => {
     return iNaturalistApi.apiV1Fetch<SpeciesCount[]>(
       '/v1/observations/species_counts' +
         '?captive=false' +
