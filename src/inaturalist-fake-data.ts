@@ -1,7 +1,7 @@
 import { Feature, Point } from 'geojson';
 import { Place, SpeciesCount } from './inaturalist';
 
-const reactLogo = require('./../assets/img/react_logo.svg');
+const reactLogo = require('./assets/img/react_logo.svg');
 
 export const fakeSpecies: SpeciesCount = {
   count: 10,
