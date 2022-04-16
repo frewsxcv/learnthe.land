@@ -67,5 +67,6 @@ const fakeSpecies: SpeciesCount = {
     observations_count: 10,
     preferred_establishment_means: 'foo',
     wikipedia_url: 'https://wikipedia.org/',
+    ancestor_ids: [],
   },
 };

@@ -16,8 +16,8 @@ export const PlacesStep = ({
     window.setTimeout(() => onLoad([fakePlace]), 300);
     return loading;
   }
-  iNaturalistApi.fetchPlaces(location).then((places) => {
-    onLoad(places);
+  iNaturalistApi.fetchPlaces(location).then((nearby) => {
+    onLoad(nearby.standard);
   });
   return loading;
 };

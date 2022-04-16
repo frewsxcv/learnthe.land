@@ -2,60 +2,67 @@ import { GeoJsonObject } from 'geojson';
 import { Location } from './location';
 
 export const iNaturalistApi = {
-  fetchPlaces: async (location: Location) => {
-    const url =
-      'https://api.inaturalist.org' +
-      '/v1/places/nearby' +
-      `?nelat=${location.latitude}` +
-      `&nelng=${location.longitude}` +
-      `&swlat=${location.latitude}` +
-      `&swlng=${location.longitude}`;
-
+  apiV1Fetch: async <T>(urlPath: string): Promise<T> => {
+    const url = 'https://api.inaturalist.org' + urlPath;
     const response = await fetch(url);
     const json = await response.json();
-    return json.results.standard as Place[];
+    console.log(json);
+    return json.results as T;
+  },
+
+  fetchPlaces: async (location: Location) => {
+    return iNaturalistApi.apiV1Fetch<Nearby>(
+      '/v1/places/nearby' +
+        `?nelat=${location.latitude}` +
+        `&nelng=${location.longitude}` +
+        `&swlat=${location.latitude}` +
+        `&swlng=${location.longitude}`
+    );
   },
 
   // TODO: limit observations to above a certain count? so we get more common species
   // TODO: filter month?
   // TODO: parameterize iconic_taxa with an enum
   fetchAllSpeciesForPlace: async (iconicTaxa: string, place: Place) => {
-    const url =
-      'https://api.inaturalist.org' +
+    return iNaturalistApi.apiV1Fetch<SpeciesCount[]>(
       '/v1/observations/species_counts' +
-      '?captive=false' +
-      '&quality_grade=research' +
-      `&place_id=${place.id}` +
-      `&iconic_taxa=${iconicTaxa}`;
-
-    const response = await fetch(url);
-    const json = await response.json();
-    return json.results as SpeciesCount[];
+        '?captive=false' +
+        '&quality_grade=research' +
+        `&place_id=${place.id}` +
+        `&iconic_taxa=${iconicTaxa}`
+    );
   },
 
   fetchObservationsForTaxon: async (taxonId: number) => {
-    const url =
-      'https://api.inaturalist.org' +
+    return iNaturalistApi.apiV1Fetch<Observation[]>(
       '/v1/observations' +
-      '?photos=true' +
-      // "&popular=true" +
-      '&quality_grade=research' +
-      `&taxon_id=${taxonId}` +
-      '&identifications=most_agree' +
-      '&per_page=10';
-    // '&order_by=votes';
+        '?photos=true' +
+        // "&popular=true" +
+        '&quality_grade=research' +
+        `&taxon_id=${taxonId}` +
+        '&identifications=most_agree' +
+        '&per_page=10'
+      // '&order_by=votes';
+    );
+  },
 
-    const response = await fetch(url);
-    const json = await response.json();
-    return json.results as Observation[];
+  fetchAncestorTaxa: async (taxon: Taxon) => {
+    const taxonIds = taxon.ancestor_ids.join(',');
+
+    return iNaturalistApi.apiV1Fetch<Taxon[]>(`/v1/taxa?taxon_id=${taxonIds}`);
   },
 };
+
+export interface Nearby {
+  standard: Place[];
+  community: unknown;
+}
 
 export interface Place {
   admin_level: number;
   ancestor_place_ids: null;
   bbox_area: number;
-  bounding_box_geojson: { coordinates: any[] };
+  bounding_box_geojson: { coordinates: unknown[] };
   display_name: string;
   geometry_geojson: GeoJsonObject;
   id: number;
@@ -80,9 +87,9 @@ export interface Taxon {
   preferred_common_name?: string;
   rank: string;
   rank_level: number;
-  colors: any;
-  conservation_status: any;
-  conservation_statuses: any;
+  colors: unknown;
+  conservation_status: unknown;
+  conservation_statuses: unknown;
   default_photo: {
     id: number;
     attribution: string;
@@ -91,10 +98,11 @@ export interface Taxon {
     medium_url: string;
     square_url: string;
   };
-  establishment_means: any;
+  establishment_means: unknown;
   observations_count: number;
   preferred_establishment_means: string;
   wikipedia_url?: string;
+  ancestor_ids: number[];
 }
 
 export interface Observation {
