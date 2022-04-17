@@ -314,6 +314,8 @@ const SpeciesFacts = ({ species, ancestors }: { species: SpeciesCount; ancestors
         zIndex: ' 10',
         left: '50%',
         transform: 'translate(-50%, -50%)',
+        maxHeight: '20rem',
+        overflowY: 'scroll',
         top: '50%',
       }}
     >
@@ -342,7 +344,7 @@ const TaxonAncestors = ({ ancestors }: { ancestors: Taxon[] }) => {
       ancestorTaxon.preferred_common_name && `(${ancestorTaxon.preferred_common_name})`;
     return (
       <li key={i}>
-        <a href={taxonUrl(ancestorTaxon.id)} about="_blank">
+        <a href={taxonUrl(ancestorTaxon.id)} target="_blank" rel="noreferrer">
           <small>
             {ancestorTaxon.name} {commonName}
             <br />

@@ -46,9 +46,15 @@ export const iNaturalistApi = {
   },
 
   fetchAncestorTaxa: async (taxon: Taxon) => {
-    const taxonIds = taxon.ancestor_ids.join(',');
+    const taxonIds = taxon.ancestor_ids;
 
-    return iNaturalistApi.apiV1Fetch<Taxon[]>(`/v1/taxa/${taxonIds}`);
+    // Don't include the species in the results, which is the last entry
+    taxonIds.pop();
+
+    // Don't include 'Life' in the results, which is the first entry
+    taxonIds.shift();
+
+    return iNaturalistApi.apiV1Fetch<Taxon[]>(`/v1/taxa/${taxonIds.join(',')}`);
   },
 };
 
