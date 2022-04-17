@@ -160,6 +160,7 @@ export const Flashcard = ({
   const flickingRef = useRef<Flicking>(null);
 
   let inner: JSX.Element;
+  let speciesFacts;
 
   if (data.images.length === 0) {
     loadImageMetadata(offlineMode, data.species).then((flashcardImages) => {
@@ -223,9 +224,11 @@ export const Flashcard = ({
         {imageElems}
       </Flicking>
     );
-  }
 
-  const speciesFacts = revealed ? <SpeciesFacts species={data.species} /> : null;
+    speciesFacts = revealed ? (
+      <SpeciesFacts species={data.species} ancestors={data.ancestors} />
+    ) : null;
+  }
 
   return (
     <>
@@ -303,7 +306,7 @@ const loadINaturalistObservationFlashcardImages: (
   });
 };
 
-const SpeciesFacts = ({ species }: { species: SpeciesCount }) => {
+const SpeciesFacts = ({ species, ancestors }: { species: SpeciesCount; ancestors: Taxon[] }) => {
   return (
     <Card
       style={{
@@ -315,13 +318,41 @@ const SpeciesFacts = ({ species }: { species: SpeciesCount }) => {
       }}
     >
       <Card.Body>
-        <div className="d-grid gap-3">
-          <SpeciesName species={species} />
-          <Hyperlinks species={species} />
-        </div>
+        <Row>
+          <Col>
+            <div className="d-grid gap-3">
+              <SpeciesName species={species} />
+              <Hyperlinks species={species} />
+            </div>
+          </Col>
+          <Col>
+            <TaxonAncestors ancestors={ancestors} />
+          </Col>
+        </Row>
       </Card.Body>
     </Card>
   );
+};
+
+const taxonUrl = (id: number) => `https://www.inaturalist.org/taxa/${id}`;
+
+const TaxonAncestors = ({ ancestors }: { ancestors: Taxon[] }) => {
+  const rows = ancestors.map((ancestorTaxon, i) => {
+    const commonName =
+      ancestorTaxon.preferred_common_name && `(${ancestorTaxon.preferred_common_name})`;
+    return (
+      <li key={i}>
+        <a href={taxonUrl(ancestorTaxon.id)} about="_blank">
+          <small>
+            {ancestorTaxon.name} {commonName}
+            <br />
+            {ancestorTaxon.rank}
+          </small>
+        </a>
+      </li>
+    );
+  });
+  return <ul>{rows}</ul>;
 };
 
 const SpeciesName = ({ species }: { species: SpeciesCount }) => {

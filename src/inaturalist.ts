@@ -48,7 +48,7 @@ export const iNaturalistApi = {
   fetchAncestorTaxa: async (taxon: Taxon) => {
     const taxonIds = taxon.ancestor_ids.join(',');
 
-    return iNaturalistApi.apiV1Fetch<Taxon[]>(`/v1/taxa?taxon_id=${taxonIds}`);
+    return iNaturalistApi.apiV1Fetch<Taxon[]>(`/v1/taxa/${taxonIds}`);
   },
 };
 
